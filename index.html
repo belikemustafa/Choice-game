@@ -857,7 +857,7 @@
         id: 'movies',
         title: 'Movies',
         emoji: '🎬',
-        subtitle: 'Global & Indian cinema — expandable via GitHub data/movies.json or Google Search AI.',
+        subtitle: 'Global & Indian cinema — expandable via GitHub movies.json or Google Search AI.',
         aiPromptHint: 'popular critically acclaimed movies (mix of global cinema and Indian cinema)',
         defaultMediaType: 'tmdb-movie',
         seedTotalPlays: 12480,
@@ -883,7 +883,7 @@
         id: 'comfort-foods',
         title: 'Food',
         emoji: '🍛',
-        subtitle: 'Karnataka & South Indian icons — loads data/comfort-foods.json automatically on GitHub.',
+        subtitle: 'Karnataka & South Indian icons — loads comfort-foods.json automatically on GitHub.',
         aiPromptHint: 'beloved Indian food dishes focusing strongly on Karnataka dishes and South Indian specialties',
         defaultMediaType: 'wiki',
         seedTotalPlays: 14920,
@@ -1152,7 +1152,7 @@
     ];
 
     // =========================================================================
-    // 1B. EXTERNAL GITHUB JSON CATALOG LOADER (./data.json & ./data/<id>.json)
+    // 1B. EXTERNAL GITHUB JSON CATALOG LOADER (Root OR ./data/ folder)
     // =========================================================================
     function mergeExternalEntriesIntoCategory(cat, list) {
       if (!Array.isArray(list) || list.length === 0) return 0;
@@ -1200,16 +1200,22 @@
         }
       } catch (_) {}
 
-      // 2) Try loading modular ./data/<category-id>.json files in parallel (e.g. data/comfort-foods.json, data/movies.json)
+      // 2) Try loading modular files from BOTH ./<id>.json (root) and ./data/<id>.json
       await Promise.all(
         BUILTIN_CATEGORIES.map(async (cat) => {
-          try {
-            const res = await fetch(`./data/${cat.id}.json`, { cache: 'no-cache' });
-            if (!res.ok) return;
-            const parsed = await res.json();
-            const list = Array.isArray(parsed) ? parsed : (Array.isArray(parsed?.[cat.id]) ? parsed[cat.id] : []);
-            mergeExternalEntriesIntoCategory(cat, list);
-          } catch (_) {}
+          const urls = [`./${cat.id}.json`, `./data/${cat.id}.json`];
+          for (const url of urls) {
+            try {
+              const res = await fetch(url, { cache: 'no-cache' });
+              if (!res.ok) continue;
+              const parsed = await res.json();
+              const list = Array.isArray(parsed) ? parsed : (Array.isArray(parsed?.[cat.id]) ? parsed[cat.id] : []);
+              if (list.length > 0) {
+                mergeExternalEntriesIntoCategory(cat, list);
+                break;
+              }
+            } catch (_) {}
+          }
         })
       );
     }
@@ -2950,7 +2956,7 @@ Do NOT include any of these already-used items: ${excludeSample}.`;
 
     async function boot() {
       loadLocalState();
-      await loadExternalCatalog(); // Automatically loads ./data.json and ./data/<category>.json on GitHub
+      await loadExternalCatalog(); // Automatically loads ./<category>.json AND ./data/<category>.json on GitHub
       setupEventListeners();
       initCreatorSlots();
       applyLayoutMode();
