@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>PickOff — 10-Choice Knockout &amp; Live Standings</title>
+  <title>PickOff — Knockout, Good/Bad/Ugly &amp; Personality</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -19,221 +19,112 @@
           colors: {
             obsidian: '#0d0e12',
             surface: '#14161c',
-            surfaceHover: '#1b1e26',
-            borderSubtle: '#1d2028',
             goldAccent: '#e0b34c',
-            champBorder: '#7c3526',
-            champTint: '#251514',
           }
         }
       }
     };
   </script>
   <style>
-    :root {
-      color-scheme: dark;
-    }
-
-    * {
-      -webkit-tap-highlight-color: transparent;
-      box-sizing: border-box;
-    }
-
+    :root { color-scheme: dark; }
+    * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
     html, body {
-      margin: 0;
-      padding: 0;
-      background-color: #0d0e12;
-      color: #f4f4f5;
+      margin: 0; padding: 0;
+      background-color: #0d0e12; color: #f4f4f5;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      overflow-x: hidden;
-      min-height: 100dvh;
+      overflow-x: hidden; min-height: 100dvh;
     }
-
     body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
+      content: ''; position: fixed; inset: 0;
       background:
         radial-gradient(900px circle at 50% -12%, rgba(224, 179, 76, 0.08), transparent 62%),
         radial-gradient(620px circle at 12% 78%, rgba(224, 179, 76, 0.035), transparent 60%),
         radial-gradient(640px circle at 88% 82%, rgba(56, 189, 248, 0.045), transparent 62%);
-      pointer-events: none;
-      z-index: 0;
+      pointer-events: none; z-index: 0;
     }
-
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-    /* Arena card sizing: stacked on mobile, cinematic side-by-side on desktop (Auto mode) */
+    /* Arena 1v1 Cards */
     .arena-card {
-      width: 100%;
-      max-width: 440px;
-      height: clamp(205px, 33dvh, 290px);
-      position: relative;
-      border-radius: 22px;
-      overflow: hidden;
-      cursor: pointer;
-      user-select: none;
-      border: 1px solid #262b38;
-      background-color: #14161c;
-      transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
-                  border-color 0.24s ease,
-                  box-shadow 0.24s ease,
-                  opacity 0.2s ease;
+      width: 100%; max-width: 440px; height: clamp(205px, 33dvh, 290px);
+      position: relative; border-radius: 22px; overflow: hidden;
+      cursor: pointer; user-select: none;
+      border: 1px solid #262b38; background-color: #14161c;
+      transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.24s ease, box-shadow 0.24s ease, opacity 0.2s ease;
       box-shadow: 0 20px 48px rgba(0, 0, 0, 0.58);
     }
-
     @media (min-width: 768px) {
-      .arena-card {
-        flex: 1 1 0%;
-        max-width: 400px;
-        height: clamp(380px, 56dvh, 505px);
-      }
+      .arena-card { flex: 1 1 0%; max-width: 400px; height: clamp(370px, 54dvh, 495px); }
     }
+    #arena-stage.layout-vertical { flex-direction: column !important; max-width: 460px !important; gap: 0.75rem !important; }
+    #arena-stage.layout-vertical .arena-card { flex: none !important; width: 100% !important; max-width: 460px !important; height: clamp(195px, 32dvh, 275px) !important; }
+    #arena-stage.layout-vertical .vs-divider-wrap { width: 100% !important; margin: 0.125rem 0 !important; }
+    #arena-stage.layout-vertical .vs-dashed-line { display: block !important; }
+    #arena-stage.layout-vertical .vs-badge { position: absolute !important; }
 
-    /* Forced Top & Bottom (Vertical) Layout Mode */
-    #arena-stage.layout-vertical {
-      flex-direction: column !important;
-      max-width: 460px !important;
-      gap: 0.75rem !important;
-    }
-
-    #arena-stage.layout-vertical .arena-card {
-      flex: none !important;
-      width: 100% !important;
-      max-width: 460px !important;
-      height: clamp(195px, 32dvh, 275px) !important;
-    }
-
-    #arena-stage.layout-vertical .vs-divider-wrap {
-      width: 100% !important;
-      margin: 0.125rem 0 !important;
-    }
-
-    #arena-stage.layout-vertical .vs-dashed-line {
-      display: block !important;
-    }
-
-    #arena-stage.layout-vertical .vs-badge {
-      position: absolute !important;
-    }
-
-    /* Forced Side-by-Side Layout Mode */
-    #arena-stage.layout-horizontal {
-      flex-direction: row !important;
-      gap: 0.75rem !important;
-    }
-
-    #arena-stage.layout-horizontal .arena-card {
-      flex: 1 1 0% !important;
-      height: clamp(250px, 48dvh, 485px) !important;
-    }
-
-    #arena-stage.layout-horizontal .vs-divider-wrap {
-      width: auto !important;
-    }
-
-    #arena-stage.layout-horizontal .vs-dashed-line {
-      display: none !important;
-    }
-
-    #arena-stage.layout-horizontal .vs-badge {
-      position: relative !important;
-    }
+    #arena-stage.layout-horizontal { flex-direction: row !important; gap: 0.75rem !important; }
+    #arena-stage.layout-horizontal .arena-card { flex: 1 1 0% !important; height: clamp(250px, 48dvh, 485px) !important; }
+    #arena-stage.layout-horizontal .vs-divider-wrap { width: auto !important; }
+    #arena-stage.layout-horizontal .vs-dashed-line { display: none !important; }
+    #arena-stage.layout-horizontal .vs-badge { position: relative !important; }
 
     .arena-card:hover {
       transform: translateY(-4px) scale(1.015);
       border-color: rgba(224, 179, 76, 0.45);
       box-shadow: 0 26px 60px rgba(0, 0, 0, 0.72), 0 0 36px rgba(224, 179, 76, 0.1);
     }
-
     .arena-card:active { transform: scale(0.985); }
-
     .arena-card.picked-win {
       border-color: rgba(224, 179, 76, 0.9);
       box-shadow: 0 0 0 2px rgba(224, 179, 76, 0.35), 0 24px 56px rgba(0, 0, 0, 0.78);
       transform: scale(1.028);
     }
-
     .arena-card.picked-lose { opacity: 0.14; transform: scale(0.94); }
+    .arena-card.challenger-enter { animation: challengerEnter 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-    .arena-card.challenger-enter {
-      animation: challengerEnter 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    /* Good / Bad / Ugly 3-Card Mode */
+    .gbu-card {
+      position: relative; border-radius: 20px; overflow: hidden;
+      border: 1px solid #262b38; background-color: #14161c;
+      height: clamp(240px, 34dvh, 360px);
+      cursor: pointer; user-select: none;
+      transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.55);
     }
+    .gbu-card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.22); }
+    .gbu-card.role-good { border-color: #34d399 !important; box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.35), 0 18px 42px rgba(0,0,0,0.65); }
+    .gbu-card.role-bad { border-color: #fb923c !important; box-shadow: 0 0 0 2px rgba(251, 146, 60, 0.35), 0 18px 42px rgba(0,0,0,0.65); }
+    .gbu-card.role-ugly { border-color: #f43f5e !important; box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.35), 0 18px 42px rgba(0,0,0,0.65); }
 
     @keyframes challengerEnter {
       0% { opacity: 0; transform: translateY(14px) scale(0.96); }
       100% { opacity: 1; transform: translateY(0) scale(1); }
     }
-
     .card-vignette {
-      background: linear-gradient(
-        180deg,
-        rgba(9, 10, 14, 0.22) 0%,
-        rgba(9, 10, 14, 0.04) 36%,
-        rgba(9, 10, 14, 0.62) 72%,
-        rgba(7, 8, 11, 0.96) 100%
-      );
+      background: linear-gradient(180deg, rgba(9,10,14,0.22) 0%, rgba(9,10,14,0.04) 36%, rgba(9,10,14,0.64) 70%, rgba(7,8,11,0.97) 100%);
     }
+    .art-mesh { background-image: radial-gradient(rgba(255,255,255,0.075) 1px, transparent 1px); background-size: 16px 16px; }
 
-    .art-mesh {
-      background-image: radial-gradient(rgba(255, 255, 255, 0.075) 1px, transparent 1px);
-      background-size: 16px 16px;
-    }
-
-    .metric-card {
-      position: relative;
-      background: #14161c;
-      border: 1px solid #1f232d;
-      border-radius: 12px;
-      padding: 13px 13px 13px 16px;
-      overflow: hidden;
-    }
-
-    .metric-card::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 3px;
-      border-radius: 3px 0 0 3px;
-    }
-
+    .metric-card { position: relative; background: #14161c; border: 1px solid #1f232d; border-radius: 12px; padding: 13px 13px 13px 16px; overflow: hidden; }
+    .metric-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; border-radius: 3px 0 0 3px; }
     .metric-cyan::before { background: #4ea8de; }
     .metric-orange::before { background: #d97742; }
     .metric-gold::before { background: #e0b34c; }
     .metric-green::before { background: #52a47a; }
 
-    .accordion-body {
-      display: grid;
-      grid-template-rows: 0fr;
-      transition: grid-template-rows 0.28s cubic-bezier(0.22, 1, 0.36, 1);
-    }
+    .accordion-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.28s cubic-bezier(0.22, 1, 0.36, 1); }
     .accordion-body.open { grid-template-rows: 1fr; }
     .accordion-inner { overflow: hidden; }
-
     .lb-fill { transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
 
     @keyframes liveRowFlash {
-      0% {
-        box-shadow: 0 0 0 1px rgba(52, 211, 153, 0.75), 0 0 22px rgba(52, 211, 153, 0.25);
-        border-color: rgba(52, 211, 153, 0.75);
-      }
-      55% {
-        box-shadow: 0 0 0 1px rgba(224, 179, 76, 0.55), 0 0 16px rgba(224, 179, 76, 0.16);
-        border-color: rgba(224, 179, 76, 0.55);
-      }
+      0% { box-shadow: 0 0 0 1px rgba(52,211,153,0.75), 0 0 22px rgba(52,211,153,0.25); border-color: rgba(52,211,153,0.75); }
       100% { box-shadow: none; }
     }
-    .live-flash { animation: liveRowFlash 1.8s ease-out; }
-
-    @keyframes livePulseRing {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.45; transform: scale(1.35); }
-    }
+    .live-flash { animation: liveRowFlash 1.6s ease-out; }
+    @keyframes livePulseRing { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.45; transform: scale(1.35); } }
     .live-dot { animation: livePulseRing 1.8s ease-in-out infinite; }
-
     @keyframes popDelta {
       0% { opacity: 0; transform: translateY(6px) scale(0.9); }
       20% { opacity: 1; transform: translateY(0) scale(1); }
@@ -241,19 +132,12 @@
       100% { opacity: 0; transform: translateY(-12px) scale(0.95); }
     }
     .delta-pop { animation: popDelta 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-
-    @keyframes fadeSlideUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     .animate-in { animation: fadeSlideUp 0.26s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-
-    @keyframes spinSlow { to { transform: rotate(360deg); } }
-    .animate-spin-fast { animation: spinSlow 0.85s linear infinite; }
 
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.12); border-radius: 999px; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 999px; }
   </style>
 </head>
 <body class="bg-obsidian text-zinc-100 antialiased selection:bg-amber-500/30 selection:text-amber-100">
@@ -261,8 +145,8 @@
   <div id="app" class="relative z-10 min-h-[100dvh] flex flex-col">
 
     <!-- Top Navigation Bar -->
-    <header class="w-full max-w-[1060px] mx-auto px-4 sm:px-6 pt-4 pb-2 flex flex-wrap items-center justify-between gap-2.5">
-      <div class="flex items-center gap-2 sm:gap-2.5 flex-wrap">
+    <header class="w-full max-w-[1080px] mx-auto px-4 sm:px-6 pt-4 pb-2 flex flex-wrap items-center justify-between gap-2.5">
+      <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap">
         <div class="hidden sm:flex items-center gap-2 mr-1.5 select-none">
           <span class="w-2 h-2 rounded-full bg-[#e0b34c] shadow-[0_0_12px_rgba(224,179,76,0.75)]"></span>
           <span class="text-sm font-extrabold tracking-tight text-white">PickOff</span>
@@ -303,17 +187,35 @@
       </div>
     </header>
 
-    <!-- Category Bar -->
-    <nav id="category-nav-wrap" class="w-full max-w-[1060px] mx-auto px-4 sm:px-6 pt-1 pb-2.5">
+    <!-- Category Bar + Subfilters + Game Mode Switcher -->
+    <nav id="category-nav-wrap" class="w-full max-w-[1080px] mx-auto px-4 sm:px-6 pt-1 pb-2">
       <div id="category-pill-bar" class="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 py-1"></div>
-      <div id="subfilter-bar" class="hidden flex flex-wrap items-center justify-center gap-1.5 pt-2 pb-0.5"></div>
+      <div id="subfilter-bar" class="hidden flex flex-wrap items-center justify-center gap-1.5 pt-1.5 pb-0.5"></div>
+
+      <!-- Game Mode Selector -->
+      <div id="mode-bar-wrap" class="flex flex-wrap items-center justify-center gap-1.5 pt-2.5">
+        <div class="inline-flex flex-wrap items-center justify-center bg-[#12151c] border border-[#1f2432] rounded-xl p-1 gap-1">
+          <button id="btn-mode-knockout" type="button" class="px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all bg-[#232838] text-white">
+            ⚔️ 10-Choice Knockout
+          </button>
+          <button id="btn-mode-gbu" type="button" class="px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all text-zinc-400 hover:text-zinc-100">
+            🤠 Good · Bad · Ugly
+          </button>
+          <button id="btn-mode-personality" type="button" class="px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all text-zinc-400 hover:text-zinc-100 flex items-center gap-1.5">
+            <span>🧠 20-Round Personality</span>
+            <span id="personality-lock-badge" class="text-[9.5px] px-1.5 py-0.5 rounded bg-white/[0.06] text-zinc-400">42+</span>
+          </button>
+        </div>
+      </div>
     </nav>
 
     <!-- Main Dynamic Views -->
-    <main class="flex-1 w-full max-w-[1060px] mx-auto px-4 sm:px-6 pb-10 flex flex-col">
+    <main class="flex-1 w-full max-w-[1080px] mx-auto px-4 sm:px-6 pb-10 flex flex-col">
 
-      <!-- VIEW 1: 1v1 KNOCKOUT ARENA -->
-      <section id="view-arena" class="flex-1 flex flex-col items-center justify-center py-2 md:py-4">
+      <!-- ============================================================
+           VIEW 1: 1v1 ARENA (10-CHOICE KNOCKOUT & 20-ROUND PERSONALITY)
+           ============================================================ -->
+      <section id="view-arena" class="flex-1 flex flex-col items-center justify-center py-2 md:py-3">
 
         <div id="arena-custom-banner" class="hidden w-full max-w-[860px] mb-3 text-center">
           <div class="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-bold text-[#e0b34c] bg-[#e0b34c]/10 border border-[#e0b34c]/25 px-3 py-1 rounded-full">
@@ -324,35 +226,23 @@
           <p id="arena-custom-subtitle" class="text-xs text-zinc-400 truncate"></p>
         </div>
 
-        <div id="arena-header-wrap" class="w-full max-w-[440px] md:max-w-[860px] mb-4 md:mb-5">
+        <div id="arena-header-wrap" class="w-full max-w-[440px] md:max-w-[860px] mb-4">
           <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] sm:text-xs font-semibold tracking-[0.12em] uppercase mb-1.5">
             <span id="arena-round-label" class="text-zinc-400">DUEL 1 OF 9</span>
             <div class="flex items-center gap-2">
               <span id="arena-pool-text" class="hidden sm:inline text-[11px] font-medium normal-case tracking-normal text-zinc-400">Pool: 10 Movies</span>
               <span id="arena-seen-text" class="hidden md:inline text-[11px] font-medium normal-case tracking-normal tabular-nums text-zinc-500"></span>
-              <button id="btn-arena-ai-fetch" type="button" class="text-[#e0b34c] hover:text-obsidian bg-[#e0b34c]/12 hover:bg-[#e0b34c] border border-[#e0b34c]/40 px-2.5 py-1 rounded-lg transition-all flex items-center gap-1.5 text-[11px] font-bold tracking-wider" title="Fetch 10 brand-new choices live using Google Search AI">
-                <span>✨</span>
-                <span id="ai-fetch-label">AI Fresh 10</span>
-              </button>
-              <button id="btn-arena-reshuffle" type="button" class="text-zinc-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-[#242936] px-2.5 py-1 rounded-lg transition-colors flex items-center gap-1 text-[11px] tracking-wider" title="Deal 10 fresh unseen choices from your pool">
+              <button id="btn-arena-reshuffle" type="button" class="text-zinc-300 hover:text-[#e0b34c] bg-white/[0.04] hover:bg-[#e0b34c]/10 border border-[#242936] hover:border-[#e0b34c]/35 px-2.5 py-1 rounded-lg transition-colors flex items-center gap-1 text-[11px] tracking-wider">
                 <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
                 </svg>
-                <span>Fresh 10</span>
+                <span id="btn-reshuffle-label">Fresh 10</span>
               </button>
             </div>
           </div>
           <div class="w-full h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
             <div id="arena-progress-bar" class="h-full bg-gradient-to-r from-[#d49c35] to-[#f0cc70] rounded-full transition-all duration-300" style="width: 11%;"></div>
           </div>
-        </div>
-
-        <div id="arena-ai-loading" class="hidden w-full max-w-[440px] md:max-w-[860px] mb-4 px-4 py-3 rounded-xl bg-[#151822] border border-[#e0b34c]/35 flex items-center justify-center gap-2.5 text-xs text-[#f3cf78]">
-          <svg class="w-4 h-4 animate-spin-fast shrink-0" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
-            <path class="opacity-90" fill="currentColor" d="M4 12a8 8 0 018-8v3a5 5 0 00-5 5H4z"></path>
-          </svg>
-          <span id="arena-ai-loading-text">Searching Google AI for 10 fresh choices...</span>
         </div>
 
         <div id="arena-stage" class="w-full max-w-[440px] md:max-w-[860px] flex flex-col md:flex-row items-center justify-center gap-3 md:gap-6">
@@ -375,11 +265,48 @@
           <span class="text-zinc-700">·</span>
           <button id="btn-toggle-names" type="button" class="hover:text-zinc-200 transition-colors py-1 px-1.5 rounded">HIDE NAMES</button>
         </div>
-
-        <div id="ai-sources-bar" class="hidden mt-3 max-w-[760px] flex flex-wrap items-center justify-center gap-1.5 text-[10.5px] text-zinc-400"></div>
       </section>
 
-      <!-- VIEW 2: RESULTS & TASTE RATING -->
+      <!-- ============================================================
+           VIEW 1.5: THE GOOD, THE BAD, AND THE UGLY (3-CHOICE MODE)
+           ============================================================ -->
+      <section id="view-gbu" class="hidden flex-1 flex flex-col items-center justify-center py-2 md:py-3 w-full max-w-[960px] mx-auto animate-in">
+        <div class="w-full text-center mb-4">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#151923] border border-[#262d3f] text-[11px] font-bold uppercase tracking-wider text-zinc-200">
+            <span>🤠 The Good, The Bad &amp; The Ugly</span>
+            <span class="text-zinc-600">|</span>
+            <span id="gbu-round-counter" class="text-[#e0b34c]">Trio #1</span>
+          </div>
+          <p id="gbu-instruction" class="text-sm font-semibold text-zinc-200 mt-2">
+            Tap a card (or pill) to pick <span class="text-emerald-400 font-bold">The Good 😇</span>
+          </p>
+        </div>
+
+        <div id="gbu-grid" class="w-full grid grid-cols-1 md:grid-cols-3 gap-3.5"></div>
+
+        <!-- GBU Action Bar -->
+        <div class="w-full max-w-[600px] mt-5 flex flex-wrap items-center justify-center gap-2.5">
+          <button id="btn-gbu-clear" type="button" class="px-4 py-2.5 rounded-xl bg-[#161922] hover:bg-[#1f2432] border border-[#262b3b] text-xs font-semibold text-zinc-300 transition-colors">
+            Reset Picks
+          </button>
+          <button id="btn-gbu-submit" type="button" disabled class="flex-1 min-w-[200px] py-3 px-5 rounded-xl bg-gradient-to-r from-[#e0b34c] to-[#f0cc70] text-obsidian font-extrabold text-sm transition-all disabled:opacity-35 disabled:cursor-not-allowed shadow-lg">
+            Lock In &amp; Next Trio →
+          </button>
+          <button id="btn-gbu-skip" type="button" class="px-4 py-2.5 rounded-xl bg-[#161922] hover:bg-[#1f2432] border border-[#262b3b] text-xs font-semibold text-zinc-300 transition-colors">
+            Skip 3
+          </button>
+        </div>
+
+        <!-- Recent GBU Verdicts History -->
+        <div id="gbu-history-wrap" class="hidden w-full mt-6 pt-4 border-t border-[#1d2028]">
+          <div class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-zinc-500 mb-2.5">YOUR RECENT VERDICTS</div>
+          <div id="gbu-history-list" class="space-y-2"></div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           VIEW 2: KNOCKOUT RESULTS & TASTE RATING
+           ============================================================ -->
       <section id="view-results" class="hidden animate-in space-y-3.5 pt-2 w-full max-w-[820px] mx-auto">
 
         <div id="taste-card" class="bg-[#12141a] border border-[#1d2028] rounded-2xl overflow-hidden shadow-xl">
@@ -521,26 +448,78 @@
 
         <div id="leaderboard-list" class="space-y-2"></div>
 
-        <div class="pt-3 grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-          <button id="btn-play-next-pool" type="button" class="col-span-2 sm:col-span-1 py-3 px-4 rounded-xl bg-white text-obsidian font-extrabold text-sm hover:bg-zinc-200 active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-lg">
+        <div class="pt-3 grid grid-cols-3 gap-2.5">
+          <button id="btn-play-next-pool" type="button" class="py-3 px-4 rounded-xl bg-white text-obsidian font-extrabold text-sm hover:bg-zinc-200 active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-lg">
             <span>Next 10 →</span>
           </button>
-
-          <button id="btn-play-ai-next" type="button" class="py-3 px-4 rounded-xl bg-gradient-to-r from-[#e0b34c] to-[#f0cc70] text-obsidian font-extrabold text-sm hover:brightness-105 active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-lg">
-            <span>✨ AI Fresh 10</span>
-          </button>
-
           <button id="btn-rematch-same" type="button" class="py-3 px-4 rounded-xl bg-[#181b24] hover:bg-[#212533] border border-[#262a36] text-zinc-100 font-semibold text-sm active:scale-[0.98] transition-all flex items-center justify-center gap-1.5">
             <span>Rematch</span>
           </button>
-
           <button id="btn-share-current" type="button" class="py-3 px-4 rounded-xl bg-[#181b24] hover:bg-[#212533] border border-[#262a36] text-zinc-100 font-semibold text-sm active:scale-[0.98] transition-all flex items-center justify-center gap-1.5">
             <span>Share</span>
           </button>
         </div>
       </section>
 
-      <!-- VIEW 2.5: LIVE STANDINGS -->
+      <!-- ============================================================
+           VIEW 2.2: 20-ROUND PERSONALITY PROFILE REPORT
+           ============================================================ -->
+      <section id="view-personality-report" class="hidden animate-in space-y-4 pt-2 w-full max-w-[820px] mx-auto">
+        <div class="bg-gradient-to-br from-[#191624] via-[#131620] to-[#11131a] border border-[#e0b34c]/40 rounded-2xl p-5 sm:p-6 shadow-2xl space-y-4">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#e0b34c]/15 border border-[#e0b34c]/30 text-[10px] font-bold uppercase tracking-widest text-[#f3cf78]">
+                <span>🧠 20-ROUND PERSONALITY ANALYSIS</span>
+              </div>
+              <h2 id="pers-title" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mt-2">The Visionary Rebel</h2>
+              <p id="pers-subtitle" class="text-xs font-semibold text-[#e0b34c] mt-0.5"></p>
+            </div>
+            <div id="pers-emoji" class="w-14 h-14 rounded-2xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-3xl shrink-0 shadow-lg">🧠</div>
+          </div>
+
+          <p id="pers-narrative" class="text-sm text-zinc-300 leading-relaxed"></p>
+
+          <!-- 4 Personality Trait Meters -->
+          <div id="pers-traits-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1"></div>
+
+          <!-- Dominant Vibes & Themes -->
+          <div class="pt-2 border-t border-white/[0.08]">
+            <div class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-zinc-400 mb-2">YOUR DOMINANT VIBES &amp; THEMES</div>
+            <div id="pers-themes-list" class="flex flex-wrap gap-1.5"></div>
+          </div>
+        </div>
+
+        <!-- Standout Highlights -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="bg-[#12141a] border border-[#1f2430] rounded-xl p-3.5">
+            <div class="text-[10px] font-bold uppercase tracking-[0.12em] text-emerald-400">🔥 BIGGEST UPSET PICK</div>
+            <div id="pers-upset-box" class="mt-2"></div>
+          </div>
+          <div class="bg-[#12141a] border border-[#1f2430] rounded-xl p-3.5">
+            <div class="text-[10px] font-bold uppercase tracking-[0.12em] text-[#e0b34c]">👑 HIGHEST-RATED FAVORITE</div>
+            <div id="pers-fav-box" class="mt-2"></div>
+          </div>
+        </div>
+
+        <!-- All 20 Winners Grid -->
+        <div class="bg-[#12141a] border border-[#1d2028] rounded-2xl p-4 space-y-2.5">
+          <div class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-zinc-400">YOUR 20 WINNING CHOICES</div>
+          <div id="pers-winners-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2.5 pt-1">
+          <button id="btn-pers-again" type="button" class="py-3 px-4 rounded-xl bg-gradient-to-r from-[#e0b34c] to-[#f0cc70] text-obsidian font-extrabold text-sm hover:brightness-105 transition-all shadow-lg">
+            Play 20 Fresh Rounds →
+          </button>
+          <button id="btn-pers-copy" type="button" class="py-3 px-4 rounded-xl bg-[#181b24] hover:bg-[#222634] border border-[#282d3e] text-white font-semibold text-sm transition-all">
+            Copy Personality Summary
+          </button>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           VIEW 2.5: LIVE STANDINGS
+           ============================================================ -->
       <section id="view-standings" class="hidden animate-in space-y-3.5 pt-2 w-full max-w-[920px] mx-auto">
         <div class="bg-[#12151c] border border-[#1f2430] rounded-2xl p-4 space-y-3">
           <div class="flex items-start justify-between gap-3">
@@ -553,12 +532,9 @@
                 <span id="standings-last-sync" class="text-[11px] text-zinc-500 truncate">Saved locally</span>
               </div>
               <h2 id="standings-title" class="text-lg font-extrabold text-white tracking-tight mt-1 truncate">🎬 Movies Live Standings</h2>
-              <p id="standings-subtitle" class="text-xs text-zinc-400 mt-0.5">Includes built-in starters, external GitHub JSON data, and AI-discovered items.</p>
+              <p id="standings-subtitle" class="text-xs text-zinc-400 mt-0.5">Scores update live after every Knockout, Good/Bad/Ugly, or 20-Round Personality pick.</p>
             </div>
-            <div class="flex items-center gap-2 shrink-0">
-              <button id="btn-standings-ai-add" type="button" class="px-3 py-2 rounded-xl bg-[#e0b34c]/15 hover:bg-[#e0b34c]/25 border border-[#e0b34c]/35 text-[#e0b34c] font-bold text-xs transition-colors">✨ +10 via AI</button>
-              <button id="btn-standings-play" type="button" class="px-3.5 py-2 rounded-xl bg-[#e0b34c] hover:bg-[#edc466] text-obsidian font-bold text-xs transition-colors shadow-lg">Play 10 →</button>
-            </div>
+            <button id="btn-standings-play" type="button" class="shrink-0 px-3.5 py-2 rounded-xl bg-[#e0b34c] hover:bg-[#edc466] text-obsidian font-bold text-xs transition-colors shadow-lg">Play →</button>
           </div>
 
           <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
@@ -594,12 +570,14 @@
         </div>
       </section>
 
-      <!-- VIEW 3: CREATE YOUR OWN 10 -->
+      <!-- ============================================================
+           VIEW 3: CREATE YOUR OWN 10
+           ============================================================ -->
       <section id="view-creator" class="hidden animate-in space-y-4 pt-2 w-full max-w-[860px] mx-auto">
         <div class="flex items-center justify-between">
           <div>
             <h2 class="text-xl font-bold text-white tracking-tight">Create Your Own 10</h2>
-            <p class="text-xs text-zinc-400 mt-0.5">Type any topic and let Google Search AI fill 10 choices, or craft your own.</p>
+            <p class="text-xs text-zinc-400 mt-0.5">Build a custom 10-choice deck &amp; share the link with friends.</p>
           </div>
           <button id="btn-creator-back" type="button" class="px-3 py-1.5 rounded-lg bg-[#14161c] hover:bg-[#1e222c] border border-[#252936] text-xs font-semibold text-zinc-300 transition-colors">← Back</button>
         </div>
@@ -653,10 +631,6 @@
             </div>
 
             <div class="pt-1 flex flex-wrap items-center gap-2">
-              <button id="btn-creator-ai-fill" type="button" class="px-3.5 py-2 rounded-xl bg-[#e0b34c]/15 hover:bg-[#e0b34c]/25 border border-[#e0b34c]/40 text-[#f3cf78] text-xs font-bold transition-colors flex items-center gap-1.5">
-                <span>✨</span>
-                <span id="btn-creator-ai-label">Auto-Fill 10 with Google Search AI</span>
-              </button>
               <button id="btn-toggle-paste" type="button" class="px-3 py-2 rounded-xl bg-[#1b1f2b] hover:bg-[#252a3a] border border-[#2a2f3f] text-xs font-semibold text-zinc-200 transition-colors">📋 Quick Paste 10</button>
               <button id="btn-clear-form" type="button" class="px-3 py-2 rounded-xl bg-transparent hover:bg-white/[0.05] text-xs font-medium text-zinc-500 hover:text-zinc-300 transition-colors ml-auto">Clear</button>
             </div>
@@ -735,7 +709,7 @@
         </div>
 
         <div class="pt-1 border-t border-[#1d2028] flex items-center justify-between gap-3">
-          <div class="text-[11px] text-zinc-500">Scores &amp; AI pools save locally on your device.</div>
+          <div class="text-[11px] text-zinc-500">Scores &amp; custom decks save locally on your device.</div>
           <button id="btn-reset-local" type="button" class="px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 text-[11px] font-semibold transition-colors shrink-0">Reset Local Stats</button>
         </div>
       </div>
@@ -748,7 +722,7 @@
       <div class="px-5 py-4 border-b border-[#1d2028] flex items-center justify-between gap-3">
         <div>
           <h2 class="text-base font-bold text-white">Custom &amp; Shared Decks</h2>
-          <p class="text-xs text-zinc-400">Open a friend's link or jump into community 10-choice decks</p>
+          <p class="text-xs text-zinc-400">Open a friend's link or jump into saved 10-choice decks</p>
         </div>
         <button id="btn-close-shared" type="button" class="w-8 h-8 rounded-full bg-white/[0.06] hover:bg-white/[0.12] flex items-center justify-center text-zinc-300 transition-colors" aria-label="Close modal">✕</button>
       </div>
@@ -789,7 +763,7 @@
     let getFirestore, doc, setDoc, getDoc, collection, onSnapshot, increment;
 
     // =========================================================================
-    // 1. PALETTES & 12 BUILT-IN CATEGORIES (10 STARTERS + EXTERNAL JSON LOADER)
+    // 1. PALETTES & 13 BUILT-IN CATEGORIES (AUTO-EXPANDED BY GITHUB JSON FILES)
     // =========================================================================
     const PALETTES = [
       ['#232b3a', '#0f1218'],
@@ -833,35 +807,20 @@
       const seedCrowns = Math.max(1, Math.round((baseStrength / 100) * 9));
       const seedPoints = seedWins + seedCrowns * 5;
       return {
-        id,
-        name,
-        emoji,
-        seedVotes,
-        seedWins,
-        seedDuels,
-        seedCrowns,
-        seedPoints,
+        id, name, emoji, seedVotes, seedWins, seedDuels, seedCrowns, seedPoints,
         paletteIdx: paletteIdx % PALETTES.length,
         gradient: PALETTES[paletteIdx % PALETTES.length],
-        tag,
-        wikiSlug,
-        group,
-        mediaType,
+        tag, wikiSlug, group, mediaType,
         year: year ? String(year) : '',
-        img: null,
-        isAiGenerated: false
+        img: null
       };
     }
 
     const BUILTIN_CATEGORIES = [
       {
-        id: 'movies',
-        title: 'Movies',
-        emoji: '🎬',
-        subtitle: 'Global & Indian cinema — expandable via GitHub movies.json or Google Search AI.',
-        aiPromptHint: 'popular critically acclaimed movies (mix of global cinema and Indian cinema)',
-        defaultMediaType: 'tmdb-movie',
-        seedTotalPlays: 12480,
+        id: 'movies', title: 'Movies', emoji: '🎬',
+        subtitle: 'Global & Indian cinema — automatically loads movies.json.',
+        defaultMediaType: 'tmdb-movie', seedTotalPlays: 12480,
         subFilters: [
           { id: 'all', label: 'All Movies' },
           { id: 'global', label: 'Global Cinema' },
@@ -881,13 +840,9 @@
         ]
       },
       {
-        id: 'comfort-foods',
-        title: 'Food',
-        emoji: '🍛',
-        subtitle: 'Karnataka & South Indian icons — loads comfort-foods.json automatically on GitHub.',
-        aiPromptHint: 'beloved Indian food dishes focusing strongly on Karnataka dishes and South Indian specialties',
-        defaultMediaType: 'wiki',
-        seedTotalPlays: 14920,
+        id: 'comfort-foods', title: 'Food', emoji: '🍛',
+        subtitle: 'Karnataka & South Indian icons — automatically loads comfort-foods.json.',
+        defaultMediaType: 'wiki', seedTotalPlays: 14920,
         subFilters: [
           { id: 'all', label: 'All Dishes' },
           { id: 'karnataka', label: 'Karnataka Specials' },
@@ -901,200 +856,16 @@
           mk('f-ragi-mudde', 'Ragi Mudde & Bassaru', '🥣', 4180, 4, 'Old Mysuru · Finger Millet & Greens', 'Ragi_mudde', 'karnataka'),
           mk('f-donne-biryani', 'Bengaluru Donne Biryani', '🍛', 4260, 4, 'Bengaluru · Herb Seeraga Samba', 'Biryani', 'karnataka'),
           mk('f-thatte-idli', 'Bidadi Thatte Idli', '⚪', 4140, 2, 'Bidadi · Soft Plate Idli & Butter', 'Idli', 'karnataka'),
-          mk('f-ghee-roast', 'Mangalorean Ghee Roast', '🔥', 4220, 1, 'Kundapura · Byadgi Chilli Roast', 'Chicken_ghee_roast', 'karnataka'),
+          mk('f-ghee-roast', 'Mangalorean Chicken Ghee Roast', '🔥', 4220, 1, 'Kundapura · Byadgi Chilli Roast', 'Chicken_ghee_roast', 'karnataka'),
           mk('f-maddur-vada', 'Maddur Vada', '🍩', 4060, 6, 'Maddur · Crispy Onion Fritter', 'Maddur_vada', 'karnataka'),
           mk('f-hyderabadi-biryani', 'Hyderabadi Dum Biryani', '🍛', 4290, 3, 'South Indian · Royal Saffron Dum', 'Hyderabadi_biryani', 'south-indian'),
-          mk('f-malabar-parotta', 'Malabar Parotta & Curry', '🫓', 4110, 6, 'Kerala · Flaky Layered Parotta', 'Parotta', 'south-indian'),
+          mk('f-malabar-parotta', 'Malabar Parotta & Roast', '🫓', 4110, 6, 'Kerala · Flaky Layered Parotta', 'Parotta', 'south-indian'),
         ]
       },
       {
-        id: 'sports',
-        title: 'Sports',
-        emoji: '🏅',
-        subtitle: 'Team, combat, motor & Olympic sports.',
-        aiPromptHint: 'exciting world sports, Olympic sports, Indian traditional sports, motorsports, and combat sports',
-        defaultMediaType: 'wiki',
-        seedTotalPlays: 11240,
-        subFilters: [
-          { id: 'all', label: 'All Sports' },
-          { id: 'team', label: 'Team Sports' },
-          { id: 'individual', label: 'Individual & Combat' },
-          { id: 'motor', label: 'Motor & Mind' },
-        ],
-        choices: [
-          mk('sp-cricket', 'Cricket', '🏏', 4460, 2, 'Bat & Ball · Global', 'Cricket', 'team'),
-          mk('sp-football', 'Football (Soccer)', '⚽', 4510, 4, 'The World Game', 'Association_football', 'team'),
-          mk('sp-kabaddi', 'Kabaddi', '🤼', 4190, 6, 'Indian Contact Sport', 'Kabaddi', 'team'),
-          mk('sp-badminton', 'Badminton', '🏸', 4240, 4, 'Racquet Speed', 'Badminton', 'individual'),
-          mk('sp-formula-1', 'Formula 1', '🏎️', 4280, 1, 'Pinnacle Motorsport', 'Formula_One', 'motor'),
-          mk('sp-tennis', 'Tennis', '🎾', 4140, 3, 'Grand Slam', 'Tennis', 'individual'),
-          mk('sp-basketball', 'Basketball', '🏀', 4090, 3, 'Hoops · NBA', 'Basketball', 'team'),
-          mk('sp-chess', 'Chess', '♟️', 4160, 0, 'Mind Sport', 'Chess', 'motor'),
-          mk('sp-mma', 'MMA / UFC', '🥊', 4020, 1, 'Mixed Martial Arts', 'Mixed_martial_arts', 'individual'),
-          mk('sp-field-hockey', 'Field Hockey', '🏑', 3940, 2, 'Olympic Classic', 'Field_hockey', 'team'),
-        ]
-      },
-      {
-        id: 'video-games',
-        title: 'Video Games',
-        emoji: '🎮',
-        subtitle: 'Hall-of-fame RPGs, action classics, indies & multiplayer titans.',
-        aiPromptHint: 'critically acclaimed video games across RPG, action-adventure, open world, indie, and multiplayer genres',
-        defaultMediaType: 'wiki',
-        seedTotalPlays: 13680,
-        subFilters: [
-          { id: 'all', label: 'All Games' },
-          { id: 'rpg', label: 'RPG & Open World' },
-          { id: 'action', label: 'Action & FPS' },
-          { id: 'multi-indie', label: 'Multiplayer & Indie' },
-        ],
-        choices: [
-          mk('vg-rdr2', 'Red Dead Redemption 2', '🤠', 4380, 1, 'Rockstar · Open World', 'Red_Dead_Redemption_2', 'rpg'),
-          mk('vg-elden-ring', 'Elden Ring', '💍', 4320, 3, 'FromSoftware · Action RPG', 'Elden_Ring', 'rpg'),
-          mk('vg-botw', 'Zelda: Breath of the Wild', '🗡️', 4240, 4, 'Nintendo · Adventure', 'The_Legend_of_Zelda:_Breath_of_the_Wild', 'rpg'),
-          mk('vg-witcher-3', 'The Witcher 3: Wild Hunt', '🐺', 4290, 0, 'CDPR · Fantasy RPG', 'The_Witcher_3:_Wild_Hunt', 'rpg'),
-          mk('vg-gta-v', 'Grand Theft Auto V', '🚗', 4180, 6, 'Rockstar · Sandbox', 'Grand_Theft_Auto_V', 'rpg'),
-          mk('vg-god-of-war', 'God of War (2018)', '🪓', 4210, 2, 'Santa Monica · Action', 'God_of_War_(2018_video_game)', 'action'),
-          mk('vg-sekiro', 'Sekiro: Shadows Die Twice', '⚔️', 4150, 1, 'FromSoftware · Action', 'Sekiro:_Shadows_Die_Twice', 'action'),
-          mk('vg-minecraft', 'Minecraft', '⛏️', 4260, 4, 'Sandbox Icon', 'Minecraft', 'multi-indie'),
-          mk('vg-bg3', "Baldur's Gate 3", '🎲', 4190, 5, 'Larian · CRPG', "Baldur's_Gate_3", 'rpg'),
-          mk('vg-hollow-knight', 'Hollow Knight', '🦋', 4080, 7, 'Team Cherry · Metroidvania', 'Hollow_Knight', 'multi-indie'),
-        ]
-      },
-      {
-        id: 'careers',
-        title: 'Careers',
-        emoji: '💼',
-        subtitle: 'Which extraordinary life & career path would you live?',
-        aiPromptHint: 'fascinating, inspiring, modern, and prestigious career paths across technology, science, arts, sports, aviation, and leadership',
-        defaultMediaType: 'wiki',
-        seedTotalPlays: 10940,
-        subFilters: [
-          { id: 'all', label: 'All Careers' },
-          { id: 'tech', label: 'Tech & Science' },
-          { id: 'creative', label: 'Creative & Media' },
-          { id: 'impact', label: 'Sports & Leadership' },
-        ],
-        choices: [
-          mk('c-filmmaker', 'Filmmaker', '🎬', 4280, 3, 'Cinema & Storytelling', 'Film_director', 'creative'),
-          mk('c-astronaut', 'Astronaut', '👨‍🚀', 4340, 7, 'Spaceflight', 'Astronaut', 'tech'),
-          mk('c-ai-researcher', 'AI Researcher', '🧠', 4210, 7, 'Artificial Intelligence', 'Artificial_intelligence', 'tech'),
-          mk('c-f1-driver', 'Formula 1 Driver', '🏎️', 4260, 1, 'Motorsport', 'Formula_One', 'impact'),
-          mk('c-fighter-pilot', 'Fighter Pilot', '✈️', 4180, 2, 'Aviation', 'Fighter_pilot', 'impact'),
-          mk('c-surgeon', 'Neurosurgeon', '🩺', 4120, 2, 'Medicine', 'Neurosurgery', 'impact'),
-          mk('c-game-dev', 'Game Director', '🕹️', 4060, 5, 'Interactive Worlds', 'Video_game_developer', 'tech'),
-          mk('c-entrepreneur', 'Startup Founder', '🚀', 4190, 3, 'Entrepreneurship', 'Entrepreneurship', 'impact'),
-          mk('c-ias', 'IAS / Civil Servant', '🏛️', 4150, 3, 'Public Leadership', 'Indian_Administrative_Service', 'impact'),
-          mk('c-chef', 'Executive Chef', '👨‍🍳', 3990, 6, 'Culinary Arts', 'Chef', 'creative'),
-        ]
-      },
-      {
-        id: 'cricketers',
-        title: 'Cricketers',
-        emoji: '🏏',
-        subtitle: 'Indian & international cricket legends and modern stars.',
-        aiPromptHint: 'famous international and Indian cricketers (both active stars and all-time legends)',
-        defaultMediaType: 'wiki',
-        seedTotalPlays: 15820,
-        subFilters: [
-          { id: 'all', label: 'All Cricketers' },
-          { id: 'indian', label: 'Indian Stars' },
-          { id: 'international', label: 'International' },
-        ],
-        choices: [
-          mk('cr-virat', 'Virat Kohli', '🏏', 4480, 1, 'IND · Batter', 'Virat_Kohli', 'indian'),
-          mk('cr-dhoni', 'MS Dhoni', '🏆', 4460, 3, 'IND · Captain-Keeper', 'MS_Dhoni', 'indian'),
-          mk('cr-sachin', 'Sachin Tendulkar', '👑', 4490, 2, 'IND · Legend Batter', 'Sachin_Tendulkar', 'indian'),
-          mk('cr-rohit', 'Rohit Sharma', '🔥', 4320, 2, 'IND · Opener-Captain', 'Rohit_Sharma', 'indian'),
-          mk('cr-bumrah', 'Jasprit Bumrah', '⚡', 4360, 7, 'IND · Fast Bowler', 'Jasprit_Bumrah', 'indian'),
-          mk('cr-dravid', 'Rahul Dravid', '🧱', 4280, 0, 'IND · The Wall (Karnataka)', 'Rahul_Dravid', 'indian'),
-          mk('cr-abd', 'AB de Villiers', '💎', 4340, 4, 'RSA · Mr. 360', 'AB_de_Villiers', 'international'),
-          mk('cr-warne', 'Shane Warne', '🌀', 4220, 3, 'AUS · Leg-Spin Legend', 'Shane_Warne', 'international'),
-          mk('cr-ponting', 'Ricky Ponting', '⭐', 4190, 3, 'AUS · Batter-Captain', 'Ricky_Ponting', 'international'),
-          mk('cr-kallis', 'Jacques Kallis', '🛡️', 4160, 4, 'RSA · All-Rounder GOAT', 'Jacques_Kallis', 'international'),
-        ]
-      },
-      {
-        id: 'footballers',
-        title: 'Footballers',
-        emoji: '⚽',
-        subtitle: 'Active football superstars & all-time legends.',
-        aiPromptHint: 'famous world footballers (active superstars and all-time football legends)',
-        defaultMediaType: 'wiki',
-        seedTotalPlays: 14710,
-        subFilters: [
-          { id: 'all', label: 'All Footballers' },
-          { id: 'active', label: 'Active Stars' },
-          { id: 'legends', label: 'All-Time Legends' },
-        ],
-        choices: [
-          mk('fb-messi', 'Lionel Messi', '🐐', 4510, 2, 'ARG · Forward', 'Lionel_Messi', 'active'),
-          mk('fb-ronaldo', 'Cristiano Ronaldo', '⚡', 4470, 1, 'POR · Forward', 'Cristiano_Ronaldo', 'active'),
-          mk('fb-pele', 'Pelé', '👑', 4390, 3, 'BRA · Legend', 'Pel%C3%A9', 'legends'),
-          mk('fb-maradona', 'Diego Maradona', '🔥', 4360, 2, 'ARG · Legend', 'Diego_Maradona', 'legends'),
-          mk('fb-zidane', 'Zinedine Zidane', '💎', 4310, 7, 'FRA · Midfielder', 'Zinedine_Zidane', 'legends'),
-          mk('fb-mbappe', 'Kylian Mbappé', '🚀', 4260, 0, 'FRA · Forward', 'Kylian_Mbapp%C3%A9', 'active'),
-          mk('fb-ronaldinho', 'Ronaldinho', '✨', 4320, 4, 'BRA · Playmaker', 'Ronaldinho', 'legends'),
-          mk('fb-haaland', 'Erling Haaland', '🤖', 4180, 2, 'NOR · Striker', 'Erling_Haaland', 'active'),
-          mk('fb-yamal', 'Lamine Yamal', '🌟', 4220, 1, 'ESP · Winger', 'Lamine_Yamal', 'active'),
-          mk('fb-chhetri', 'Sunil Chhetri', '🇮🇳', 4240, 2, 'IND · Forward Legend', 'Sunil_Chhetri', 'legends'),
-        ]
-      },
-      {
-        id: 'tv-serials',
-        title: 'TV Serials',
-        emoji: '📺',
-        subtitle: 'Peak global television & iconic Indian series.',
-        aiPromptHint: 'critically acclaimed TV series and popular Indian web series or classic TV serials',
-        defaultMediaType: 'tmdb-tv',
-        seedTotalPlays: 11850,
-        subFilters: [
-          { id: 'all', label: 'All Series' },
-          { id: 'global', label: 'Global Series' },
-          { id: 'indian', label: 'Indian Shows' },
-        ],
-        choices: [
-          mk('tv-breaking-bad', 'Breaking Bad', '🧪', 4480, 4, '2008 · Crime Drama', 'Breaking_Bad', 'global', 'tmdb-tv', '2008'),
-          mk('tv-got', 'Game of Thrones', '🐉', 4340, 1, '2011 · Fantasy', 'Game_of_Thrones', 'global', 'tmdb-tv', '2011'),
-          mk('tv-dark', 'Dark', '⏳', 4240, 7, '2017 · Sci-Fi', 'Dark_(TV_series)', 'global', 'tmdb-tv', '2017'),
-          mk('tv-stranger-things', 'Stranger Things', '🚲', 4210, 1, '2016 · Sci-Fi', 'Stranger_Things', 'global', 'tmdb-tv', '2016'),
-          mk('tv-office', 'The Office', '📎', 4260, 2, '2005 · Sitcom', 'The_Office_(American_TV_series)', 'global', 'tmdb-tv', '2005'),
-          mk('tv-chernobyl', 'Chernobyl', '☢️', 4290, 0, '2019 · Miniseries', 'Chernobyl_(miniseries)', 'global', 'tmdb-tv', '2019'),
-          mk('tv-panchayat', 'Panchayat', '🌾', 4310, 4, '2020 · Indian Drama', 'Panchayat_(TV_series)', 'indian', 'tmdb-tv', '2020'),
-          mk('tv-scam-1992', 'Scam 1992', '📈', 4330, 3, '2020 · Indian Bio-Drama', 'Scam_1992', 'indian', 'tmdb-tv', '2020'),
-          mk('tv-family-man', 'The Family Man', '🕶️', 4190, 2, '2019 · Indian Thriller', 'The_Family_Man_(Indian_TV_series)', 'indian', 'tmdb-tv', '2019'),
-          mk('tv-malgudi', 'Malgudi Days', '🚂', 4220, 6, '1987 · Karnataka Classic', 'Malgudi_Days_(TV_series)', 'indian', 'tmdb-tv', '1987'),
-        ]
-      },
-      {
-        id: 'anime',
-        title: 'Anime',
-        emoji: '⛩️',
-        subtitle: 'All-time greatest & modern anime series.',
-        aiPromptHint: 'top rated anime series across shonen, seinen, psychological thriller, sci-fi, and sports genres',
-        defaultMediaType: 'tmdb-tv',
-        seedTotalPlays: 12910,
-        choices: [
-          mk('an-aot', 'Attack on Titan', '🧱', 4420, 1, '2013 · Dark Fantasy', '', 'all', 'tmdb-tv', '2013'),
-          mk('an-one-piece', 'One Piece', '🏴‍☠️', 4450, 2, '1999 · Adventure', '', 'all', 'tmdb-tv', '1999'),
-          mk('an-fmab', 'Fullmetal Alchemist: Brotherhood', '⚗️', 4390, 3, '2009 · Masterpiece', '', 'all', 'tmdb-tv', '2009'),
-          mk('an-death-note', 'Death Note', '📓', 4340, 0, '2006 · Psychological', '', 'all', 'tmdb-tv', '2006'),
-          mk('an-naruto', 'Naruto Shippuden', '🍥', 4310, 6, '2007 · Shonen', '', 'all', 'tmdb-tv', '2007'),
-          mk('an-hxh', 'Hunter x Hunter', '🃏', 4260, 4, '2011 · Adventure', '', 'all', 'tmdb-tv', '2011'),
-          mk('an-solo-leveling', 'Solo Leveling', '🕶️', 4220, 7, '2024 · Action', '', 'all', 'tmdb-tv', '2024'),
-          mk('an-frieren', "Frieren: Beyond Journey's End", '🪄', 4280, 5, '2023 · Fantasy', '', 'all', 'tmdb-tv', '2023'),
-          mk('an-vinland', 'Vinland Saga', '🪓', 4180, 0, '2019 · Historical Seinen', '', 'all', 'tmdb-tv', '2019'),
-          mk('an-steins-gate', 'Steins;Gate', '⏱️', 4210, 7, '2011 · Sci-Fi Thriller', '', 'all', 'tmdb-tv', '2011'),
-        ]
-      },
-      {
-        id: 'pokemon',
-        title: 'Pokémon',
-        emoji: '⚡',
-        subtitle: '512 Pokémon — Starters, Legendaries, Mythicals & fan favorites across all 9 generations.',
-        aiPromptHint: 'iconic Pokémon across all 9 generations including starters, legendaries, mythicals, and fan favorites',
-        defaultMediaType: 'pokemon',
-        seedTotalPlays: 16420,
+        id: 'pokemon', title: 'Pokémon', emoji: '⚡',
+        subtitle: 'Starters, Legendaries, Mythicals & fan favorites — loads pokemon.json + pokemona.json.',
+        defaultMediaType: 'pokemon', seedTotalPlays: 16420,
         subFilters: [
           { id: 'all', label: 'All' },
           { id: 'starters', label: 'Starters' },
@@ -1116,24 +887,348 @@
         ]
       },
       {
-        id: 'superpowers',
-// ... existing code ... -->
+        id: 'sports', title: 'Sports', emoji: '🏅',
+        subtitle: 'Team, combat, motor & Olympic sports.',
+        defaultMediaType: 'wiki', seedTotalPlays: 11240,
+        subFilters: [
+          { id: 'all', label: 'All Sports' },
+          { id: 'team', label: 'Team Sports' },
+          { id: 'individual', label: 'Individual & Combat' },
+          { id: 'motor', label: 'Motor & Mind' },
+        ],
+        choices: [
+          mk('sp-cricket', 'Cricket', '🏏', 4460, 2, 'Bat & Ball · Global', 'Cricket', 'team'),
+          mk('sp-football', 'Football (Soccer)', '⚽', 4510, 4, 'The World Game', 'Association_football', 'team'),
+          mk('sp-kabaddi', 'Kabaddi', '🤼', 4190, 6, 'Indian Contact Sport', 'Kabaddi', 'team'),
+          mk('sp-badminton', 'Badminton', '🏸', 4240, 4, 'Racquet Speed', 'Badminton', 'individual'),
+          mk('sp-formula-1', 'Formula 1', '🏎️', 4280, 1, 'Pinnacle Motorsport', 'Formula_One', 'motor'),
+          mk('sp-tennis', 'Tennis', '🎾', 4140, 3, 'Grand Slam', 'Tennis', 'individual'),
+          mk('sp-basketball', 'Basketball', '🏀', 4090, 3, 'Hoops · NBA', 'Basketball', 'team'),
+          mk('sp-chess', 'Chess', '♟️', 4160, 0, 'Mind Sport', 'Chess', 'motor'),
+          mk('sp-mma', 'MMA / UFC', '🥊', 4020, 1, 'Mixed Martial Arts', 'Mixed_martial_arts', 'individual'),
+          mk('sp-field-hockey', 'Field Hockey', '🏑', 3940, 2, 'Olympic Classic', 'Field_hockey', 'team'),
+        ]
+      },
+      {
+        id: 'video-games', title: 'Video Games', emoji: '🎮',
+        subtitle: 'Hall-of-fame RPGs, action classics, indies & multiplayer titans.',
+        defaultMediaType: 'wiki', seedTotalPlays: 13680,
+        subFilters: [
+          { id: 'all', label: 'All Games' },
+          { id: 'rpg', label: 'RPG & Open World' },
+          { id: 'action', label: 'Action & FPS' },
+          { id: 'multi-indie', label: 'Multiplayer & Indie' },
+        ],
+        choices: [
+          mk('vg-rdr2', 'Red Dead Redemption 2', '🤠', 4380, 1, 'Rockstar · Open World', 'Red_Dead_Redemption_2', 'rpg'),
+          mk('vg-elden-ring', 'Elden Ring', '💍', 4320, 3, 'FromSoftware · Action RPG', 'Elden_Ring', 'rpg'),
+          mk('vg-botw', 'Zelda: Breath of the Wild', '🗡️', 4240, 4, 'Nintendo · Adventure', 'The_Legend_of_Zelda:_Breath_of_the_Wild', 'rpg'),
+          mk('vg-witcher-3', 'The Witcher 3: Wild Hunt', '🐺', 4290, 0, 'CDPR · Fantasy RPG', 'The_Witcher_3:_Wild_Hunt', 'rpg'),
+          mk('vg-gta-v', 'Grand Theft Auto V', '🚗', 4180, 6, 'Rockstar · Sandbox', 'Grand_Theft_Auto_V', 'rpg'),
+          mk('vg-god-of-war', 'God of War (2018)', '🪓', 4210, 2, 'Santa Monica · Action', 'God_of_War_(2018_video_game)', 'action'),
+          mk('vg-sekiro', 'Sekiro: Shadows Die Twice', '⚔️', 4150, 1, 'FromSoftware · Action', 'Sekiro:_Shadows_Die_Twice', 'action'),
+          mk('vg-minecraft', 'Minecraft', '⛏️', 4260, 4, 'Sandbox Icon', 'Minecraft', 'multi-indie'),
+          mk('vg-bg3', "Baldur's Gate 3", '🎲', 4190, 5, 'Larian · CRPG', "Baldur's_Gate_3", 'rpg'),
+          mk('vg-hollow-knight', 'Hollow Knight', '🦋', 4080, 7, 'Team Cherry · Metroidvania', 'Hollow_Knight', 'multi-indie'),
+        ]
+      },
+      {
+        id: 'careers', title: 'Careers', emoji: '💼',
+        subtitle: 'Which extraordinary life & career path would you live?',
+        defaultMediaType: 'wiki', seedTotalPlays: 10940,
+        subFilters: [
+          { id: 'all', label: 'All Careers' },
+          { id: 'tech', label: 'Tech & Science' },
+          { id: 'creative', label: 'Creative & Media' },
+          { id: 'impact', label: 'Sports & Leadership' },
+        ],
+        choices: [
+          mk('c-filmmaker', 'Filmmaker / Director', '🎬', 4280, 3, 'Cinema & Storytelling', 'Film_director', 'creative'),
+          mk('c-astronaut', 'Astronaut', '👨‍🚀', 4340, 7, 'Spaceflight', 'Astronaut', 'tech'),
+          mk('c-ai-researcher', 'AI Researcher', '🧠', 4210, 7, 'Artificial Intelligence', 'Artificial_intelligence', 'tech'),
+          mk('c-f1-driver', 'Formula 1 Driver', '🏎️', 4260, 1, 'Motorsport', 'Formula_One', 'impact'),
+          mk('c-fighter-pilot', 'Fighter Pilot', '✈️', 4180, 2, 'Aviation', 'Fighter_pilot', 'impact'),
+          mk('c-surgeon', 'Neurosurgeon', '🩺', 4120, 2, 'Medicine', 'Neurosurgery', 'impact'),
+          mk('c-game-dev', 'Game Director', '🕹️', 4060, 5, 'Interactive Worlds', 'Video_game_developer', 'tech'),
+          mk('c-entrepreneur', 'Startup Founder / CEO', '🚀', 4190, 3, 'Entrepreneurship', 'Entrepreneurship', 'impact'),
+          mk('c-ias', 'IAS / Civil Servant', '🏛️', 4150, 3, 'Public Leadership', 'Indian_Administrative_Service', 'impact'),
+          mk('c-chef', 'Executive Chef', '👨‍🍳', 3990, 6, 'Culinary Arts', 'Chef', 'creative'),
+        ]
+      },
+      {
+        id: 'cricketers', title: 'Cricketers', emoji: '🏏',
+        subtitle: 'Indian & international cricket legends and modern stars.',
+        defaultMediaType: 'wiki', seedTotalPlays: 15820,
+        subFilters: [
+          { id: 'all', label: 'All Cricketers' },
+          { id: 'indian', label: 'Indian Stars' },
+          { id: 'international', label: 'International' },
+        ],
+        choices: [
+          mk('cr-virat', 'Virat Kohli', '🏏', 4480, 1, 'IND · Batter', 'Virat_Kohli', 'indian'),
+          mk('cr-dhoni', 'MS Dhoni', '🏆', 4460, 3, 'IND · Captain-Keeper', 'MS_Dhoni', 'indian'),
+          mk('cr-sachin', 'Sachin Tendulkar', '👑', 4490, 2, 'IND · Legend Batter', 'Sachin_Tendulkar', 'indian'),
+          mk('cr-rohit', 'Rohit Sharma', '🔥', 4320, 2, 'IND · Opener-Captain', 'Rohit_Sharma', 'indian'),
+          mk('cr-bumrah', 'Jasprit Bumrah', '⚡', 4360, 7, 'IND · Fast Bowler', 'Jasprit_Bumrah', 'indian'),
+          mk('cr-dravid', 'Rahul Dravid', '🧱', 4280, 0, 'IND · The Wall (Karnataka)', 'Rahul_Dravid', 'indian'),
+          mk('cr-abd', 'AB de Villiers', '💎', 4340, 4, 'RSA · Mr. 360', 'AB_de_Villiers', 'international'),
+          mk('cr-warne', 'Shane Warne', '🌀', 4220, 3, 'AUS · Leg-Spin Legend', 'Shane_Warne', 'international'),
+          mk('cr-ponting', 'Ricky Ponting', '⭐', 4190, 3, 'AUS · Batter-Captain', 'Ricky_Ponting', 'international'),
+          mk('cr-kallis', 'Jacques Kallis', '🛡️', 4160, 4, 'RSA · All-Rounder GOAT', 'Jacques_Kallis', 'international'),
+        ]
+      },
+      {
+        id: 'footballers', title: 'Footballers', emoji: '⚽',
+        subtitle: 'Active football superstars & all-time legends.',
+        defaultMediaType: 'wiki', seedTotalPlays: 14710,
+        subFilters: [
+          { id: 'all', label: 'All Footballers' },
+          { id: 'active', label: 'Active Stars' },
+          { id: 'legends', label: 'All-Time Legends' },
+        ],
+        choices: [
+          mk('fb-messi', 'Lionel Messi', '🐐', 4510, 2, 'ARG · Forward', 'Lionel_Messi', 'active'),
+          mk('fb-ronaldo', 'Cristiano Ronaldo', '⚡', 4470, 1, 'POR · Forward', 'Cristiano_Ronaldo', 'active'),
+          mk('fb-pele', 'Pelé', '👑', 4390, 3, 'BRA · Legend', 'Pel%C3%A9', 'legends'),
+          mk('fb-maradona', 'Diego Maradona', '🔥', 4360, 2, 'ARG · Legend', 'Diego_Maradona', 'legends'),
+          mk('fb-zidane', 'Zinedine Zidane', '💎', 4310, 7, 'FRA · Midfielder', 'Zinedine_Zidane', 'legends'),
+          mk('fb-mbappe', 'Kylian Mbappé', '🚀', 4260, 0, 'FRA · Forward', 'Kylian_Mbapp%C3%A9', 'active'),
+          mk('fb-ronaldinho', 'Ronaldinho', '✨', 4320, 4, 'BRA · Playmaker', 'Ronaldinho', 'legends'),
+          mk('fb-haaland', 'Erling Haaland', '🤖', 4180, 2, 'NOR · Striker', 'Erling_Haaland', 'active'),
+          mk('fb-yamal', 'Lamine Yamal', '🌟', 4220, 1, 'ESP · Winger', 'Lamine_Yamal', 'active'),
+          mk('fb-chhetri', 'Sunil Chhetri', '🇮🇳', 4240, 2, 'IND · Forward Legend', 'Sunil_Chhetri', 'active'),
+        ]
+      },
+      {
+        id: 'tv-serials', title: 'TV Serials', emoji: '📺',
+        subtitle: 'Peak global television & iconic Indian series.',
+        defaultMediaType: 'tmdb-tv', seedTotalPlays: 11850,
+        subFilters: [
+          { id: 'all', label: 'All Series' },
+          { id: 'global', label: 'Global Series' },
+          { id: 'indian', label: 'Indian Shows' },
+        ],
+        choices: [
+          mk('tv-breaking-bad', 'Breaking Bad', '🧪', 4480, 4, '2008 · Crime Drama', 'Breaking_Bad', 'global', 'tmdb-tv', '2008'),
+          mk('tv-got', 'Game of Thrones', '🐉', 4340, 1, '2011 · Fantasy', 'Game_of_Thrones', 'global', 'tmdb-tv', '2011'),
+          mk('tv-dark', 'Dark', '⏳', 4240, 7, '2017 · Sci-Fi', 'Dark_(TV_series)', 'global', 'tmdb-tv', '2017'),
+          mk('tv-stranger-things', 'Stranger Things', '🚲', 4210, 1, '2016 · Sci-Fi', 'Stranger_Things', 'global', 'tmdb-tv', '2016'),
+          mk('tv-office', 'The Office', '📎', 4260, 2, '2005 · Sitcom', 'The_Office_(American_TV_series)', 'global', 'tmdb-tv', '2005'),
+          mk('tv-chernobyl', 'Chernobyl', '☢️', 4290, 0, '2019 · Miniseries', 'Chernobyl_(miniseries)', 'global', 'tmdb-tv', '2019'),
+          mk('tv-panchayat', 'Panchayat', '🌾', 4310, 4, '2020 · Indian Drama', 'Panchayat_(TV_series)', 'indian', 'tmdb-tv', '2020'),
+          mk('tv-scam-1992', 'Scam 1992', '📈', 4330, 3, '2020 · Indian Bio-Drama', 'Scam_1992', 'indian', 'tmdb-tv', '2020'),
+          mk('tv-family-man', 'The Family Man', '🕶️', 4190, 2, '2019 · Indian Thriller', 'The_Family_Man_(Indian_TV_series)', 'indian', 'tmdb-tv', '2019'),
+          mk('tv-malgudi', 'Malgudi Days', '🚂', 4220, 6, '1987 · Karnataka Classic', 'Malgudi_Days_(TV_series)', 'indian', 'tmdb-tv', '1987'),
+        ]
+      },
+      {
+        id: 'anime', title: 'Anime', emoji: '⛩️',
+        subtitle: 'All-time greatest & modern anime series.',
+        defaultMediaType: 'tmdb-tv', seedTotalPlays: 12910,
+        choices: [
+          mk('an-aot', 'Attack on Titan', '🧱', 4420, 1, '2013 · Dark Fantasy', '', 'all', 'tmdb-tv', '2013'),
+          mk('an-one-piece', 'One Piece', '🏴‍☠️', 4450, 2, '1999 · Adventure', '', 'all', 'tmdb-tv', '1999'),
+          mk('an-fmab', 'Fullmetal Alchemist: Brotherhood', '⚗️', 4390, 3, '2009 · Masterpiece', '', 'all', 'tmdb-tv', '2009'),
+          mk('an-death-note', 'Death Note', '📓', 4340, 0, '2006 · Psychological', '', 'all', 'tmdb-tv', '2006'),
+          mk('an-naruto', 'Naruto Shippuden', '🍥', 4310, 6, '2007 · Shonen', '', 'all', 'tmdb-tv', '2007'),
+          mk('an-hxh', 'Hunter x Hunter', '🃏', 4260, 4, '2011 · Adventure', '', 'all', 'tmdb-tv', '2011'),
+          mk('an-solo-leveling', 'Solo Leveling', '🕶️', 4220, 7, '2024 · Action', '', 'all', 'tmdb-tv', '2024'),
+          mk('an-frieren', "Frieren: Beyond Journey's End", '🪄', 4280, 5, '2023 · Fantasy', '', 'all', 'tmdb-tv', '2023'),
+          mk('an-vinland', 'Vinland Saga', '🪓', 4180, 0, '2019 · Historical Seinen', '', 'all', 'tmdb-tv', '2019'),
+          mk('an-steins-gate', 'Steins;Gate', '⏱️', 4210, 7, '2011 · Sci-Fi Thriller', '', 'all', 'tmdb-tv', '2011'),
+        ]
+      },
+      {
+        id: 'superpowers', title: 'Superpowers', emoji: '✨',
+        subtitle: 'One ability for life. Choose wisely.',
+        defaultMediaType: 'wiki', seedTotalPlays: 9840,
+        choices: [
+          mk('pw-time', 'Time Manipulation', '⏳', 4320, 7, 'Rewind & Slow', 'Time_travel'),
+          mk('pw-teleport', 'Teleportation', '🌀', 4260, 2, 'Instant Jump', 'Teleportation'),
+          mk('pw-freeze', 'Stopping Time', '⏸️', 4190, 0, 'Freeze World', 'Clock'),
+          mk('pw-luck', 'Luck Manipulation', '🍀', 4210, 4, 'Bend Probability', 'Four-leaf_clover'),
+          mk('pw-telekinesis', 'Telekinesis', '🧠', 4080, 5, 'Mind Over Matter', 'Telekinesis'),
+          mk('pw-flight', 'Flight', '🦅', 4040, 2, 'Sky Travel', 'Flight'),
+          mk('pw-invisibility', 'Invisibility', '👻', 3990, 0, 'Total Stealth', 'Invisibility'),
+          mk('pw-healing', 'Healing Factor', '❤️‍🔥', 4110, 1, 'Regeneration', 'Regeneration_(biology)'),
+          mk('pw-speed', 'Super Speed', '⚡', 4020, 3, 'Flash Velocity', 'Speed_of_light'),
+          mk('pw-shapeshift', 'Shapeshifting', '🦎', 3960, 4, 'Morph Anyone', 'Shapeshifting'),
+        ]
+      },
+      {
+        id: 'destinations', title: 'Destinations', emoji: '✈️',
+        subtitle: 'One all-expenses-paid ticket anywhere on Earth.',
+        defaultMediaType: 'wiki', seedTotalPlays: 9420,
+        choices: [
+          mk('ds-tokyo', 'Tokyo', '🗼', 4290, 5, 'Japan · Neon Metropolis', 'Tokyo'),
+          mk('ds-swiss', 'Swiss Alps', '🏔️', 4250, 2, 'Switzerland · Snow Peaks', 'Swiss_Alps'),
+          mk('ds-kyoto', 'Kyoto', '⛩️', 4180, 1, 'Japan · Shrines & Bamboo', 'Kyoto'),
+          mk('ds-ladakh', 'Ladakh', '🏍️', 4210, 2, 'India · High Himalayas', 'Ladakh'),
+          mk('ds-coorg', 'Coorg (Kodagu)', '🌿', 4160, 4, 'Karnataka · Coffee Hills', 'Kodagu_district'),
+          mk('ds-hampi', 'Hampi', '🏛️', 4140, 3, 'Karnataka · UNESCO Ruins', 'Hampi'),
+          mk('ds-gokarna', 'Gokarna', '🏖️', 4090, 2, 'Karnataka · Coastal Beaches', 'Gokarna,_Karnataka'),
+          mk('ds-iceland', 'Reykjavik & Iceland', '🌌', 4190, 7, 'Iceland · Northern Lights', 'Reykjav%C3%ADk'),
+          mk('ds-santorini', 'Santorini', '🌊', 4060, 2, 'Greece · Aegean Cliffs', 'Santorini'),
+          mk('ds-maldives', 'Maldives', '🐚', 4120, 2, 'Indian Ocean · Lagoons', 'Maldives'),
+        ]
+      },
+      {
+        id: 'skills', title: 'Skills', emoji: '🧠',
+        subtitle: 'Download world-class mastery into your brain overnight.',
+        defaultMediaType: 'wiki', seedTotalPlays: 8910,
+        choices: [
+          mk('sk-languages', 'Speaking 10 Languages', '🗣️', 4280, 2, 'Effortless Polyglot', 'Multilingualism'),
+          mk('sk-martial', 'Martial Arts Mastery', '🥋', 4190, 1, 'Combat & Discipline', 'Martial_arts'),
+          mk('sk-piano', 'Grand Piano Virtuoso', '🎹', 4140, 0, 'Classical & Jazz', 'Piano'),
+          mk('sk-cooking', 'Gourmet Cooking', '🍳', 4160, 3, 'Michelin-Level Chef', 'Cooking'),
+          mk('sk-jet', 'Flying a Jet', '✈️', 4120, 7, 'Aerobatic Pilot', 'Jet_aircraft'),
+          mk('sk-coding', 'Full-Stack AI Coding', '💻', 4220, 7, 'Build Anything', 'Computer_programming'),
+          mk('sk-music', 'Music Production', '🎛️', 4050, 5, 'Sound & Beats', 'Mixing_console'),
+          mk('sk-film', 'Filmmaking & Directing', '🎥', 4090, 3, 'Cinema Storytelling', 'Filmmaking'),
+          mk('sk-drift', 'Drift & Track Racing', '🏎️', 4070, 1, 'Motorsport', 'Drifting_(motorsport)'),
+          mk('sk-chess', 'Speed Chess', '♟️', 4010, 3, 'Grandmaster Tactics', 'Chess'),
+        ]
+      }
+    ];
+
+    // =========================================================================
+    // 2. EXTERNAL GITHUB JSON LOADER (ROOT + /data/ + pokemona.json)
+    // =========================================================================
+    function mergeEntriesIntoCategory(cat, list) {
+      if (!cat || !Array.isArray(list)) return;
+      const existingNames = new Set(cat.choices.map((c) => c.name.toLowerCase()));
+      list.forEach((entry) => {
+        if (!Array.isArray(entry)) return;
+        const [name, tag = '', emoji = cat.emoji, group = 'all', year = '', wikiSlug = ''] = entry;
+        if (!name || existingNames.has(String(name).toLowerCase())) return;
+        existingNames.add(String(name).toLowerCase());
+
+        const id = slugifyId(cat.id, name, year);
+        const seedVotes = 2200 + (stableHash(id) % 1800);
+        const palIdx = stableHash(id) % PALETTES.length;
+        cat.choices.push(
+          mk(id, String(name), emoji || cat.emoji, seedVotes, palIdx, String(tag || ''), String(wikiSlug || ''), String(group || 'all'), cat.defaultMediaType || 'wiki', year)
+        );
+      });
+    }
+
+    async function fetchFirstValidJson(urls) {
+      for (const url of urls) {
+        try {
+          const res = await fetch(url, { cache: 'no-cache' });
+          if (!res.ok) continue;
+          return await res.json();
+        } catch (_) {}
+      }
+      return null;
+    }
+
+    async function loadExternalCatalog() {
+      // 1) Optional monolithic data.json
+      const monolith = await fetchFirstValidJson(['./data.json', './data/data.json']);
+      if (monolith && typeof monolith === 'object' && !Array.isArray(monolith)) {
+        BUILTIN_CATEGORIES.forEach((cat) => {
+          if (Array.isArray(monolith[cat.id])) mergeEntriesIntoCategory(cat, monolith[cat.id]);
+        });
+      }
+
+      // 2) Modular category JSON files (checks root ./<id>.json first, then ./data/<id>.json)
+      await Promise.all(
+        BUILTIN_CATEGORIES.map(async (cat) => {
+          const list = await fetchFirstValidJson([`./${cat.id}.json`, `./data/${cat.id}.json`]);
+          if (Array.isArray(list)) mergeEntriesIntoCategory(cat, list);
+        })
+      );
+
+      // 3) Extra Pokémon expansion (pokemona.json)
+      const pokemonCat = BUILTIN_CATEGORIES.find((c) => c.id === 'pokemon');
+      if (pokemonCat) {
+        const extra = await fetchFirstValidJson(['./pokemona.json', './data/pokemona.json']);
+        if (Array.isArray(extra)) mergeEntriesIntoCategory(pokemonCat, extra);
+      }
+    }
+
+    // =========================================================================
+    // 3. ARTWORK ENGINE (TMDB POSTERS + POKEAPI HD ART + WIKIPEDIA PORTRAITS)
+    // =========================================================================
+    const TMDB_API_KEY = '1114624ba1ff059194414aa9b0dcf9dd';
+    const TMDB_IMG_BASE = 'https://image.tmdb.org/t/p/w500';
+    const mediaCache = new Map();
+    const mediaPending = new Map();
+    const fetchQueue = [];
+    let activeFetches = 0;
+
+    function enqueueMediaFetch(task) {
+      return new Promise((resolve) => {
+        fetchQueue.push({ task, resolve });
+        drainMediaQueue();
+      });
+    }
+
+    function drainMediaQueue() {
+      while (activeFetches < 4 && fetchQueue.length > 0) {
+        const next = fetchQueue.shift();
+        activeFetches += 1;
+        next.task()
+          .then((res) => next.resolve(res))
+          .catch(() => next.resolve({ url: null, rating: null }))
+          .finally(() => { activeFetches -= 1; drainMediaQueue(); });
+      }
+    }
+
+    async function fetchTmdbMedia(choice) {
+      try {
+        const isMovie = choice.mediaType === 'tmdb-movie';
+        const endpoint = isMovie ? 'movie' : 'tv';
+        const cleanQuery = choice.name.replace(/\s*\(\d{4}\)$/, '').trim();
+        const yearParam = choice.year
+          ? (isMovie ? `&year=${encodeURIComponent(choice.year)}` : `&first_air_date_year=${encodeURIComponent(choice.year)}`)
+          : '';
+        let res = await fetch(`https://api.themoviedb.org/3/search/${endpoint}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(cleanQuery)}${yearParam}`);
+        let data = res.ok ? await res.json() : null;
+        let hit = data?.results?.find((r) => r.poster_path) || data?.results?.[0];
+        if (!hit && yearParam) {
+          res = await fetch(`https://api.themoviedb.org/3/search/${endpoint}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(cleanQuery)}`);
+          data = res.ok ? await res.json() : null;
+          hit = data?.results?.find((r) => r.poster_path) || data?.results?.[0];
+        }
+        if (hit) {
+          const url = hit.poster_path ? `${TMDB_IMG_BASE}${hit.poster_path}` : null;
+          const rating = hit.vote_average > 0 && (hit.vote_count || 0) >= 15 ? hit.vote_average.toFixed(1) : null;
+          if (url || rating) return { url, rating };
+        }
+      } catch (_) {}
+      return { url: null, rating: null };
+    }
+
+    async function fetchWikiMedia(choice) {
+      const slug = choice.wikiSlug || encodeURIComponent(choice.name.replace(/\s+/g, '_'));
+      try {
+        const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${slug}`, { headers: { 'Accept': 'application/json' } });
+        if (!res.ok) return { url: null, rating: null };
+        const data = await res.json();
+        const raw = data?.thumbnail?.source || data?.originalimage?.source || null;
+        return { url: raw ? raw.replace(/\/\d+px-/, '/640px-') : null, rating: null };
+      } catch (_) {
+        return { url: null, rating: null };
+      }
+    }
+
     function resolveMediaForChoice(choice) {
       if (!choice) return Promise.resolve({ url: null, rating: null });
       if (choice.img) return Promise.resolve({ url: choice.img, rating: null });
       if (mediaCache.has(choice.id)) return Promise.resolve(mediaCache.get(choice.id));
       if (mediaPending.has(choice.id)) return mediaPending.get(choice.id);
 
-      // Instant HD official artwork for Pokémon using National Pokédex number
       if (choice.mediaType === 'pokemon' && choice.year) {
         const dexNum = String(choice.year).replace(/[^0-9]/g, '');
         if (dexNum) {
-          const result = {
+          const res = {
             url: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${dexNum}.png`,
             rating: `#${dexNum.padStart(3, '0')}`
           };
-          mediaCache.set(choice.id, result);
-          return Promise.resolve(result);
+          mediaCache.set(choice.id, res);
+          return Promise.resolve(res);
         }
       }
 
@@ -1142,8 +1237,8 @@
         if (choice.mediaType === 'tmdb-movie' || choice.mediaType === 'tmdb-tv') {
           result = await fetchTmdbMedia(choice);
           if (!result.url) {
-            const fallback = await fetchWikiMedia(choice);
-            if (fallback.url) result.url = fallback.url;
+            const fb = await fetchWikiMedia(choice);
+            if (fb.url) result.url = fb.url;
           }
         } else {
           result = await fetchWikiMedia(choice);
@@ -1174,13 +1269,11 @@
       document.querySelectorAll(`[data-art-id="${CSS.escape(choiceId)}"]`).forEach((slot) => {
         if (slot.querySelector('img')) return;
         const img = document.createElement('img');
-        img.src = imgUrl;
-        img.alt = '';
-        img.loading = 'lazy';
-        const fitMode = slot.dataset.artFit;
-        img.className = fitMode === 'pokemon-card'
+        img.src = imgUrl; img.alt = ''; img.loading = 'lazy';
+        const fit = slot.dataset.artFit;
+        img.className = fit === 'pokemon-card'
           ? 'absolute inset-0 w-full h-full object-contain p-5 pb-16 drop-shadow-[0_14px_24px_rgba(0,0,0,0.65)] opacity-0 transition-opacity duration-500'
-          : fitMode === 'pokemon-thumb'
+          : fit === 'pokemon-thumb'
             ? 'absolute inset-0 w-full h-full object-contain p-0.5 opacity-0 transition-opacity duration-300'
             : 'absolute inset-0 w-full h-full object-cover object-top opacity-0 transition-opacity duration-500';
         img.onload = () => img.classList.remove('opacity-0');
@@ -1197,14 +1290,14 @@
     }
 
     function prefetchUpcomingRoundArtwork(choices, startIdx) {
-      for (let i = startIdx; i < Math.min(choices.length, startIdx + 3); i++) {
+      for (let i = startIdx; i < Math.min(choices.length, startIdx + 4); i++) {
         const ch = choices[i];
         if (ch && !ch.img && !mediaCache.has(ch.id)) resolveMediaForChoice(ch);
       }
     }
 
     // =========================================================================
-    // 4. WEB AUDIO SOUND ENGINE
+    // 4. SOUND ENGINE
     // =========================================================================
     let soundEnabled = true;
     let audioCtx = null;
@@ -1224,17 +1317,14 @@
         const ctx = getAudioCtx();
         if (!ctx) return;
         const now = ctx.currentTime;
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
+        const osc = ctx.createOscillator(), gain = ctx.createGain();
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(pitch, now);
         osc.frequency.exponentialRampToValueAtTime(pitch * 1.32, now + 0.06);
         gain.gain.setValueAtTime(0.055, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.075);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(now);
-        osc.stop(now + 0.08);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(now); osc.stop(now + 0.08);
       } catch (_) {}
     }
 
@@ -1245,16 +1335,13 @@
         if (!ctx) return;
         [523.25, 659.25, 783.99, 1046.5].forEach((freq, idx) => {
           const now = ctx.currentTime + idx * 0.06;
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
+          const osc = ctx.createOscillator(), gain = ctx.createGain();
           osc.type = 'sine';
           osc.frequency.setValueAtTime(freq, now);
           gain.gain.setValueAtTime(0.05, now);
           gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.start(now);
-          osc.stop(now + 0.34);
+          osc.connect(gain); gain.connect(ctx.destination);
+          osc.start(now); osc.stop(now + 0.34);
         });
       } catch (_) {}
     }
@@ -1262,7 +1349,7 @@
     // =========================================================================
     // 5. LOCALSTORAGE PERSISTENCE + OPTIONAL FIREBASE SYNC
     // =========================================================================
-    const LOCAL_STORAGE_KEY = 'pickoff_ai_v3';
+    const LOCAL_STORAGE_KEY = 'pickoff_v4_state';
     const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
     let db = null, auth = null, currentUser = null, firestoreReady = false;
 
@@ -1277,26 +1364,10 @@
         const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (!raw) return;
         const parsed = JSON.parse(raw);
-        if (parsed.scores && typeof parsed.scores === 'object') Object.assign(categoryScoresCache, parsed.scores);
-        if (parsed.customDecks && typeof parsed.customDecks === 'object') Object.assign(customDecksCache, parsed.customDecks);
+        if (parsed.scores) Object.assign(categoryScoresCache, parsed.scores);
+        if (parsed.customDecks) Object.assign(customDecksCache, parsed.customDecks);
         if (Array.isArray(parsed.history)) userRoundHistory = parsed.history;
-
-        if (parsed.aiDiscovered && typeof parsed.aiDiscovered === 'object') {
-          BUILTIN_CATEGORIES.forEach((cat) => {
-            const extra = parsed.aiDiscovered[cat.id];
-            if (Array.isArray(extra)) {
-              const existingIds = new Set(cat.choices.map((c) => c.id));
-              extra.forEach((item) => {
-                if (item && item.id && !existingIds.has(item.id)) {
-                  cat.choices.push(item);
-                  existingIds.add(item.id);
-                }
-              });
-            }
-          });
-        }
-
-        if (parsed.settings && typeof parsed.settings === 'object') {
+        if (parsed.settings) {
           if (typeof parsed.settings.soundEnabled === 'boolean') soundEnabled = parsed.settings.soundEnabled;
           if (typeof parsed.settings.hideNames === 'boolean') state.hideNames = parsed.settings.hideNames;
           if (['auto', 'vertical', 'horizontal'].includes(parsed.settings.layoutMode)) state.layoutMode = parsed.settings.layoutMode;
@@ -1306,16 +1377,10 @@
 
     function saveLocalState() {
       try {
-        const aiDiscovered = {};
-        BUILTIN_CATEGORIES.forEach((cat) => {
-          const aiItems = cat.choices.filter((c) => c.isAiGenerated);
-          if (aiItems.length > 0) aiDiscovered[cat.id] = aiItems.slice(-80);
-        });
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({
           scores: categoryScoresCache,
           customDecks: customDecksCache,
           history: userRoundHistory.slice(0, 60),
-          aiDiscovered,
           settings: { soundEnabled, hideNames: state.hideNames, layoutMode: state.layoutMode }
         }));
       } catch (_) {}
@@ -1334,49 +1399,25 @@
         const fbApp = initializeApp(firebaseConfig);
         auth = getAuth(fbApp);
         db = getFirestore(fbApp);
-
-        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-          currentUser = (await signInWithCustomToken(auth, __initial_auth_token)).user;
-        } else {
-          currentUser = (await signInAnonymously(auth)).user;
-        }
+        currentUser = (typeof __initial_auth_token !== 'undefined' && __initial_auth_token)
+          ? (await signInWithCustomToken(auth, __initial_auth_token)).user
+          : (await signInAnonymously(auth)).user;
         if (!currentUser) return;
         firestoreReady = true;
         subscribeToFirestore();
       } catch (_) {}
     }
 
-    function markChangedItemsForFlash(prevDoc, nextDoc) {
-      if (!prevDoc || !nextDoc) return;
-      const prevItems = prevDoc.items || {}, nextItems = nextDoc.items || {};
-      const now = Date.now();
-      let changed = false;
-      Object.keys(nextItems).forEach((cid) => {
-        if ((nextItems[cid]?.p || 0) !== (prevItems[cid]?.p || 0) || (nextItems[cid]?.d || 0) !== (prevItems[cid]?.d || 0)) {
-          recentlyFlashedIds.set(cid, now);
-          changed = true;
-        }
-      });
-      if (changed) lastLiveSyncTimestamp = now;
-    }
-
     function subscribeToFirestore() {
       if (!firestoreReady || !currentUser || !db) return;
       onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'category_scores'), (snap) => {
-        snap.forEach((docSnap) => {
-          const nextData = docSnap.data() || {};
-          markChangedItemsForFlash(categoryScoresCache[docSnap.id], nextData);
-          categoryScoresCache[docSnap.id] = nextData;
-        });
+        snap.forEach((docSnap) => { categoryScoresCache[docSnap.id] = docSnap.data() || {}; });
         refreshLiveUI();
       });
       onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'custom_decks'), (snap) => {
         snap.forEach((docSnap) => {
-          const data = docSnap.data();
-          if (data && Array.isArray(data.choices) && data.choices.length === 10) {
-            markChangedItemsForFlash(customDecksCache[docSnap.id], data);
-            customDecksCache[docSnap.id] = { id: docSnap.id, ...data };
-          }
+          const d = docSnap.data();
+          if (d && Array.isArray(d.choices) && d.choices.length === 10) customDecksCache[docSnap.id] = { id: docSnap.id, ...d };
         });
         refreshLiveUI();
       });
@@ -1391,20 +1432,21 @@
       return store[deck.id];
     }
 
-    function recordLiveDuelVote(deck, winner, loser) {
+    function recordLiveDuelVote(deck, winner, loser, bonusPts = 1) {
       const now = Date.now();
       const docObj = ensureLocalScoreDoc(deck);
       docObj.totalDuels = (docObj.totalDuels || 0) + 1;
       docObj.updatedAt = now;
-      docObj.lastUpdatedId = winner.id;
 
       const wEntry = docObj.items[winner.id] || { w: 0, d: 0, c: 0, p: 0 };
-      wEntry.w += 1; wEntry.d += 1; wEntry.p += 1;
+      wEntry.w += 1; wEntry.d += 1; wEntry.p += bonusPts;
       docObj.items[winner.id] = wEntry;
 
-      const lEntry = docObj.items[loser.id] || { w: 0, d: 0, c: 0, p: 0 };
-      lEntry.d += 1;
-      docObj.items[loser.id] = lEntry;
+      if (loser) {
+        const lEntry = docObj.items[loser.id] || { w: 0, d: 0, c: 0, p: 0 };
+        lEntry.d += 1;
+        docObj.items[loser.id] = lEntry;
+      }
 
       recentlyFlashedIds.set(winner.id, now);
       lastLiveSyncTimestamp = now;
@@ -1413,13 +1455,11 @@
 
       if (!firestoreReady || !currentUser || !db) return;
       const colName = deck.isCustom ? 'custom_decks' : 'category_scores';
-      const targetRef = doc(db, 'artifacts', appId, 'public', 'data', colName, deck.id);
-      const payload = {
-        totalDuels: increment(1), updatedAt: now, lastUpdatedId: winner.id,
-        items: { [winner.id]: { w: increment(1), d: increment(1), p: increment(1) }, [loser.id]: { d: increment(1) } }
-      };
-      if (deck.isCustom) Object.assign(payload, { id: deck.id, title: deck.title, categoryLabel: deck.categoryLabel || 'Custom', subtitle: deck.subtitle || '', choices: deck.choices });
-      setDoc(targetRef, payload, { merge: true }).catch(() => {});
+      const itemsUpdate = { [winner.id]: { w: increment(1), d: increment(1), p: increment(bonusPts) } };
+      if (loser) itemsUpdate[loser.id] = { d: increment(1) };
+      setDoc(doc(db, 'artifacts', appId, 'public', 'data', colName, deck.id), {
+        totalDuels: increment(1), updatedAt: now, items: itemsUpdate
+      }, { merge: true }).catch(() => {});
     }
 
     async function persistChampionResults(deck, champion, tasteMetrics) {
@@ -1427,8 +1467,6 @@
       const docObj = ensureLocalScoreDoc(deck);
       docObj.totalPlays = (docObj.totalPlays || 0) + 1;
       docObj.updatedAt = now;
-      docObj.lastUpdatedId = champion.id;
-
       const cEntry = docObj.items[champion.id] || { w: 0, d: 0, c: 0, p: 0 };
       cEntry.c += 1; cEntry.p += 5;
       docObj.items[champion.id] = cEntry;
@@ -1445,26 +1483,21 @@
         hotTakes: tasteMetrics.hotTakes, signature: tasteMetrics.signature,
         archetypeTitle: tasteMetrics.archetype.title,
       };
-      userRoundHistory = [historyEntry, ...userRoundHistory.filter((h) => h.playedAt !== historyEntry.playedAt)];
+      userRoundHistory = [historyEntry, ...userRoundHistory.filter((h) => h.playedAt !== now)];
       saveLocalState();
 
       if (!firestoreReady || !currentUser || !db) return;
-      try {
-        const colName = deck.isCustom ? 'custom_decks' : 'category_scores';
-        await setDoc(doc(db, 'artifacts', appId, 'public', 'data', colName, deck.id), {
-          totalPlays: increment(1), updatedAt: now, lastUpdatedId: champion.id,
-          items: { [champion.id]: { c: increment(1), p: increment(5) } }
-        }, { merge: true });
-      } catch (_) {}
+      const colName = deck.isCustom ? 'custom_decks' : 'category_scores';
+      setDoc(doc(db, 'artifacts', appId, 'public', 'data', colName, deck.id), {
+        totalPlays: increment(1), updatedAt: now, items: { [champion.id]: { c: increment(1), p: increment(5) } }
+      }, { merge: true }).catch(() => {});
     }
 
     async function saveCustomDeckToStore(deckObj) {
       customDecksCache[deckObj.id] = deckObj;
       saveLocalState();
       if (!firestoreReady || !currentUser || !db) return;
-      try {
-        await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'custom_decks', deckObj.id), { ...deckObj, creatorId: currentUser.uid }, { merge: true });
-      } catch (_) {}
+      setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'custom_decks', deckObj.id), { ...deckObj, creatorId: currentUser.uid }, { merge: true }).catch(() => {});
     }
 
     async function fetchCustomDeckById(deckId) {
@@ -1472,35 +1505,34 @@
       if (!firestoreReady || !currentUser || !db) return null;
       try {
         const snap = await getDoc(doc(db, 'artifacts', appId, 'public', 'data', 'custom_decks', deckId));
-        if (snap.exists()) { const data = { id: snap.id, ...snap.data() }; customDecksCache[deckId] = data; return data; }
+        if (snap.exists()) { const d = { id: snap.id, ...snap.data() }; customDecksCache[deckId] = d; return d; }
       } catch (_) {}
       return null;
     }
 
     // =========================================================================
-    // 6. SHAREABLE URL ENCODING & DECODING
+    // 6. SHARE URL ENCODE/DECODE
     // =========================================================================
     function encodeUnicodeBase64(str) {
-      const bytes = new TextEncoder().encode(str);
       let binary = '';
-      bytes.forEach((b) => { binary += String.fromCharCode(b); });
+      new TextEncoder().encode(str).forEach((b) => { binary += String.fromCharCode(b); });
       return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
     }
 
     function decodeUnicodeBase64(b64) {
-      const normalized = b64.replace(/-/g, '+').replace(/_/g, '/');
-      const pad = normalized.length % 4 === 0 ? '' : '='.repeat(4 - (normalized.length % 4));
-      return new TextDecoder().decode(Uint8Array.from(atob(normalized + pad), (ch) => ch.charCodeAt(0)));
+      const norm = b64.replace(/-/g, '+').replace(/_/g, '/');
+      const pad = norm.length % 4 === 0 ? '' : '='.repeat(4 - (norm.length % 4));
+      return new TextDecoder().decode(Uint8Array.from(atob(norm + pad), (ch) => ch.charCodeAt(0)));
     }
 
     function buildShareUrl(deck) {
       const base = window.location.href.split('?')[0].split('#')[0];
       if (!deck) return base;
       if (!deck.isCustom) {
-        const params = new URLSearchParams();
-        params.set('cat', deck.id);
-        if (state.activeSubFilter && state.activeSubFilter !== 'all') params.set('sub', state.activeSubFilter);
-        return `${base}?${params.toString()}`;
+        const p = new URLSearchParams();
+        p.set('cat', deck.id);
+        if (state.activeSubFilter && state.activeSubFilter !== 'all') p.set('sub', state.activeSubFilter);
+        return `${base}?${p.toString()}`;
       }
       const compact = {
         id: deck.id, t: deck.title || 'Custom 10', c: deck.categoryLabel || 'Custom', s: deck.subtitle || '',
@@ -1514,10 +1546,9 @@
         const trimmed = String(rawInput || '').trim();
         if (!trimmed) return null;
         if (/^d_[a-z0-9_]+$/i.test(trimmed)) return { deckIdOnly: trimmed };
-
-        const customMatch = trimmed.match(/#custom=([A-Za-z0-9_-]+)/);
-        if (customMatch && customMatch[1]) {
-          const parsed = JSON.parse(decodeUnicodeBase64(customMatch[1]));
+        const m = trimmed.match(/#custom=([A-Za-z0-9_-]+)/);
+        if (m && m[1]) {
+          const parsed = JSON.parse(decodeUnicodeBase64(m[1]));
           if (parsed?.id && Array.isArray(parsed.ch) && parsed.ch.length === 10) {
             const catLabel = parsed.c || 'Custom';
             const mediaType = catLabel === 'Movies' ? 'tmdb-movie' : (catLabel === 'TV Serials' || catLabel === 'Anime') ? 'tmdb-tv' : (catLabel === 'Pokemon' ? 'pokemon' : 'wiki');
@@ -1525,12 +1556,8 @@
               id: parsed.id, title: parsed.t || 'Shared 10-Choice Deck', categoryLabel: catLabel, subtitle: parsed.s || '',
               isCustom: true, createdAt: Date.now(), totalPlays: 0, totalDuels: 0, items: {},
               choices: parsed.ch.map((entry, idx) => {
-                const paletteIdx = Math.abs(Number(entry[2]) || 0) % PALETTES.length;
-                return {
-                  id: `c${idx + 1}`, name: String(entry[0] || `Choice ${idx + 1}`), emoji: String(entry[1] || '✨'),
-                  paletteIdx, gradient: PALETTES[paletteIdx], tag: String(entry[3] || ''),
-                  img: entry[4] ? String(entry[4]) : null, wikiSlug: '', mediaType, seedVotes: 0
-                };
+                const pal = Math.abs(Number(entry[2]) || 0) % PALETTES.length;
+                return { id: `c${idx + 1}`, name: String(entry[0] || `Choice ${idx + 1}`), emoji: String(entry[1] || '✨'), paletteIdx: pal, gradient: PALETTES[pal], tag: String(entry[3] || ''), img: entry[4] ? String(entry[4]) : null, wikiSlug: '', mediaType, seedVotes: 0 };
               })
             };
           }
@@ -1546,7 +1573,7 @@
     }
 
     // =========================================================================
-    // 7. LIVE SCORE, LEADERBOARD & TASTE RATING ANALYTICS
+    // 7. SCORING, LEADERBOARD & PERSONALITY ANALYTICS
     // =========================================================================
     function formatVoteCount(n) {
       if (n >= 1000000) return `${(n / 1000000).toFixed(1).replace(/\.0$/, '')}m`;
@@ -1598,15 +1625,13 @@
         if (sortBy === 'livePoints') return b.livePoints - a.livePoints || b.liveScore - a.liveScore;
         return b.liveScore - a.liveScore || b.livePoints - a.livePoints || a.name.localeCompare(b.name);
       });
-
       const totalPts = scored.reduce((s, i) => s + Math.max(1, i.livePoints), 0);
       const maxVal = Math.max(1, ...scored.map((i) => sortBy === 'winRate' ? i.winRate : sortBy === 'crowns' ? i.crowns : sortBy === 'livePoints' ? i.livePoints : i.liveScore));
 
       return scored.map((item, idx) => {
         const pct = Math.max(0, Math.round((Math.max(1, item.livePoints) / totalPts) * 100));
         const metricVal = sortBy === 'winRate' ? item.winRate : sortBy === 'crowns' ? item.crowns : sortBy === 'livePoints' ? item.livePoints : item.liveScore;
-        const barWidthPct = Math.max(8, Math.round((metricVal / maxVal) * 100));
-        return { ...item, rank: idx + 1, pct, barWidthPct };
+        return { ...item, rank: idx + 1, pct, barWidthPct: Math.max(8, Math.round((metricVal / maxVal) * 100)) };
       });
     }
 
@@ -1637,17 +1662,14 @@
 
       let agreed = 0, raritySum = 0, upsetSum = 0, maxUpset = 0, knockedTop = false, maxStreak = 0;
       const winsPer = {};
-
       duelHistory.forEach((duel) => {
-        const wRank = rankById[duel.winner.id] || 5;
-        const lRank = rankById[duel.loser.id] || 5;
+        const wRank = rankById[duel.winner.id] || 5, lRank = rankById[duel.loser.id] || 5;
         winsPer[duel.winner.id] = (winsPer[duel.winner.id] || 0) + 1;
         if (winsPer[duel.winner.id] > maxStreak) maxStreak = winsPer[duel.winner.id];
         if (wRank < lRank) agreed += 1;
         else if (wRank > lRank) {
           const gap = (wRank - lRank) / Math.max(1, n - 1);
-          upsetSum += gap;
-          if (gap > maxUpset) maxUpset = gap;
+          upsetSum += gap; if (gap > maxUpset) maxUpset = gap;
           if (lRank <= 2) knockedTop = true;
         } else agreed += 0.5;
         raritySum += (wRank - 1) / Math.max(1, n - 1);
@@ -1669,11 +1691,130 @@
       };
     }
 
+    // 20-Round Deep Personality Analyzer
+    function analyzeTwentyRoundPersonality(deck, pool, duelHistory) {
+      const fullBoard = computeLeaderboard(deck, pool, 'liveScore');
+      const rankMap = new Map();
+      const scoreMap = new Map();
+      fullBoard.forEach((item) => { rankMap.set(item.id, item.rank); scoreMap.set(item.id, item.liveScore); });
+      const total = Math.max(2, fullBoard.length);
+
+      let agreed = 0, upsets = 0, rareSum = 0, classicCount = 0, modernCount = 0, datedCount = 0;
+      let biggestUpset = null, biggestUpsetGap = -1;
+      let topRatedWin = null, topRatedScore = -1;
+      const tokenFreq = {};
+
+      duelHistory.forEach(({ winner, loser }) => {
+        const wRank = rankMap.get(winner.id) || Math.ceil(total / 2);
+        const lRank = rankMap.get(loser.id) || Math.ceil(total / 2);
+        const wScore = scoreMap.get(winner.id) || 50;
+
+        if (wRank <= lRank) agreed += 1;
+        else {
+          upsets += 1;
+          const gap = wRank - lRank;
+          if (gap > biggestUpsetGap) { biggestUpsetGap = gap; biggestUpset = { winner, loser, gap }; }
+        }
+
+        if (wScore > topRatedScore) { topRatedScore = wScore; topRatedWin = winner; }
+        rareSum += (wRank - 1) / (total - 1);
+
+        // Extract vibe tokens from tag
+        const rawTag = String(winner.tag || '');
+        rawTag.split(/[·,/()]+/).map((s) => s.trim()).filter((s) => s.length >= 2 && !/^\d{4}$/.test(s)).forEach((tok) => {
+          tokenFreq[tok] = (tokenFreq[tok] || 0) + 1;
+        });
+
+        // Year / Gen era detection
+        const yr = parseInt(winner.year || (rawTag.match(/\b(19|20)\d{2}\b/) || [])[0], 10);
+        if (yr >= 1920 && yr <= 2030) {
+          datedCount += 1;
+          if (yr < 2010) classicCount += 1;
+          else modernCount += 1;
+        }
+      });
+
+      const rounds = Math.max(1, duelHistory.length);
+      const crowdSync = Math.round((agreed / rounds) * 100);
+      const boldness = Math.min(100, Math.round((upsets / rounds) * 120));
+      const rareTaste = Math.min(100, Math.round((rareSum / rounds) * 100));
+      const topThemes = Object.entries(tokenFreq).sort((a, b) => b[1] - a[1]).slice(0, 6);
+      const focusRatio = topThemes.length > 0 ? Math.min(100, Math.round(((topThemes[0][1] + (topThemes[1]?.[1] || 0)) / rounds) * 95)) : 55;
+
+      // Classify into 8 rich personalities
+      let profile;
+      if (crowdSync >= 75 && boldness < 35) {
+        profile = {
+          title: 'The Golden Consensus',
+          emoji: '👑',
+          subtitle: 'Instinctive Curator · Crowd Whisperer',
+          narrative: `Across 20 head-to-head calls in ${deck.title}, you agreed with the broader favorites ${crowdSync}% of the time. You have an uncanny radar for timeless quality—when something earns legendary status, you immediately see why.`
+        };
+      } else if (boldness >= 60 && rareTaste >= 55) {
+        profile = {
+          title: 'The Visionary Rebel',
+          emoji: '🔥',
+          subtitle: 'Contrarian Thinker · Underdog Champion',
+          narrative: `You flipped the script in ${upsets} out of 20 matchups, repeatedly elevating deep cuts over crowd favorites. You don't follow hype cycles—you trust your gut, prize originality, and love championing underrated gems.`
+        };
+      } else if (rareTaste >= 60 && focusRatio >= 50) {
+        profile = {
+          title: 'The Cult Connoisseur',
+          emoji: '🔮',
+          subtitle: 'Refined Taste · Deep-Cut Specialist',
+          narrative: `With a ${rareTaste}/100 Rare Taste score, your picks reveal a deliberate, niche aesthetic. You gravitate toward distinct flavors and craft rather than whatever sits at the top of mainstream charts.`
+        };
+      } else if (datedCount >= 8 && classicCount / datedCount >= 0.62) {
+        profile = {
+          title: 'The Timeless Purist',
+          emoji: '🏛️',
+          subtitle: 'Heritage Lover · Era Archivist',
+          narrative: `You consistently leaned toward iconic classics and proven legends across your 20 rounds. Nostalgia, enduring craft, and historical weight carry huge value in how you judge greatness.`
+        };
+      } else if (datedCount >= 8 && modernCount / datedCount >= 0.7) {
+        profile = {
+          title: 'The Modern Trendsetter',
+          emoji: '🚀',
+          subtitle: 'Forward-Looking · Pulse of Now',
+          narrative: `Your 20 picks skew strongly toward fresh, modern standouts. You appreciate bold contemporary energy, new waves, and evolving styles over living purely in the past.`
+        };
+      } else if (focusRatio >= 62) {
+        profile = {
+          title: 'The Focused Pursuer',
+          emoji: '🎯',
+          subtitle: 'High Conviction · Signature Identity',
+          narrative: `You know exactly what lights you up. Your 20 picks clustered tightly around specific vibes—especially ${topThemes[0]?.[0] || deck.title}—showing sharp clarity and decisive personal taste.`
+        };
+      } else if (boldness >= 50) {
+        profile = {
+          title: 'The Chaos Tactician',
+          emoji: '⚡',
+          subtitle: 'Unpredictable · Pure Instinct',
+          narrative: `Half diplomat, half disruptor—you kept the brackets guessing with ${upsets} bold upsets while still honoring select heavyweights. You judge every single matchup on pure moment-to-moment vibe.`
+        };
+      } else {
+        profile = {
+          title: 'The Balanced Philosopher',
+          emoji: '⚖️',
+          subtitle: 'Nuanced Critic · Best of Both Worlds',
+          narrative: `Your 20 choices struck a rare equilibrium: ${crowdSync}% crowd alignment paired with ${upsets} spicy personal upsets. You respect the icons without ever letting popularity dictate your favorites.`
+        };
+      }
+
+      return {
+        ...profile,
+        crowdSync, boldness, rareTaste, focusRatio,
+        topThemes, biggestUpset, topRatedWin,
+        winners: duelHistory.map((d) => d.winner)
+      };
+    }
+
     // =========================================================================
-    // 8. APPLICATION STATE & KNOCKOUT ENGINE (WITH UNSEEN CYCLING)
+    // 8. APP STATE & ALL 3 GAME MODES
     // =========================================================================
     const state = {
-      view: 'arena',
+      view: 'arena',          // 'arena' | 'gbu' | 'results' | 'personality-report' | 'standings' | 'creator'
+      gameMode: 'knockout',   // 'knockout' | 'gbu' | 'personality'
       activeDeck: null,
       activeSubFilter: 'all',
       seenByPoolKey: {},
@@ -1683,15 +1824,15 @@
       tasteTab: 'post',
       lbMode: 'round',
       isAnimatingPick: false,
-      isFetchingAi: false,
-      lastAiSources: [],
       resetConfirmArmed: false,
 
       standingsSearch: '',
       standingsSort: 'liveScore',
       standingsLimit: 50,
 
+      // 1v1 Knockout & 20-Round Personality state
       roundChoices: [],
+      personalityPairs: [],
       topChoice: null,
       bottomChoice: null,
       topStreak: 0,
@@ -1701,7 +1842,15 @@
       duelHistory: [],
       champion: null,
       lastTasteMetrics: null,
+      lastPersonalityReport: null,
 
+      // Good / Bad / Ugly state
+      gbuTrio: [],
+      gbuAssign: { good: null, bad: null, ugly: null }, // stores choice index 0|1|2
+      gbuRoundCount: 1,
+      gbuHistory: [],
+
+      // Creator state
       creatorSlots: [],
       lastCreatedDeck: null,
       activeEmojiSlotIdx: null,
@@ -1716,9 +1865,9 @@
       return copy;
     }
 
-    function dealTenChoices(deck, subFilter = 'all') {
+    function drawFreshChoices(deck, subFilter, count) {
       const pool = getFilteredPool(deck, subFilter);
-      if (pool.length <= 10) return shuffleArray(pool);
+      if (pool.length <= count) return shuffleArray(pool);
 
       const poolKey = `${deck.id}::${subFilter}`;
       if (!state.seenByPoolKey[poolKey]) state.seenByPoolKey[poolKey] = new Set();
@@ -1728,14 +1877,37 @@
       const alreadySeen = shuffleArray(pool.filter((c) => seen.has(c.id)));
 
       let dealt;
-      if (unseen.length >= 10) {
-        dealt = unseen.slice(0, 10);
+      if (unseen.length >= count) {
+        dealt = unseen.slice(0, count);
       } else {
-        dealt = [...unseen, ...alreadySeen.slice(0, 10 - unseen.length)];
+        dealt = [...unseen, ...alreadySeen.slice(0, count - unseen.length)];
         seen.clear();
       }
       dealt.forEach((c) => seen.add(c.id));
       return shuffleArray(dealt);
+    }
+
+    function updateModeBarUI() {
+      const deck = state.activeDeck || BUILTIN_CATEGORIES[0];
+      const pool = getFilteredPool(deck, state.activeSubFilter);
+      const personalityUnlocked = pool.length > 41;
+
+      const activeCls = 'px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all bg-[#232838] text-white shadow';
+      const idleCls = 'px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all text-zinc-400 hover:text-zinc-100';
+
+      document.getElementById('btn-mode-knockout').className = state.gameMode === 'knockout' ? activeCls : idleCls;
+      document.getElementById('btn-mode-gbu').className = state.gameMode === 'gbu' ? activeCls : idleCls;
+
+      const pBtn = document.getElementById('btn-mode-personality');
+      const pBadge = document.getElementById('personality-lock-badge');
+      pBtn.className = (state.gameMode === 'personality' ? activeCls : idleCls) + ' flex items-center gap-1.5' + (personalityUnlocked ? '' : ' opacity-55');
+      if (personalityUnlocked) {
+        pBadge.textContent = `${pool.length} ✓`;
+        pBadge.className = 'text-[9.5px] px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-400/30 font-bold';
+      } else {
+        pBadge.textContent = `🔒 ${pool.length}/42`;
+        pBadge.className = 'text-[9.5px] px-1.5 py-0.5 rounded bg-white/[0.06] text-zinc-400';
+      }
     }
 
     function applyLayoutMode() {
@@ -1745,36 +1917,52 @@
       stage.classList.remove('layout-vertical', 'layout-horizontal');
       if (state.layoutMode === 'vertical') {
         stage.classList.add('layout-vertical');
-        if (headerWrap) headerWrap.className = 'w-full max-w-[460px] mb-4 md:mb-5';
+        if (headerWrap) headerWrap.className = 'w-full max-w-[460px] mb-4';
       } else if (state.layoutMode === 'horizontal') {
         stage.classList.add('layout-horizontal');
-        if (headerWrap) headerWrap.className = 'w-full max-w-[860px] mb-4 md:mb-5';
+        if (headerWrap) headerWrap.className = 'w-full max-w-[860px] mb-4';
       } else {
-        if (headerWrap) headerWrap.className = 'w-full max-w-[440px] md:max-w-[860px] mb-4 md:mb-5';
+        if (headerWrap) headerWrap.className = 'w-full max-w-[440px] md:max-w-[860px] mb-4';
       }
       renderSettingsUI();
     }
 
-    function startRound(deck, options = {}) {
-      const { subFilter = null, explicitChoices = null, sources = [] } = options;
+    function startActiveMode(deck, options = {}) {
       state.activeDeck = deck;
-      if (subFilter !== null) state.activeSubFilter = subFilter;
-      else if (!deck.subFilters) state.activeSubFilter = 'all';
+      if (options.subFilter !== undefined && options.subFilter !== null) {
+        state.activeSubFilter = options.subFilter;
+      } else if (!deck.subFilters) {
+        state.activeSubFilter = 'all';
+      }
 
-      state.view = 'arena';
+      const pool = getFilteredPool(deck, state.activeSubFilter);
+      if (state.gameMode === 'personality' && pool.length <= 41) {
+        state.gameMode = 'knockout';
+      }
+
+      if (state.gameMode === 'gbu') {
+        startGbuRound(deck, { resetCounter: true });
+      } else if (state.gameMode === 'personality') {
+        startPersonalityMode(deck);
+      } else {
+        startKnockoutRound(deck, options);
+      }
+    }
+
+    // --- MODE A: 10-CHOICE KNOCKOUT ---
+    function startKnockoutRound(deck, options = {}) {
+      state.gameMode = 'knockout';
+      state.activeDeck = deck;
       state.isAnimatingPick = false;
       state.duelHistory = [];
       state.champion = null;
       state.lastTasteMetrics = null;
       state.lbMode = 'round';
       state.tasteExpanded = false;
-      state.lastAiSources = sources;
 
-      if (explicitChoices && explicitChoices.length >= 2) {
-        state.roundChoices = shuffleArray(explicitChoices).slice(0, 10);
-      } else {
-        state.roundChoices = dealTenChoices(deck, state.activeSubFilter);
-      }
+      state.roundChoices = (options.explicitChoices && options.explicitChoices.length >= 2)
+        ? shuffleArray(options.explicitChoices).slice(0, 10)
+        : drawFreshChoices(deck, state.activeSubFilter, 10);
 
       state.topChoice = state.roundChoices[0];
       state.bottomChoice = state.roundChoices[1];
@@ -1785,57 +1973,110 @@
 
       updateHeader();
       renderCategoryBar();
+      updateModeBarUI();
       showView('arena');
       applyLayoutMode();
       renderArena(true, true);
       prefetchUpcomingRoundArtwork(state.roundChoices, 2);
     }
 
-    async function handleFetchAiFreshTen(openInStandings = false) {
-      const deck = state.activeDeck;
-      if (!deck || deck.isCustom || state.isFetchingAi) return;
-
-      state.isFetchingAi = true;
-      const loadingBanner = document.getElementById('arena-ai-loading');
-      const loadingText = document.getElementById('arena-ai-loading-text');
-      const aiBtn = document.getElementById('btn-arena-ai-fetch');
-      const aiLabel = document.getElementById('ai-fetch-label');
-
-      const subObj = deck.subFilters?.find((s) => s.id === state.activeSubFilter);
-      const scopeName = subObj && state.activeSubFilter !== 'all' ? subObj.label : deck.title;
-
-      loadingText.textContent = `Searching Google AI for 10 fresh ${scopeName}...`;
-      loadingBanner.classList.remove('hidden');
-      aiBtn.disabled = true;
-      aiLabel.textContent = 'Searching...';
-
-      try {
-        const { newChoices, sources } = await fetchAiChoicesForDeck(deck, state.activeSubFilter);
-        showToast(`✨ Found ${newChoices.length} fresh ${scopeName} via Google Search AI!`, 'success');
-        renderCategoryBar();
-        if (openInStandings) {
-          renderLiveStandings();
-        } else {
-          const roundSet = [...newChoices];
-          if (roundSet.length < 10) {
-            const existing = shuffleArray(getFilteredPool(deck, state.activeSubFilter).filter((c) => !roundSet.some((n) => n.id === c.id)));
-            roundSet.push(...existing.slice(0, 10 - roundSet.length));
-          }
-          startRound(deck, { subFilter: state.activeSubFilter, explicitChoices: roundSet, sources });
-        }
-      } catch (_) {
-        showToast('AI search unavailable right now — dealing 10 fresh choices from your pool.', 'warn');
-        if (!openInStandings) startRound(deck, { subFilter: state.activeSubFilter });
-      } finally {
-        state.isFetchingAi = false;
-        loadingBanner.classList.add('hidden');
-        aiBtn.disabled = false;
-        aiLabel.textContent = 'AI Fresh 10';
+    // --- MODE B: 20-ROUND PERSONALITY MODE (REQUIRES > 41 CHOICES IN FILTER) ---
+    function startPersonalityMode(deck) {
+      const pool = getFilteredPool(deck, state.activeSubFilter);
+      if (pool.length <= 41) {
+        showToast(`20-Round Personality needs 42+ choices in this filter (currently ${pool.length}).`, 'warn');
+        return;
       }
+      state.gameMode = 'personality';
+      state.activeDeck = deck;
+      state.isAnimatingPick = false;
+      state.duelHistory = [];
+      state.lastPersonalityReport = null;
+
+      const drawn40 = drawFreshChoices(deck, state.activeSubFilter, 40);
+      state.roundChoices = drawn40;
+      state.personalityPairs = [];
+      for (let i = 0; i < 40; i += 2) {
+        state.personalityPairs.push([drawn40[i], drawn40[i + 1]]);
+      }
+
+      state.duelNumber = 1;
+      state.topChoice = state.personalityPairs[0][0];
+      state.bottomChoice = state.personalityPairs[0][1];
+      state.topStreak = 0;
+      state.bottomStreak = 0;
+
+      updateHeader();
+      renderCategoryBar();
+      updateModeBarUI();
+      showView('arena');
+      applyLayoutMode();
+      renderArena(true, true);
+      prefetchUpcomingRoundArtwork(drawn40, 2);
+    }
+
+    // --- MODE C: THE GOOD, THE BAD, AND THE UGLY (3 CHOICES) ---
+    function startGbuRound(deck, options = {}) {
+      state.gameMode = 'gbu';
+      state.activeDeck = deck;
+      if (options.resetCounter) { state.gbuRoundCount = 1; state.gbuHistory = []; }
+      state.gbuTrio = drawFreshChoices(deck, state.activeSubFilter, 3);
+      state.gbuAssign = { good: null, bad: null, ugly: null };
+
+      updateHeader();
+      renderCategoryBar();
+      updateModeBarUI();
+      showView('gbu');
+      renderGbuView();
+    }
+
+    function assignGbuRole(cardIdx, forcedRole = null) {
+      const a = state.gbuAssign;
+      const currentRole = a.good === cardIdx ? 'good' : a.bad === cardIdx ? 'bad' : a.ugly === cardIdx ? 'ugly' : null;
+
+      if (forcedRole) {
+        if (currentRole === forcedRole) { a[forcedRole] = null; }
+        else {
+          if (currentRole) a[currentRole] = null;
+          a[forcedRole] = cardIdx;
+        }
+      } else {
+        if (currentRole) {
+          a[currentRole] = null;
+        } else if (a.good === null) {
+          a.good = cardIdx;
+        } else if (a.bad === null) {
+          a.bad = cardIdx;
+        } else if (a.ugly === null) {
+          a.ugly = cardIdx;
+        }
+      }
+      playClickTone(forcedRole === 'good' ? 540 : forcedRole === 'ugly' ? 320 : 440);
+      renderGbuView();
+    }
+
+    function submitGbuTrio() {
+      const { good, bad, ugly } = state.gbuAssign;
+      if (good === null || bad === null || ugly === null) return;
+      const goodItem = state.gbuTrio[good];
+      const badItem = state.gbuTrio[bad];
+      const uglyItem = state.gbuTrio[ugly];
+
+      // Update live scores: Good wins over both Bad & Ugly
+      recordLiveDuelVote(state.activeDeck, goodItem, badItem, 2);
+      recordLiveDuelVote(state.activeDeck, goodItem, uglyItem, 1);
+
+      state.gbuHistory.unshift({ round: state.gbuRoundCount, good: goodItem, bad: badItem, ugly: uglyItem });
+      state.gbuHistory = state.gbuHistory.slice(0, 8);
+      state.gbuRoundCount += 1;
+
+      playChampionChime();
+      showToast(`😇 ${goodItem.name} · 😈 ${badItem.name} · 💀 ${uglyItem.name}`, 'success');
+      startGbuRound(state.activeDeck, { resetCounter: false });
     }
 
     function handlePick(side) {
-      if (state.view !== 'arena' || state.isAnimatingPick || state.isFetchingAi) return;
+      if (state.view !== 'arena' || state.isAnimatingPick) return;
       state.isAnimatingPick = true;
 
       const winner = side === 'top' ? state.topChoice : state.bottomChoice;
@@ -1847,28 +2088,51 @@
       winEl.classList.add('picked-win');
       loseEl.classList.add('picked-lose');
 
+      const isFinalKnockout = state.gameMode === 'knockout' && state.nextIndex >= state.roundChoices.length;
       const pop = document.createElement('div');
       pop.className = 'delta-pop absolute top-3 right-3 z-30 px-2.5 py-1 rounded-full bg-emerald-500/90 text-obsidian text-[10px] font-extrabold tracking-wider shadow-lg pointer-events-none';
-      pop.textContent = state.nextIndex >= state.roundChoices.length ? '+6 LIVE PTS 👑' : '+1 LIVE PT ↑';
+      pop.textContent = isFinalKnockout ? '+6 LIVE PTS 👑' : '+1 LIVE PT ↑';
       winEl.appendChild(pop);
 
-      recordLiveDuelVote(state.activeDeck, winner, loser);
+      recordLiveDuelVote(state.activeDeck, winner, loser, 1);
       state.duelHistory.push({ winner, loser });
 
-      if (side === 'top') { state.topStreak += 1; state.bottomStreak = 0; }
-      else { state.bottomStreak += 1; state.topStreak = 0; }
+      if (state.gameMode === 'knockout') {
+        if (side === 'top') { state.topStreak += 1; state.bottomStreak = 0; }
+        else { state.bottomStreak += 1; state.topStreak = 0; }
+      }
 
       setTimeout(async () => {
         winEl.classList.remove('picked-win');
         loseEl.classList.remove('picked-lose');
 
+        if (state.gameMode === 'personality') {
+          if (state.duelNumber >= state.personalityPairs.length) {
+            const pool = getFilteredPool(state.activeDeck, state.activeSubFilter);
+            state.lastPersonalityReport = analyzeTwentyRoundPersonality(state.activeDeck, pool, state.duelHistory);
+            playChampionChime();
+            state.isAnimatingPick = false;
+            showView('personality-report');
+            renderPersonalityReport();
+          } else {
+            state.duelNumber += 1;
+            const pair = state.personalityPairs[state.duelNumber - 1];
+            state.topChoice = pair[0];
+            state.bottomChoice = pair[1];
+            renderArena(true, true);
+            prefetchUpcomingRoundArtwork(state.roundChoices, state.duelNumber * 2);
+            state.isAnimatingPick = false;
+          }
+          return;
+        }
+
+        // 10-Choice Knockout flow
         if (state.nextIndex >= state.roundChoices.length) {
           state.champion = winner;
           state.lastTasteMetrics = calculateTasteRating(state.activeDeck, state.roundChoices, state.duelHistory, winner);
           playChampionChime();
           await persistChampionResults(state.activeDeck, winner, state.lastTasteMetrics);
           state.isAnimatingPick = false;
-          state.view = 'results';
           updateHeader();
           showView('results');
           renderResults();
@@ -1881,7 +2145,7 @@
           prefetchUpcomingRoundArtwork(state.roundChoices, state.nextIndex);
           state.isAnimatingPick = false;
         }
-      }, 240);
+      }, 230);
     }
 
     // =========================================================================
@@ -1894,18 +2158,20 @@
     function showView(viewName) {
       state.view = viewName;
       document.getElementById('view-arena').classList.toggle('hidden', viewName !== 'arena');
+      document.getElementById('view-gbu').classList.toggle('hidden', viewName !== 'gbu');
       document.getElementById('view-results').classList.toggle('hidden', viewName !== 'results');
+      document.getElementById('view-personality-report').classList.toggle('hidden', viewName !== 'personality-report');
       document.getElementById('view-standings').classList.toggle('hidden', viewName !== 'standings');
       document.getElementById('view-creator').classList.toggle('hidden', viewName !== 'creator');
       document.getElementById('category-nav-wrap').classList.toggle('hidden', viewName === 'creator');
+      document.getElementById('mode-bar-wrap').classList.toggle('hidden', viewName === 'standings' || viewName === 'creator');
 
-      const playActive = viewName === 'arena' || viewName === 'results';
-      const standingsActive = viewName === 'standings';
+      const playActive = ['arena', 'gbu', 'results', 'personality-report'].includes(viewName);
       document.getElementById('btn-nav-play').className = playActive
         ? 'px-3 py-1.5 rounded-lg text-xs font-bold bg-[#1b1f2b] text-white border border-[#2d3345] transition-colors whitespace-nowrap shrink-0'
         : 'px-3 py-1.5 rounded-lg text-xs font-semibold text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.04] border border-transparent transition-colors whitespace-nowrap shrink-0';
 
-      document.getElementById('btn-nav-standings').className = standingsActive
+      document.getElementById('btn-nav-standings').className = viewName === 'standings'
         ? 'px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-500/15 text-emerald-200 border border-emerald-400/35 transition-colors whitespace-nowrap shrink-0 flex items-center gap-1.5'
         : 'px-3 py-1.5 rounded-lg text-xs font-semibold text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.04] border border-transparent transition-colors whitespace-nowrap shrink-0 flex items-center gap-1.5';
 
@@ -1952,7 +2218,7 @@
             renderCategoryBar();
             renderLiveStandings();
           } else {
-            startRound(cat, { subFilter: 'all' });
+            startActiveMode(cat, { subFilter: 'all' });
           }
         });
       });
@@ -1983,7 +2249,7 @@
               renderCategoryBar();
               renderLiveStandings();
             } else {
-              startRound(deck, { subFilter: subId });
+              startActiveMode(deck, { subFilter: subId });
             }
           });
         });
@@ -1991,6 +2257,7 @@
         subBar.classList.add('hidden');
         subBar.innerHTML = '';
       }
+      updateModeBarUI();
     }
 
     function buildThumbHtml(choice, sizeClass = 'w-9 h-9') {
@@ -2012,6 +2279,7 @@
     }
 
     function renderArenaCard(el, choice, streak, animateEnter) {
+      if (!choice) return;
       const [c1, c2] = choice.gradient || PALETTES[0];
       const isPokemon = choice.mediaType === 'pokemon';
       const initials = choice.name.split(/\s+/).slice(0, 2).map((w) => w[0] || '').join('').toUpperCase();
@@ -2023,22 +2291,15 @@
       const cardImgClass = isPokemon
         ? 'absolute inset-0 w-full h-full object-contain p-5 pb-16 drop-shadow-[0_14px_24px_rgba(0,0,0,0.65)] opacity-0 transition-opacity duration-500 group-hover:scale-[1.04]'
         : 'absolute inset-0 w-full h-full object-cover object-top opacity-0 transition-opacity duration-500 group-hover:scale-[1.03]';
-
       const imgHtml = knownUrl
         ? `<img src="${escapeHtml(knownUrl)}" alt="${escapeHtml(choice.name)}" class="${cardImgClass}" onload="this.classList.remove('opacity-0')" onerror="this.remove()" />`
         : '';
 
-      const leftBadge = streak >= 2
+      const leftBadge = state.gameMode === 'knockout' && streak >= 2
         ? `<div class="absolute top-3 left-3 z-20 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-[#e0b34c]/40 text-[10px] font-bold uppercase tracking-wider text-[#e0b34c]">🔥 ${streak} streak</div>`
-        : (choice.isAiGenerated ? `<div class="absolute top-3 left-3 z-20 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-sky-400/35 text-[9.5px] font-bold uppercase tracking-wider text-sky-300">✨ AI</div>` : '');
+        : '';
 
       const ratingDisplay = knownRating ? (String(knownRating).startsWith('#') ? knownRating : `★ ${knownRating}`) : '';
-      const topRightBadges = `
-        <div class="absolute top-3 right-3 z-20 flex items-center gap-1.5 transition-opacity duration-200 ${state.hideNames ? 'opacity-0' : 'opacity-100'}">
-          <span data-tmdb-id="${escapeHtml(choice.id)}" class="${knownRating ? '' : 'hidden'} px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-[#e0b34c]/35 text-[10px] font-bold text-[#f3cf78] tabular-nums">${escapeHtml(ratingDisplay)}</span>
-          <span class="px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-emerald-400/30 text-[10px] font-bold text-emerald-300 tabular-nums">⚡ ${liveStats.liveScore.toFixed(1)}</span>
-        </div>`;
-
       el.innerHTML = `
         <div data-art-id="${escapeHtml(choice.id)}" data-art-fit="${isPokemon ? 'pokemon-card' : 'cover'}" class="absolute inset-0 art-mesh flex flex-col items-center justify-center" style="background: radial-gradient(circle at 50% 34%, ${c1} 0%, ${c2} 85%);">
           <div class="absolute inset-0 flex items-center justify-center opacity-[0.06] text-[132px] font-black tracking-tighter select-none pointer-events-none">${escapeHtml(initials)}</div>
@@ -2049,7 +2310,10 @@
         </div>
         <div class="absolute inset-0 card-vignette z-10 pointer-events-none"></div>
         ${leftBadge}
-        ${topRightBadges}
+        <div class="absolute top-3 right-3 z-20 flex items-center gap-1.5 transition-opacity duration-200 ${state.hideNames ? 'opacity-0' : 'opacity-100'}">
+          <span data-tmdb-id="${escapeHtml(choice.id)}" class="${knownRating ? '' : 'hidden'} px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-[#e0b34c]/35 text-[10px] font-bold text-[#f3cf78] tabular-nums">${escapeHtml(ratingDisplay)}</span>
+          <span class="px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-emerald-400/30 text-[10px] font-bold text-emerald-300 tabular-nums">⚡ ${liveStats.liveScore.toFixed(1)}</span>
+        </div>
         <div class="absolute inset-x-0 bottom-0 z-20 px-5 pb-4 md:pb-5 pt-10 text-center transition-opacity duration-200 ${state.hideNames ? 'opacity-0' : 'opacity-100'}">
           <span class="block text-[19px] sm:text-[21px] md:text-[23px] font-bold text-white tracking-tight leading-snug drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)]">${escapeHtml(choice.name)}</span>
           ${choice.tag ? `<span class="block text-[11.5px] md:text-xs font-medium text-zinc-300/90 mt-1 drop-shadow-[0_1px_6px_rgba(0,0,0,0.95)]">${escapeHtml(choice.tag)}</span>` : ''}
@@ -2065,13 +2329,18 @@
     }
 
     function renderArena(animateTop = false, animateBottom = false) {
-      const totalDuels = Math.max(1, state.roundChoices.length - 1);
+      const isPers = state.gameMode === 'personality';
+      const totalDuels = isPers ? 20 : Math.max(1, state.roundChoices.length - 1);
       const isFinal = state.duelNumber === totalDuels;
 
       const roundLabelEl = document.getElementById('arena-round-label');
-      roundLabelEl.textContent = isFinal ? 'FINAL DUEL · DECIDE YOUR CHAMPION' : `DUEL ${state.duelNumber} OF ${totalDuels}`;
-      roundLabelEl.className = isFinal ? 'text-[#e0b34c] font-bold' : 'text-zinc-400';
+      roundLabelEl.textContent = isPers
+        ? (isFinal ? 'FINAL QUESTION · ROUND 20 OF 20' : `PERSONALITY ROUND ${state.duelNumber} OF 20`)
+        : (isFinal ? 'FINAL DUEL · DECIDE YOUR CHAMPION' : `DUEL ${state.duelNumber} OF ${totalDuels}`);
+      roundLabelEl.className = isFinal ? 'text-[#e0b34c] font-bold' : (isPers ? 'text-sky-300 font-bold' : 'text-zinc-400');
+
       document.getElementById('arena-progress-bar').style.width = `${Math.round((state.duelNumber / totalDuels) * 100)}%`;
+      document.getElementById('btn-reshuffle-label').textContent = isPers ? 'Restart 20' : 'Fresh 10';
 
       const pool = getFilteredPool(state.activeDeck, state.activeSubFilter);
       const poolKey = `${state.activeDeck.id}::${state.activeSubFilter}`;
@@ -2081,7 +2350,6 @@
         ? 'Custom Deck · 10 choices'
         : `Pool: ${pool.length} ${state.activeDeck.title}`;
       document.getElementById('arena-seen-text').textContent = pool.length > 10 ? `${seenCount}/${pool.length} cycled` : '';
-      document.getElementById('btn-arena-ai-fetch').classList.toggle('hidden', Boolean(state.activeDeck.isCustom));
 
       const customBanner = document.getElementById('arena-custom-banner');
       if (state.activeDeck.isCustom) {
@@ -2096,17 +2364,164 @@
       renderArenaCard(document.getElementById('card-top'), state.topChoice, state.topStreak, animateTop);
       renderArenaCard(document.getElementById('card-bottom'), state.bottomChoice, state.bottomStreak, animateBottom);
       document.getElementById('btn-toggle-names').textContent = state.hideNames ? 'SHOW NAMES' : 'HIDE NAMES';
+    }
 
-      const srcBar = document.getElementById('ai-sources-bar');
-      if (state.lastAiSources && state.lastAiSources.length > 0) {
-        srcBar.classList.remove('hidden');
-        srcBar.innerHTML = `<span class="text-zinc-500">Google Search AI sources:</span>` + state.lastAiSources.slice(0, 3).map((s) =>
-          `<a href="${escapeHtml(s.uri)}" target="_blank" rel="noopener noreferrer" class="underline decoration-zinc-600 hover:text-zinc-200 truncate max-w-[180px]">${escapeHtml(s.title)}</a>`
-        ).join('<span class="text-zinc-700">·</span>');
+    function renderGbuView() {
+      const a = state.gbuAssign;
+      document.getElementById('gbu-round-counter').textContent = `Trio #${state.gbuRoundCount}`;
+
+      const instr = document.getElementById('gbu-instruction');
+      if (a.good === null) instr.innerHTML = 'Tap a card (or pill) to pick <span class="text-emerald-400 font-bold">The Good 😇</span>';
+      else if (a.bad === null) instr.innerHTML = 'Now pick <span class="text-orange-400 font-bold">The Bad 😈</span>';
+      else if (a.ugly === null) instr.innerHTML = 'Finally pick <span class="text-rose-400 font-bold">The Ugly 💀</span>';
+      else instr.innerHTML = '<span class="text-[#e0b34c] font-bold">All 3 assigned!</span> Tap Lock In or click any card to swap.';
+
+      const allAssigned = a.good !== null && a.bad !== null && a.ugly !== null;
+      document.getElementById('btn-gbu-submit').disabled = !allAssigned;
+
+      const grid = document.getElementById('gbu-grid');
+      grid.innerHTML = state.gbuTrio.map((ch, idx) => {
+        const [c1, c2] = ch.gradient || PALETTES[0];
+        const isPokemon = ch.mediaType === 'pokemon';
+        const cached = mediaCache.get(ch.id);
+        const knownUrl = ch.img || cached?.url || null;
+        const role = a.good === idx ? 'good' : a.bad === idx ? 'bad' : a.ugly === idx ? 'ugly' : null;
+
+        const imgClass = isPokemon
+          ? 'absolute inset-0 w-full h-full object-contain p-4 pb-20 drop-shadow-[0_12px_20px_rgba(0,0,0,0.65)] opacity-0 transition-opacity duration-500'
+          : 'absolute inset-0 w-full h-full object-cover object-top opacity-0 transition-opacity duration-500';
+        const imgHtml = knownUrl ? `<img src="${escapeHtml(knownUrl)}" alt="${escapeHtml(ch.name)}" class="${imgClass}" onload="this.classList.remove('opacity-0')" onerror="this.remove()" />` : '';
+
+        const roleBanner = role === 'good'
+          ? '<div class="absolute top-3 left-3 z-20 px-2.5 py-1 rounded-full bg-emerald-500 text-obsidian text-[10px] font-extrabold uppercase tracking-wider shadow">😇 THE GOOD</div>'
+          : role === 'bad'
+            ? '<div class="absolute top-3 left-3 z-20 px-2.5 py-1 rounded-full bg-orange-400 text-obsidian text-[10px] font-extrabold uppercase tracking-wider shadow">😈 THE BAD</div>'
+            : role === 'ugly'
+              ? '<div class="absolute top-3 left-3 z-20 px-2.5 py-1 rounded-full bg-rose-500 text-white text-[10px] font-extrabold uppercase tracking-wider shadow">💀 THE UGLY</div>'
+              : '';
+
+        return `
+          <div class="gbu-card ${role ? `role-${role}` : ''} flex flex-col justify-end" data-gbu-card="${idx}">
+            <div data-art-id="${escapeHtml(ch.id)}" data-art-fit="${isPokemon ? 'pokemon-card' : 'cover'}" class="absolute inset-0 art-mesh flex items-center justify-center" style="background: radial-gradient(circle at 50% 34%, ${c1} 0%, ${c2} 85%);">
+              <span class="text-5xl opacity-85 select-none mb-12">${escapeHtml(ch.emoji || '✨')}</span>
+              ${imgHtml}
+            </div>
+            <div class="absolute inset-0 card-vignette z-10 pointer-events-none"></div>
+            ${roleBanner}
+            <div class="relative z-20 p-3.5 text-center space-y-2.5">
+              <div>
+                <div class="text-base sm:text-lg font-bold text-white leading-tight drop-shadow">${escapeHtml(ch.name)}</div>
+                ${ch.tag ? `<div class="text-[11px] text-zinc-300/90 mt-0.5 truncate">${escapeHtml(ch.tag)}</div>` : ''}
+              </div>
+              <div class="grid grid-cols-3 gap-1.5">
+                <button type="button" data-gbu-idx="${idx}" data-gbu-role="good" class="btn-gbu-role py-1.5 rounded-lg text-[10.5px] font-bold border transition-all ${role === 'good' ? 'bg-emerald-500 text-obsidian border-emerald-400' : 'bg-black/60 hover:bg-emerald-500/20 text-emerald-300 border-emerald-500/35'}">😇 Good</button>
+                <button type="button" data-gbu-idx="${idx}" data-gbu-role="bad" class="btn-gbu-role py-1.5 rounded-lg text-[10.5px] font-bold border transition-all ${role === 'bad' ? 'bg-orange-400 text-obsidian border-orange-300' : 'bg-black/60 hover:bg-orange-500/20 text-orange-300 border-orange-500/35'}">😈 Bad</button>
+                <button type="button" data-gbu-idx="${idx}" data-gbu-role="ugly" class="btn-gbu-role py-1.5 rounded-lg text-[10.5px] font-bold border transition-all ${role === 'ugly' ? 'bg-rose-500 text-white border-rose-400' : 'bg-black/60 hover:bg-rose-500/20 text-rose-300 border-rose-500/35'}">💀 Ugly</button>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+
+      grid.querySelectorAll('.gbu-card').forEach((card) => {
+        card.addEventListener('click', (e) => {
+          if (e.target.closest('.btn-gbu-role')) return;
+          assignGbuRole(Number(card.dataset.gbuCard), null);
+        });
+      });
+      grid.querySelectorAll('.btn-gbu-role').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          assignGbuRole(Number(btn.dataset.gbuIdx), btn.dataset.gbuRole);
+        });
+      });
+
+      state.gbuTrio.forEach((ch) => hydrateArtworkForChoice(ch));
+
+      const histWrap = document.getElementById('gbu-history-wrap');
+      if (state.gbuHistory.length > 0) {
+        histWrap.classList.remove('hidden');
+        document.getElementById('gbu-history-list').innerHTML = state.gbuHistory.map((h) => `
+          <div class="bg-[#12141a] border border-[#1d2028] rounded-xl px-3.5 py-2.5 flex flex-wrap items-center gap-2 text-xs">
+            <span class="text-zinc-500 font-bold">#${h.round}</span>
+            <span class="px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-300 border border-emerald-500/25 font-semibold">😇 ${escapeHtml(h.good.name)}</span>
+            <span class="px-2 py-0.5 rounded-md bg-orange-500/15 text-orange-300 border border-orange-500/25 font-semibold">😈 ${escapeHtml(h.bad.name)}</span>
+            <span class="px-2 py-0.5 rounded-md bg-rose-500/15 text-rose-300 border border-rose-500/25 font-semibold">💀 ${escapeHtml(h.ugly.name)}</span>
+          </div>`).join('');
       } else {
-        srcBar.classList.add('hidden');
-        srcBar.innerHTML = '';
+        histWrap.classList.add('hidden');
       }
+    }
+
+    function renderPersonalityReport() {
+      const rep = state.lastPersonalityReport;
+      if (!rep) return;
+
+      document.getElementById('pers-title').textContent = rep.title;
+      document.getElementById('pers-subtitle').textContent = rep.subtitle;
+      document.getElementById('pers-emoji').textContent = rep.emoji;
+      document.getElementById('pers-narrative').textContent = rep.narrative;
+
+      const traits = [
+        { label: 'Crowd Sync', val: rep.crowdSync, color: 'from-sky-400 to-cyan-300', desc: rep.crowdSync >= 65 ? 'Aligned with consensus' : 'Independent thinker' },
+        { label: 'Boldness & Upsets', val: rep.boldness, color: 'from-amber-400 to-orange-400', desc: rep.boldness >= 50 ? 'Loves giant-killers' : 'Steady & measured' },
+        { label: 'Rare Taste', val: rep.rareTaste, color: 'from-violet-400 to-fuchsia-400', desc: rep.rareTaste >= 55 ? 'Deep-cut appreciator' : 'Classic heavyweight fan' },
+        { label: 'Vibe Focus', val: rep.focusRatio, color: 'from-emerald-400 to-teal-300', desc: rep.focusRatio >= 55 ? 'Distinct signature lane' : 'Eclectic & wide-ranging' },
+      ];
+
+      document.getElementById('pers-traits-grid').innerHTML = traits.map((t) => `
+        <div class="bg-[#0e1017]/90 border border-white/[0.08] rounded-xl p-3">
+          <div class="flex items-center justify-between text-xs font-bold">
+            <span class="text-zinc-200">${t.label}</span>
+            <span class="text-white tabular-nums">${t.val}/100</span>
+          </div>
+          <div class="w-full h-2 bg-white/[0.07] rounded-full overflow-hidden mt-2">
+            <div class="h-full bg-gradient-to-r ${t.color} rounded-full" style="width: ${Math.max(6, t.val)}%;"></div>
+          </div>
+          <div class="text-[10.5px] text-zinc-400 mt-1.5">${t.desc}</div>
+        </div>`).join('');
+
+      document.getElementById('pers-themes-list').innerHTML = rep.topThemes.length > 0
+        ? rep.topThemes.map(([tok, cnt]) => `<span class="px-2.5 py-1 rounded-full bg-white/[0.06] border border-white/10 text-xs font-semibold text-zinc-200">${escapeHtml(tok)} <span class="text-[#e0b34c]">×${cnt}</span></span>`).join('')
+        : '<span class="text-xs text-zinc-400">Eclectic mix across the board</span>';
+
+      const uBox = document.getElementById('pers-upset-box');
+      if (rep.biggestUpset) {
+        uBox.innerHTML = `
+          <div class="flex items-center gap-2.5">
+            ${buildThumbHtml(rep.biggestUpset.winner, 'w-10 h-10')}
+            <div class="min-w-0">
+              <div class="text-sm font-bold text-white truncate">${escapeHtml(rep.biggestUpset.winner.name)}</div>
+              <div class="text-[11px] text-zinc-400 truncate">beat ${escapeHtml(rep.biggestUpset.loser.name)}</div>
+            </div>
+          </div>`;
+        hydrateArtworkForChoice(rep.biggestUpset.winner);
+      } else {
+        uBox.innerHTML = '<div class="text-xs text-zinc-400">Zero upsets — pure favorite sweep!</div>';
+      }
+
+      const fBox = document.getElementById('pers-fav-box');
+      if (rep.topRatedWin) {
+        fBox.innerHTML = `
+          <div class="flex items-center gap-2.5">
+            ${buildThumbHtml(rep.topRatedWin, 'w-10 h-10')}
+            <div class="min-w-0">
+              <div class="text-sm font-bold text-white truncate">${escapeHtml(rep.topRatedWin.name)}</div>
+              <div class="text-[11px] text-zinc-400 truncate">${escapeHtml(rep.topRatedWin.tag || state.activeDeck.title)}</div>
+            </div>
+          </div>`;
+        hydrateArtworkForChoice(rep.topRatedWin);
+      }
+
+      document.getElementById('pers-winners-grid').innerHTML = rep.winners.map((w, i) => `
+        <div class="flex items-center gap-2.5 bg-[#161922] border border-[#222634] rounded-xl px-2.5 py-2">
+          <span class="w-5 text-[11px] font-bold text-zinc-500 tabular-nums">#${i + 1}</span>
+          ${buildThumbHtml(w, 'w-8 h-8')}
+          <div class="min-w-0">
+            <div class="text-xs font-semibold text-zinc-100 truncate">${escapeHtml(w.name)}</div>
+            <div class="text-[10px] text-zinc-500 truncate">${escapeHtml(w.tag || '')}</div>
+          </div>
+        </div>`).join('');
+      rep.winners.slice(0, 12).forEach((w) => hydrateArtworkForChoice(w));
     }
 
     function renderResults() {
@@ -2137,8 +2552,6 @@
       const pool = getFilteredPool(deck, state.activeSubFilter);
       document.getElementById('lb-mode-toggle').classList.toggle('hidden', pool.length <= 10);
       document.getElementById('btn-lb-all').textContent = `All-Time Highest (${pool.length})`;
-      document.getElementById('btn-play-ai-next').classList.toggle('hidden', Boolean(deck.isCustom));
-
       renderLeaderboardRows();
     }
 
@@ -2220,10 +2633,7 @@
                 <span class="w-5 text-center text-sm font-bold tabular-nums shrink-0 ${rankColor}">${item.rank}</span>
                 ${buildThumbHtml(item, 'w-9 h-9')}
                 <div class="min-w-0">
-                  <div class="flex items-center flex-wrap gap-1">
-                    <span class="text-[14px] font-semibold text-zinc-100 truncate">${escapeHtml(item.name)}</span>
-                    ${item.isAiGenerated ? '<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-sky-500/15 text-sky-300 border border-sky-400/25">✨ AI</span>' : ''}
-                  </div>
+                  <div class="text-[14px] font-semibold text-zinc-100 truncate">${escapeHtml(item.name)}</div>
                   <div class="text-[10.5px] text-zinc-400 truncate">${item.winRate}% win · 👑 ${item.crowns}${item.tag ? ` · ${escapeHtml(item.tag)}` : ''}</div>
                 </div>
               </div>
@@ -2234,7 +2644,6 @@
             </div>
           </div>`;
       }).join('');
-
       rows.slice(0, 12).forEach((i) => hydrateArtworkForChoice(i));
     }
 
@@ -2249,7 +2658,6 @@
       document.getElementById('standings-title').textContent = `${deck.emoji || '🏆'} ${deck.title} Live Standings`;
       document.getElementById('standings-search').placeholder = `Search ${pool.length} ${deck.title.toLowerCase()}...`;
       document.getElementById('btn-standings-clear-search').classList.toggle('hidden', !q);
-      document.getElementById('btn-standings-ai-add').classList.toggle('hidden', Boolean(deck.isCustom));
 
       document.querySelectorAll('.standings-sort-btn').forEach((btn) => {
         const active = btn.dataset.sortBy === state.standingsSort;
@@ -2284,8 +2692,7 @@
       }
 
       document.getElementById('standings-count-label').textContent = `Showing ${visibleRows.length} of ${filteredBoard.length} ${deck.title.toLowerCase()}`;
-      const listEl = document.getElementById('standings-list');
-      listEl.innerHTML = visibleRows.length === 0
+      document.getElementById('standings-list').innerHTML = visibleRows.length === 0
         ? `<div class="text-center py-10 px-4 rounded-2xl bg-[#12141a] border border-dashed border-[#242836] text-xs text-zinc-400">No matches found.</div>`
         : visibleRows.map((item) => {
             const rankColor = item.rank === 1 ? 'text-[#e0b34c]' : item.rank === 2 ? 'text-zinc-200' : item.rank === 3 ? 'text-[#d8894a]' : 'text-zinc-500';
@@ -2297,10 +2704,7 @@
                     <span class="w-7 text-center text-xs font-bold tabular-nums shrink-0 ${rankColor}">#${item.rank}</span>
                     ${buildThumbHtml(item, 'w-10 h-10')}
                     <div class="min-w-0">
-                      <div class="flex items-center gap-1.5 flex-wrap">
-                        <span class="text-[13.5px] font-semibold text-zinc-100 truncate">${escapeHtml(item.name)}</span>
-                        ${item.isAiGenerated ? '<span class="px-1.5 py-0.5 rounded bg-sky-500/15 text-sky-300 border border-sky-400/25 text-[9px] font-bold">✨ AI</span>' : ''}
-                      </div>
+                      <div class="text-[13.5px] font-semibold text-zinc-100 truncate">${escapeHtml(item.name)}</div>
                       <div class="text-[10.5px] text-zinc-400 truncate mt-0.5">${escapeHtml(item.tag || '')}${item.tag ? ' · ' : ''}${item.winRate}% win · 👑 ${item.crowns} · ${item.livePoints} pts</div>
                     </div>
                   </div>
@@ -2313,7 +2717,6 @@
           }).join('');
 
       visibleRows.slice(0, 16).forEach((i) => hydrateArtworkForChoice(i));
-
       const remaining = filteredBoard.length - visibleRows.length;
       document.getElementById('standings-more-wrap').classList.toggle('hidden', remaining <= 0);
       if (remaining > 0) {
@@ -2330,7 +2733,7 @@
     }
 
     // =========================================================================
-    // 10. SETTINGS & SHARED DECKS MODALS
+    // 10. SETTINGS, SHARED DECKS & CREATOR
     // =========================================================================
     function renderSettingsUI() {
       document.querySelectorAll('.btn-layout-opt').forEach((btn) => {
@@ -2339,18 +2742,13 @@
           ? 'btn-layout-opt flex flex-col items-center gap-1.5 p-3 rounded-xl border text-center transition-all bg-[#e0b34c]/15 border-[#e0b34c] text-white shadow-[0_0_14px_rgba(224,179,76,0.18)]'
           : 'btn-layout-opt flex flex-col items-center gap-1.5 p-3 rounded-xl border text-center transition-all bg-[#161922] hover:bg-[#1c202c] border-[#242834] text-zinc-300';
       });
+      const onCls = 'px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-300 border border-emerald-400/30';
+      const offCls = 'px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-zinc-800 text-zinc-400 border border-zinc-700';
 
-      const sBadge = document.getElementById('badge-setting-sound');
-      sBadge.textContent = soundEnabled ? 'ON' : 'OFF';
-      sBadge.className = soundEnabled
-        ? 'px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-300 border border-emerald-400/30'
-        : 'px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-zinc-800 text-zinc-400 border border-zinc-700';
-
-      const nBadge = document.getElementById('badge-setting-names');
-      nBadge.textContent = state.hideNames ? 'ON' : 'OFF';
-      nBadge.className = state.hideNames
-        ? 'px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-300 border border-emerald-400/30'
-        : 'px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-zinc-800 text-zinc-400 border border-zinc-700';
+      const sB = document.getElementById('badge-setting-sound');
+      sB.textContent = soundEnabled ? 'ON' : 'OFF'; sB.className = soundEnabled ? onCls : offCls;
+      const nB = document.getElementById('badge-setting-names');
+      nB.textContent = state.hideNames ? 'ON' : 'OFF'; nB.className = state.hideNames ? onCls : offCls;
     }
 
     function openSettingsModal() {
@@ -2359,7 +2757,6 @@
       renderSettingsUI();
       document.getElementById('modal-settings').classList.remove('hidden');
     }
-
     function closeSettingsModal() { document.getElementById('modal-settings').classList.add('hidden'); }
     function openSharedModal() { document.getElementById('input-load-share').value = ''; document.getElementById('modal-shared').classList.remove('hidden'); renderSharedModal(); }
     function closeSharedModal() { document.getElementById('modal-shared').classList.add('hidden'); }
@@ -2395,7 +2792,7 @@
         const target = customDecksCache[btn.dataset.playDeck];
         if (!target) return;
         closeSharedModal();
-        startRound({ ...target, isCustom: true });
+        startKnockoutRound({ ...target, isCustom: true });
       }));
       listEl.querySelectorAll('.btn-shared-copy').forEach((btn) => btn.addEventListener('click', () => {
         const target = customDecksCache[btn.dataset.copyDeck];
@@ -2403,9 +2800,6 @@
       }));
     }
 
-    // =========================================================================
-    // 11. CREATOR
-    // =========================================================================
     function initCreatorSlots() {
       const emojis = ['🎬','🍛','🔥','⚡','👑','💎','🎯','🚀','🌟','🏆'];
       state.creatorSlots = Array.from({ length: 10 }, (_, idx) => ({
@@ -2450,35 +2844,6 @@
       container.querySelectorAll('.btn-slot-emoji').forEach((btn) => btn.addEventListener('click', (e) => { e.stopPropagation(); openEmojiPopover(Number(btn.dataset.emojiSlot), btn); }));
     }
 
-    async function handleCreatorAiFill() {
-      const topic = document.getElementById('creator-title').value.trim();
-      const cat = document.getElementById('creator-category').value || 'Custom';
-      if (!topic) { showToast('Enter a Deck Title / Topic first!', 'warn'); document.getElementById('creator-title').focus(); return; }
-
-      const btn = document.getElementById('btn-creator-ai-fill');
-      const label = document.getElementById('btn-creator-ai-label');
-      btn.disabled = true;
-      label.textContent = 'Searching Google AI...';
-
-      try {
-        const systemPrompt = `Use Google Search to find 10 real, popular choices for the topic. Return ONLY a valid JSON array of EXACTLY 10 objects: [{"name":"Title","emoji":"1 emoji","tag":"short 2-4 word note"}]`;
-        const { text } = await callGeminiWithSearch(systemPrompt, `Topic: "${topic}" (Category: ${cat}). Return 10 iconic, distinct choices.`);
-        const arr = extractJsonArrayFromText(text);
-        arr.slice(0, 10).forEach((item, idx) => {
-          state.creatorSlots[idx].name = String(item?.name || '').slice(0, 52);
-          state.creatorSlots[idx].emoji = String(item?.emoji || '✨').slice(0, 4);
-          state.creatorSlots[idx].tag = String(item?.tag || '').slice(0, 32);
-        });
-        renderCreatorSlots();
-        showToast(`✨ Filled 10 choices for "${topic}"!`, 'success');
-      } catch (_) {
-        showToast('AI search unavailable right now. You can type or paste 10 choices.', 'warn');
-      } finally {
-        btn.disabled = false;
-        label.textContent = 'Auto-Fill 10 with Google Search AI';
-      }
-    }
-
     function openEmojiPopover(slotIdx, anchorEl) {
       state.activeEmojiSlotIdx = slotIdx;
       const pop = document.getElementById('emoji-popover');
@@ -2487,7 +2852,6 @@
       pop.style.left = `${Math.min(window.innerWidth - 276, Math.max(12, rect.left))}px`;
       pop.classList.remove('hidden');
     }
-
     function closeEmojiPopover() { document.getElementById('emoji-popover').classList.add('hidden'); state.activeEmojiSlotIdx = null; }
 
     async function handleSaveCustomDeck() {
@@ -2505,7 +2869,7 @@
           id: `c${idx + 1}`, name: s.name.trim(), tag: (s.tag || '').trim(), emoji: s.emoji || '✨',
           paletteIdx: s.paletteIdx % PALETTES.length, gradient: PALETTES[s.paletteIdx % PALETTES.length],
           img: s.img ? s.img.trim() : null, wikiSlug: '',
-          mediaType: categoryLabel === 'Movies' ? 'tmdb-movie' : (categoryLabel === 'TV Serials' || categoryLabel === 'Anime' ? 'tmdb-tv' : (categoryLabel === 'Pokemon' ? 'pokemon' : 'wiki')),
+          mediaType: categoryLabel === 'Movies' ? 'tmdb-movie' : (categoryLabel === 'TV Serials' || categoryLabel === 'Anime') ? 'tmdb-tv' : (categoryLabel === 'Pokemon' ? 'pokemon' : 'wiki'),
           seedVotes: 0,
         }))
       };
@@ -2519,22 +2883,19 @@
     }
 
     // =========================================================================
-    // 12. CLIPBOARD & TOAST HELPERS
+    // 11. CLIPBOARD & TOAST
     // =========================================================================
-    function copyTextToClipboard(text, successMsg = 'Share link copied!') {
+    function copyTextToClipboard(text, successMsg = 'Copied to clipboard!') {
       try {
         const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.setAttribute('readonly', '');
-        ta.style.position = 'fixed';
-        ta.style.top = '-9999px';
-        document.body.appendChild(ta);
-        ta.select();
+        ta.value = text; ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed'; ta.style.top = '-9999px';
+        document.body.appendChild(ta); ta.select();
         const ok = document.execCommand('copy');
         document.body.removeChild(ta);
         if (ok) { showToast(successMsg, 'success'); return; }
       } catch (_) {}
-      showToast('Copy the link from the box.', 'warn');
+      showToast('Copy the text manually.', 'warn');
     }
 
     function showToast(message, type = 'info') {
@@ -2545,21 +2906,21 @@
       toast.textContent = message;
       container.appendChild(toast);
       setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transform = 'translateY(6px)';
-        toast.style.transition = 'all 0.25s ease';
+        toast.style.opacity = '0'; toast.style.transform = 'translateY(6px)'; toast.style.transition = 'all 0.25s ease';
         setTimeout(() => toast.remove(), 260);
       }, 2600);
     }
 
     // =========================================================================
-    // 13. EVENT LISTENERS & SAFE BOOT
+    // 12. EVENT LISTENERS & SAFE BOOT
     // =========================================================================
     function setupEventListeners() {
+      // Top Nav
       document.getElementById('btn-nav-play').addEventListener('click', () => {
         playClickTone(480);
-        if (state.view === 'standings') startRound(state.activeDeck || BUILTIN_CATEGORIES[0], { subFilter: state.activeSubFilter });
-        else showView(state.champion ? 'results' : 'arena');
+        if (state.view === 'standings' || state.view === 'creator') {
+          startActiveMode(state.activeDeck || BUILTIN_CATEGORIES[0], { subFilter: state.activeSubFilter });
+        }
       });
 
       document.getElementById('btn-nav-standings').addEventListener('click', () => {
@@ -2577,6 +2938,45 @@
       document.getElementById('btn-close-settings').addEventListener('click', closeSettingsModal);
       document.getElementById('modal-settings').addEventListener('click', (e) => { if (e.target.id === 'modal-settings') closeSettingsModal(); });
 
+      // Mode Switcher
+      document.getElementById('btn-mode-knockout').addEventListener('click', () => {
+        playClickTone(500);
+        startKnockoutRound(state.activeDeck || BUILTIN_CATEGORIES[0]);
+      });
+      document.getElementById('btn-mode-gbu').addEventListener('click', () => {
+        playClickTone(520);
+        startGbuRound(state.activeDeck || BUILTIN_CATEGORIES[0], { resetCounter: true });
+      });
+      document.getElementById('btn-mode-personality').addEventListener('click', () => {
+        playClickTone(540);
+        startPersonalityMode(state.activeDeck || BUILTIN_CATEGORIES[0]);
+      });
+
+      // GBU Controls
+      document.getElementById('btn-gbu-clear').addEventListener('click', () => {
+        state.gbuAssign = { good: null, bad: null, ugly: null };
+        playClickTone(380);
+        renderGbuView();
+      });
+      document.getElementById('btn-gbu-submit').addEventListener('click', submitGbuTrio);
+      document.getElementById('btn-gbu-skip').addEventListener('click', () => {
+        playClickTone(440);
+        startGbuRound(state.activeDeck, { resetCounter: false });
+      });
+
+      // Personality Report Controls
+      document.getElementById('btn-pers-again').addEventListener('click', () => {
+        playClickTone(520);
+        startPersonalityMode(state.activeDeck);
+      });
+      document.getElementById('btn-pers-copy').addEventListener('click', () => {
+        const rep = state.lastPersonalityReport;
+        if (!rep) return;
+        const summary = `My PickOff 20-Round Personality (${state.activeDeck.title}): ${rep.emoji} ${rep.title} — ${rep.subtitle}. Crowd Sync: ${rep.crowdSync}/100 | Boldness: ${rep.boldness}/100 | Rare Taste: ${rep.rareTaste}/100.`;
+        copyTextToClipboard(summary, 'Personality summary copied!');
+      });
+
+      // Settings Controls
       document.querySelectorAll('.btn-layout-opt').forEach((btn) => {
         btn.addEventListener('click', () => {
           state.layoutMode = btn.dataset.layoutOpt;
@@ -2592,12 +2992,10 @@
         soundEnabled = !soundEnabled; saveLocalState(); updateHeader(); renderSettingsUI();
         if (soundEnabled) playClickTone(520);
       });
-
       document.getElementById('btn-setting-names').addEventListener('click', () => {
         state.hideNames = !state.hideNames; saveLocalState(); renderSettingsUI();
         if (state.view === 'arena') renderArena(false, false);
       });
-
       document.getElementById('btn-reset-local').addEventListener('click', () => {
         const btn = document.getElementById('btn-reset-local');
         if (!state.resetConfirmArmed) { state.resetConfirmArmed = true; btn.textContent = 'Tap again to confirm'; return; }
@@ -2605,12 +3003,11 @@
         Object.keys(categoryScoresCache).forEach((k) => delete categoryScoresCache[k]);
         Object.keys(customDecksCache).forEach((k) => delete customDecksCache[k]);
         userRoundHistory = [];
-        BUILTIN_CATEGORIES.forEach((cat) => { cat.choices = cat.choices.filter((c) => !c.isAiGenerated); });
         state.resetConfirmArmed = false;
         btn.textContent = 'Reset Local Stats';
         closeSettingsModal();
-        startRound(BUILTIN_CATEGORIES[0], { subFilter: 'all' });
-        showToast('Local stats & AI history reset.', 'info');
+        startKnockoutRound(BUILTIN_CATEGORIES[0]);
+        showToast('Local stats reset.', 'info');
       });
 
       document.getElementById('btn-toggle-sound').addEventListener('click', () => {
@@ -2618,11 +3015,14 @@
         if (soundEnabled) playClickTone(520);
       });
 
+      // Arena Controls
       document.getElementById('card-top').addEventListener('click', () => handlePick('top'));
       document.getElementById('card-bottom').addEventListener('click', () => handlePick('bottom'));
       document.getElementById('btn-toggle-names').addEventListener('click', () => { state.hideNames = !state.hideNames; saveLocalState(); renderArena(false, false); });
-      document.getElementById('btn-arena-reshuffle').addEventListener('click', () => { playClickTone(500); startRound(state.activeDeck, { subFilter: state.activeSubFilter }); });
-      document.getElementById('btn-arena-ai-fetch').addEventListener('click', () => { playClickTone(540); handleFetchAiFreshTen(false); });
+      document.getElementById('btn-arena-reshuffle').addEventListener('click', () => {
+        playClickTone(500);
+        startActiveMode(state.activeDeck, { subFilter: state.activeSubFilter });
+      });
 
       window.addEventListener('keydown', (e) => {
         if (state.view !== 'arena') return;
@@ -2634,26 +3034,26 @@
         else if (e.key === '2' || e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); handlePick('bottom'); }
       });
 
+      // Results Controls
       document.getElementById('btn-toggle-taste').addEventListener('click', () => { state.tasteExpanded = !state.tasteExpanded; updateTasteAccordionUI(); });
       document.getElementById('tab-this-post').addEventListener('click', () => { state.tasteTab = 'post'; updateTasteAccordionUI(); });
       document.getElementById('tab-your-persona').addEventListener('click', () => { state.tasteTab = 'persona'; renderPersonaTab(); updateTasteAccordionUI(); });
       document.getElementById('btn-lb-round').addEventListener('click', () => { state.lbMode = 'round'; renderLeaderboardRows(); });
       document.getElementById('btn-lb-all').addEventListener('click', () => { state.lbMode = 'all'; renderLeaderboardRows(); });
-      document.getElementById('btn-play-next-pool').addEventListener('click', () => { playClickTone(500); startRound(state.activeDeck, { subFilter: state.activeSubFilter }); });
-      document.getElementById('btn-play-ai-next').addEventListener('click', () => { playClickTone(540); handleFetchAiFreshTen(false); });
-      document.getElementById('btn-rematch-same').addEventListener('click', () => { playClickTone(440); startRound(state.activeDeck, { subFilter: state.activeSubFilter, explicitChoices: state.roundChoices }); });
+      document.getElementById('btn-play-next-pool').addEventListener('click', () => { playClickTone(500); startKnockoutRound(state.activeDeck); });
+      document.getElementById('btn-rematch-same').addEventListener('click', () => { playClickTone(440); startKnockoutRound(state.activeDeck, { explicitChoices: state.roundChoices }); });
       document.getElementById('btn-share-current').addEventListener('click', () => copyTextToClipboard(buildShareUrl(state.activeDeck), 'Deck link copied!'));
 
-      document.getElementById('btn-standings-play').addEventListener('click', () => startRound(state.activeDeck || BUILTIN_CATEGORIES[0], { subFilter: state.activeSubFilter }));
-      document.getElementById('btn-standings-ai-add').addEventListener('click', () => handleFetchAiFreshTen(true));
+      // Standings Controls
+      document.getElementById('btn-standings-play').addEventListener('click', () => startActiveMode(state.activeDeck || BUILTIN_CATEGORIES[0], { subFilter: state.activeSubFilter }));
       document.getElementById('standings-search').addEventListener('input', (e) => { state.standingsSearch = e.target.value; state.standingsLimit = 50; renderLiveStandings(); });
       document.getElementById('btn-standings-clear-search').addEventListener('click', () => { state.standingsSearch = ''; document.getElementById('standings-search').value = ''; renderLiveStandings(); });
       document.querySelectorAll('.standings-sort-btn').forEach((btn) => btn.addEventListener('click', () => { state.standingsSort = btn.dataset.sortBy; renderLiveStandings(); }));
       document.getElementById('btn-standings-load-more').addEventListener('click', () => { state.standingsLimit += 50; renderLiveStandings(); });
       document.getElementById('btn-standings-show-all').addEventListener('click', () => { state.standingsLimit = 1000; renderLiveStandings(); });
 
-      document.getElementById('btn-creator-back').addEventListener('click', () => showView(state.champion ? 'results' : 'arena'));
-      document.getElementById('btn-creator-ai-fill').addEventListener('click', handleCreatorAiFill);
+      // Creator Controls
+      document.getElementById('btn-creator-back').addEventListener('click', () => startActiveMode(state.activeDeck || BUILTIN_CATEGORIES[0], { subFilter: state.activeSubFilter }));
       document.getElementById('btn-toggle-paste').addEventListener('click', () => document.getElementById('quick-paste-box').classList.toggle('hidden'));
       document.getElementById('btn-apply-paste').addEventListener('click', () => {
         const lines = document.getElementById('quick-paste-input').value.split(/\r?\n/).map((l) => l.trim()).filter(Boolean).slice(0, 10);
@@ -2674,9 +3074,10 @@
       });
       document.getElementById('btn-save-deck').addEventListener('click', handleSaveCustomDeck);
       document.getElementById('btn-creator-copy').addEventListener('click', () => copyTextToClipboard(document.getElementById('creator-share-url').value));
-      document.getElementById('btn-creator-play-now').addEventListener('click', () => { if (state.lastCreatedDeck) startRound(state.lastCreatedDeck); });
+      document.getElementById('btn-creator-play-now').addEventListener('click', () => { if (state.lastCreatedDeck) startKnockoutRound(state.lastCreatedDeck); });
       document.getElementById('btn-creator-make-another').addEventListener('click', () => { document.getElementById('creator-title').value = ''; initCreatorSlots(); openCreator(); });
 
+      // Shared Modal Controls
       document.getElementById('btn-close-shared').addEventListener('click', closeSharedModal);
       document.getElementById('modal-shared').addEventListener('click', (e) => { if (e.target.id === 'modal-shared') closeSharedModal(); });
       document.getElementById('btn-modal-create').addEventListener('click', () => { closeSharedModal(); openCreator(); });
@@ -2685,20 +3086,21 @@
         if (!parsed) { showToast('Invalid share link or deck ID.', 'warn'); return; }
         if (parsed.catIdOnly) {
           const cat = BUILTIN_CATEGORIES.find((c) => c.id === parsed.catIdOnly);
-          if (cat) { closeSharedModal(); startRound(cat, { subFilter: parsed.subFilter || 'all' }); return; }
+          if (cat) { closeSharedModal(); startActiveMode(cat, { subFilter: parsed.subFilter || 'all' }); return; }
         }
         if (parsed.deckIdOnly) {
           const fetched = await fetchCustomDeckById(parsed.deckIdOnly);
-          if (fetched) { closeSharedModal(); startRound({ ...fetched, isCustom: true }); return; }
+          if (fetched) { closeSharedModal(); startKnockoutRound({ ...fetched, isCustom: true }); return; }
           showToast('Deck not found — paste the full share URL.', 'warn');
           return;
         }
         customDecksCache[parsed.id] = parsed;
         saveLocalState();
         closeSharedModal();
-        startRound(parsed);
+        startKnockoutRound(parsed);
       });
 
+      // Emoji Popover
       const emojiGrid = document.getElementById('emoji-grid');
       emojiGrid.innerHTML = CREATOR_EMOJIS.map((em) => `<button type="button" class="emoji-pick-btn w-7 h-7 rounded-lg hover:bg-white/10 flex items-center justify-center text-base">${em}</button>`).join('');
       emojiGrid.querySelectorAll('.emoji-pick-btn').forEach((btn) => btn.addEventListener('click', () => {
@@ -2712,69 +3114,36 @@
       });
     }
 
-    // Automatically loads the extra 256 Pokémon from pokemona.json (root or /data folder)
-    async function loadExtraPokemonCatalog() {
-      const pokemonCat = BUILTIN_CATEGORIES.find((c) => c.id === 'pokemon');
-      if (!pokemonCat) return;
-
-      const candidateUrls = ['./pokemona.json', './data/pokemona.json'];
-      for (const url of candidateUrls) {
-        try {
-          const res = await fetch(url, { cache: 'no-cache' });
-          if (!res.ok) continue;
-          const list = await res.json();
-          if (!Array.isArray(list)) continue;
-
-          const existingNames = new Set(pokemonCat.choices.map((c) => c.name.toLowerCase()));
-          list.forEach((entry) => {
-            if (!Array.isArray(entry)) return;
-            const [name, tag = '', emoji = '⚡', group = 'popular', dexNum = '', wikiSlug = ''] = entry;
-            if (!name || existingNames.has(String(name).toLowerCase())) return;
-            existingNames.add(String(name).toLowerCase());
-
-            const id = slugifyId('pokemon', name, dexNum);
-            const seedVotes = 2200 + (stableHash(id) % 1800);
-            const palIdx = stableHash(id) % PALETTES.length;
-            pokemonCat.choices.push(
-              mk(id, name, emoji || '⚡', seedVotes, palIdx, tag, wikiSlug, group || 'popular', 'pokemon', dexNum)
-            );
-          });
-          break;
-        } catch (err) {
-          console.warn(`Optional expansion ${url} skipped:`, err?.message);
-        }
-      }
-    }
-
     async function boot() {
       loadLocalState();
-      await loadExternalCatalog(); // Automatically loads ./<category>.json AND ./data/<category>.json on GitHub
-      await loadExtraPokemonCatalog(); // Links ./pokemona.json (or ./data/pokemona.json) for 512 total Pokémon
       setupEventListeners();
       initCreatorSlots();
       applyLayoutMode();
+
+      // Load external JSON datasets (works whether files are in repo root OR /data/ folder)
+      await loadExternalCatalog();
 
       const fbPromise = initFirebase();
       const parsedFromUrl = parseDeckFromShareString(window.location.href);
       if (parsedFromUrl) {
         if (parsedFromUrl.catIdOnly) {
           const cat = BUILTIN_CATEGORIES.find((c) => c.id === parsedFromUrl.catIdOnly);
-          if (cat) { startRound(cat, { subFilter: parsedFromUrl.subFilter || 'all' }); return; }
+          if (cat) { startActiveMode(cat, { subFilter: parsedFromUrl.subFilter || 'all' }); return; }
         } else if (parsedFromUrl.deckIdOnly) {
           await fbPromise;
           const fetched = await fetchCustomDeckById(parsedFromUrl.deckIdOnly);
-          if (fetched) { startRound({ ...fetched, isCustom: true }); return; }
+          if (fetched) { startKnockoutRound({ ...fetched, isCustom: true }); return; }
         } else if (parsedFromUrl.isCustom) {
           await fbPromise;
           const existing = await fetchCustomDeckById(parsedFromUrl.id);
           const deckToPlay = existing ? { ...existing, isCustom: true } : parsedFromUrl;
           if (!existing) customDecksCache[parsedFromUrl.id] = parsedFromUrl;
-          startRound(deckToPlay);
+          startKnockoutRound(deckToPlay);
           return;
         }
       }
 
-      startRound(BUILTIN_CATEGORIES[0], { subFilter: 'all' });
+      startKnockoutRound(BUILTIN_CATEGORIES[0]);
     }
 
     if (document.readyState === 'loading') {
