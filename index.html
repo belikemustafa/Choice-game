@@ -635,6 +635,7 @@
                   <option value="Movies">🎬 Movies</option>
                   <option value="TV Serials">📺 TV Serials</option>
                   <option value="Anime">⛩️ Anime</option>
+                  <option value="Pokemon">⚡ Pokémon</option>
                   <option value="Sports">🏅 Sports</option>
                   <option value="Cricketers">🏏 Cricketers</option>
                   <option value="Footballers">⚽ Footballers</option>
@@ -1087,312 +1088,54 @@
         ]
       },
       {
-        id: 'superpowers',
-        title: 'Superpowers',
+        id: 'pokemon',
+        title: 'Pokémon',
         emoji: '⚡',
-        subtitle: 'One ability for life. Choose wisely.',
-        aiPromptHint: 'creative and iconic superpowers or supernatural abilities from comics, anime, and sci-fi',
-        defaultMediaType: 'wiki',
-        seedTotalPlays: 9840,
+        subtitle: '512 Pokémon — Starters, Legendaries, Mythicals & fan favorites across all 9 generations.',
+        aiPromptHint: 'iconic Pokémon across all 9 generations including starters, legendaries, mythicals, and fan favorites',
+        defaultMediaType: 'pokemon',
+        seedTotalPlays: 16420,
+        subFilters: [
+          { id: 'all', label: 'All' },
+          { id: 'starters', label: 'Starters' },
+          { id: 'legendary', label: 'Legendary' },
+          { id: 'mythical', label: 'Mythical' },
+          { id: 'popular', label: 'Fan Favorites' },
+        ],
         choices: [
-          mk('p-time', 'Time Manipulation', '⏳', 4280, 7, 'Chrono', 'Time_travel'),
-          mk('p-teleport', 'Teleportation', '🌀', 4220, 2, 'Spatial', 'Teleportation'),
-          mk('p-telekinesis', 'Telekinesis', '🧠', 4060, 5, 'Psionic', 'Telekinesis'),
-          mk('p-flight', 'Flight', '🦅', 4020, 2, 'Aerial', 'Flight'),
-          mk('p-invis', 'Invisibility', '👻', 3980, 0, 'Stealth', 'Invisibility'),
-          mk('p-luck', 'Luck Manipulation', '🍀', 4190, 4, 'Probability', 'Four-leaf_clover'),
-          mk('p-healing', 'Healing Factor', '❤️‍🔥', 4110, 1, 'Regeneration', 'Regeneration_(biology)'),
-          mk('p-speed', 'Super Speed', '⚡', 4040, 3, 'Velocity', 'Speed_of_light'),
-          mk('p-shapeshift', 'Shapeshifting', '🦎', 3960, 4, 'Morph', 'Shapeshifting'),
-          mk('p-mind', 'Mind Reading', '🔮', 3920, 5, 'Telepathy', 'Telepathy'),
+          mk('pokemon-pikachu-25', 'Pikachu', '⚡', 4520, 3, 'Gen 1 · Electric', '', 'starters', 'pokemon', '25'),
+          mk('pokemon-charizard-6', 'Charizard', '🔥', 4500, 6, 'Gen 1 · Fire / Flying', '', 'starters', 'pokemon', '6'),
+          mk('pokemon-greninja-658', 'Greninja', '🌊', 4420, 2, 'Gen 6 · Water / Dark', '', 'starters', 'pokemon', '658'),
+          mk('pokemon-mewtwo-150', 'Mewtwo', '🔮', 4480, 5, 'Gen 1 · Psychic · Legendary', '', 'legendary', 'pokemon', '150'),
+          mk('pokemon-rayquaza-384', 'Rayquaza', '🐉', 4460, 4, 'Gen 3 · Dragon / Flying · Legendary', '', 'legendary', 'pokemon', '384'),
+          mk('pokemon-lugia-249', 'Lugia', '🪽', 4350, 2, 'Gen 2 · Psychic / Flying · Legendary', '', 'legendary', 'pokemon', '249'),
+          mk('pokemon-mew-151', 'Mew', '✨', 4390, 5, 'Gen 1 · Psychic · Mythical', '', 'mythical', 'pokemon', '151'),
+          mk('pokemon-arceus-493', 'Arceus', '👑', 4440, 3, 'Gen 4 · Normal · Mythical', '', 'mythical', 'pokemon', '493'),
+          mk('pokemon-lucario-448', 'Lucario', '🥊', 4370, 7, 'Gen 4 · Fighting / Steel', '', 'popular', 'pokemon', '448'),
+          mk('pokemon-gengar-94', 'Gengar', '👻', 4410, 5, 'Gen 1 · Ghost / Poison', '', 'popular', 'pokemon', '94'),
         ]
       },
       {
-        id: 'destinations',
-        title: 'Destinations',
-        emoji: '✈️',
-        subtitle: 'One all-expenses-paid ticket anywhere on Earth.',
-        aiPromptHint: 'breathtaking travel destinations around the world and scenic places in India (including Karnataka gems like Coorg, Hampi, Gokarna, Chikmagalur)',
-        defaultMediaType: 'wiki',
-        seedTotalPlays: 9620,
-        choices: [
-          mk('d-tokyo', 'Tokyo', '🗼', 4260, 5, 'Japan', 'Tokyo'),
-          mk('d-swiss', 'Swiss Alps', '🏔️', 4290, 2, 'Switzerland', 'Swiss_Alps'),
-          mk('d-kyoto', 'Kyoto', '⛩️', 4180, 1, 'Japan', 'Kyoto'),
-          mk('d-ladakh', 'Ladakh', '🏍️', 4220, 2, 'India · Himalayas', 'Ladakh'),
-          mk('d-coorg', 'Coorg (Kodagu)', '🌿', 4160, 4, 'Karnataka · Coffee Hills', 'Kodagu_district'),
-          mk('d-hampi', 'Hampi', '🏛️', 4120, 3, 'Karnataka · Heritage', 'Hampi'),
-          mk('d-iceland', 'Reykjavik & Iceland', '🌌', 4190, 7, 'Northern Lights', 'Reykjav%C3%ADk'),
-          mk('d-santorini', 'Santorini', '🌊', 4040, 2, 'Greece', 'Santorini'),
-          mk('d-bali', 'Bali', '🌴', 3990, 4, 'Indonesia', 'Bali'),
-          mk('d-amalfi', 'Amalfi Coast', '🍋', 4080, 3, 'Italy', 'Amalfi_Coast'),
-        ]
-      },
-      {
-        id: 'skills',
-        title: 'Skills',
-        emoji: '🧠',
-        subtitle: 'Download world-class mastery into your brain overnight.',
-        aiPromptHint: 'cool real-world skills, arts, sports, and crafts people wish they could master instantly',
-        defaultMediaType: 'wiki',
-        seedTotalPlays: 8910,
-        choices: [
-          mk('s-languages', 'Speaking 10 Languages', '🗣️', 4290, 2, 'Polyglot', 'Multilingualism'),
-          mk('s-martial', 'Martial Arts Mastery', '🥋', 4180, 1, 'Combat', 'Martial_arts'),
-          mk('s-piano', 'Grand Piano Virtuoso', '🎹', 4120, 0, 'Music', 'Piano'),
-          mk('s-cooking', 'Gourmet Cooking', '🍳', 4160, 3, 'Culinary', 'Cooking'),
-          mk('s-jet', 'Flying a Jet', '✈️', 4090, 7, 'Aviation', 'Jet_aircraft'),
-          mk('s-coding', 'Full-Stack AI Coding', '💻', 4140, 7, 'Engineering', 'Computer_programming'),
-          mk('s-guitar', 'Electric Guitar', '🎸', 4010, 1, 'Rock', 'Electric_guitar'),
-          mk('s-photo', 'Street Photography', '📸', 3950, 0, 'Visual Art', 'Street_photography'),
-          mk('s-chess', 'Speed Chess', '♟️', 4040, 3, 'Strategy', 'Chess'),
-          mk('s-drift', 'Drift Racing', '🏎️', 4060, 1, 'Motorsport', 'Drifting_(motorsport)'),
-        ]
-      }
-    ];
-
-    // =========================================================================
-    // 1B. EXTERNAL GITHUB JSON CATALOG LOADER (Root OR ./data/ folder)
-    // =========================================================================
-    function mergeExternalEntriesIntoCategory(cat, list) {
-      if (!Array.isArray(list) || list.length === 0) return 0;
-      const existingNames = new Set(cat.choices.map((c) => c.name.toLowerCase()));
-      let added = 0;
-
-      list.forEach((entry) => {
-        let name, tag, emoji, group, year, wikiSlug;
-        if (Array.isArray(entry)) {
-          [name, tag = '', emoji = cat.emoji, group = 'all', year = '', wikiSlug = ''] = entry;
-        } else if (entry && typeof entry === 'object') {
-          name = entry.name;
-          tag = entry.tag || '';
-          emoji = entry.emoji || cat.emoji;
-          group = entry.group || 'all';
-          year = entry.year || '';
-          wikiSlug = entry.wikiSlug || '';
-        }
-        name = String(name || '').trim();
-        if (!name || existingNames.has(name.toLowerCase())) return;
-        existingNames.add(name.toLowerCase());
-
-        const id = slugifyId(cat.id, name, year);
-        const seedVotes = 2200 + (stableHash(id) % 1800);
-        const palIdx = stableHash(id) % PALETTES.length;
-        cat.choices.push(
-          mk(id, name, emoji || cat.emoji, seedVotes, palIdx, tag, wikiSlug, group, cat.defaultMediaType || 'wiki', year)
-        );
-        added += 1;
-      });
-      return added;
-    }
-
-    async function loadExternalCatalog() {
-      // 1) Try loading a combined ./data.json if present
-      try {
-        const res = await fetch('./data.json', { cache: 'no-cache' });
-        if (res.ok) {
-          const catalog = await res.json();
-          BUILTIN_CATEGORIES.forEach((cat) => {
-            if (catalog && Array.isArray(catalog[cat.id])) {
-              mergeExternalEntriesIntoCategory(cat, catalog[cat.id]);
-            }
-          });
-        }
-      } catch (_) {}
-
-      // 2) Try loading modular files from BOTH ./<id>.json (root) and ./data/<id>.json
-      await Promise.all(
-        BUILTIN_CATEGORIES.map(async (cat) => {
-          const urls = [`./${cat.id}.json`, `./data/${cat.id}.json`];
-          for (const url of urls) {
-            try {
-              const res = await fetch(url, { cache: 'no-cache' });
-              if (!res.ok) continue;
-              const parsed = await res.json();
-              const list = Array.isArray(parsed) ? parsed : (Array.isArray(parsed?.[cat.id]) ? parsed[cat.id] : []);
-              if (list.length > 0) {
-                mergeExternalEntriesIntoCategory(cat, list);
-                break;
-              }
-            } catch (_) {}
-          }
-        })
-      );
-    }
-
-    // =========================================================================
-    // 2. GEMINI API WITH GOOGLE SEARCH GROUNDING (Optional AI Fresh 10)
-    // =========================================================================
-    const GEMINI_API_KEY = "";
-    const GEMINI_MODEL = "gemini-3-flash-preview";
-
-    async function callGeminiWithSearch(systemPrompt, userQuery, maxRetries = 2) {
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
-      const payload = {
-        contents: [{ parts: [{ text: userQuery }] }],
-        tools: [{ google_search: {} }],
-        systemInstruction: { parts: [{ text: systemPrompt }] }
-      };
-
-      let delay = 1000;
-      for (let attempt = 0; attempt <= maxRetries; attempt++) {
-        try {
-          const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-          if (!response.ok) throw new Error(`HTTP ${response.status}`);
-          const result = await response.json();
-          const candidate = result.candidates?.[0];
-          const text = candidate?.content?.parts?.[0]?.text || '';
-          let sources = [];
-          const gm = candidate?.groundingMetadata;
-          if (gm?.groundingAttributions) {
-            sources = gm.groundingAttributions.map((a) => ({ uri: a.web?.uri, title: a.web?.title })).filter((s) => s.uri && s.title);
-          } else if (gm?.groundingChunks) {
-            sources = gm.groundingChunks.map((c) => ({ uri: c.web?.uri, title: c.web?.title })).filter((s) => s.uri && s.title);
-          }
-          return { text, sources };
-        } catch (err) {
-          if (attempt === maxRetries) throw err;
-          await new Promise((r) => setTimeout(r, delay));
-          delay *= 2;
-        }
-      }
-    }
-
-    function extractJsonArrayFromText(rawText) {
-      const cleaned = String(rawText || '').replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
-      const start = cleaned.indexOf('[');
-      const end = cleaned.lastIndexOf(']');
-      if (start === -1 || end === -1 || end <= start) throw new Error('No JSON array found');
-      return JSON.parse(cleaned.slice(start, end + 1));
-    }
-
-    async function fetchAiChoicesForDeck(deck, subFilter = 'all') {
-      const existingNames = deck.choices.map((c) => c.name);
-      const excludeSample = existingNames.slice(-45).join(', ');
-      const subObj = deck.subFilters?.find((s) => s.id === subFilter);
-      const subFocus = subObj && subFilter !== 'all' ? ` Specifically focus on: ${subObj.label}.` : '';
-
-      const systemPrompt = `You are a pop-culture, food, sports, and trivia curator for PickOff.
-Use Google Search to verify accurate, real-world items.
-Return ONLY a valid JSON array of EXACTLY 10 objects:
-{"name": "Concise Official Title", "emoji": "1 relevant emoji", "tag": "Short 2-4 word subtitle", "year": "4-digit year or empty string", "wikiSlug": "Exact_English_Wikipedia_Page_Title"}`;
-
-      const userQuery = `Generate 10 fresh, well-known entries for "${deck.title}" (${deck.aiPromptHint || deck.title}).${subFocus}
-Do NOT include any of these already-used items: ${excludeSample}.`;
-
-      const { text, sources } = await callGeminiWithSearch(systemPrompt, userQuery);
-      const arr = extractJsonArrayFromText(text);
-      if (!Array.isArray(arr) || arr.length < 2) throw new Error('AI returned too few items');
-
-      const existingSet = new Set(deck.choices.map((c) => c.name.toLowerCase()));
-      const newChoices = [];
-
-      for (const raw of arr) {
-        const name = String(raw?.name || '').trim();
-        if (!name || existingSet.has(name.toLowerCase())) continue;
-        existingSet.add(name.toLowerCase());
-
-        const year = raw?.year ? String(raw.year).replace(/[^0-9]/g, '').slice(0, 4) : '';
-        const id = slugifyId(`ai-${deck.id}`, name, year);
-        const palIdx = stableHash(id) % PALETTES.length;
-        const item = mk(
-          id, name, String(raw?.emoji || deck.emoji || '✨').slice(0, 4),
-          2600 + (stableHash(id) % 1400), palIdx,
-          String(raw?.tag || '').trim().slice(0, 38),
-          String(raw?.wikiSlug || '').trim(),
-          subFilter === 'all' ? (deck.subFilters?.[1]?.id || 'all') : subFilter,
-          deck.defaultMediaType || 'wiki', year
-        );
-        item.isAiGenerated = true;
-        newChoices.push(item);
-        if (newChoices.length === 10) break;
-      }
-
-      if (newChoices.length === 0) throw new Error('All returned items were duplicates');
-      deck.choices.push(...newChoices);
-      saveLocalState();
-      return { newChoices, sources };
-    }
-
-    // =========================================================================
-    // 3. TMDB POSTER & RATING + WIKIPEDIA PORTRAIT FETCHER
-    // =========================================================================
-    const TMDB_API_KEY = '1114624ba1ff059194414aa9b0dcf9dd';
-    const TMDB_IMG_BASE = 'https://image.tmdb.org/t/p/w500';
-    const mediaCache = new Map();
-    const mediaPending = new Map();
-    const fetchQueue = [];
-    let activeFetches = 0;
-    const MAX_CONCURRENT_FETCHES = 4;
-
-    function enqueueMediaFetch(task) {
-      return new Promise((resolve) => {
-        fetchQueue.push({ task, resolve });
-        drainMediaQueue();
-      });
-    }
-
-    function drainMediaQueue() {
-      while (activeFetches < MAX_CONCURRENT_FETCHES && fetchQueue.length > 0) {
-        const next = fetchQueue.shift();
-        activeFetches += 1;
-        next.task()
-          .then((res) => next.resolve(res))
-          .catch(() => next.resolve({ url: null, rating: null }))
-          .finally(() => { activeFetches -= 1; drainMediaQueue(); });
-      }
-    }
-
-    async function fetchTmdbMedia(choice) {
-      try {
-        const isMovie = choice.mediaType === 'tmdb-movie';
-        const endpoint = isMovie ? 'movie' : 'tv';
-        const cleanQuery = choice.name.replace(/\s*\(\d{4}\)$/, '').trim();
-        const yearParam = choice.year
-          ? (isMovie ? `&year=${encodeURIComponent(choice.year)}` : `&first_air_date_year=${encodeURIComponent(choice.year)}`)
-          : '';
-
-        let res = await fetch(`https://api.themoviedb.org/3/search/${endpoint}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(cleanQuery)}${yearParam}`);
-        let data = res.ok ? await res.json() : null;
-        let hit = data?.results?.find((r) => r.poster_path) || data?.results?.[0];
-
-        if (!hit && yearParam) {
-          res = await fetch(`https://api.themoviedb.org/3/search/${endpoint}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(cleanQuery)}`);
-          data = res.ok ? await res.json() : null;
-          hit = data?.results?.find((r) => r.poster_path) || data?.results?.[0];
-        }
-
-        if (hit) {
-          const url = hit.poster_path ? `${TMDB_IMG_BASE}${hit.poster_path}` : null;
-          const rating = hit.vote_average && hit.vote_average > 0 && (hit.vote_count || 0) >= 15 ? hit.vote_average.toFixed(1) : null;
-          if (url || rating) return { url, rating };
-        }
-      } catch (_) {}
-      return { url: null, rating: null };
-    }
-
-    async function fetchWikiMedia(choice) {
-      const slug = choice.wikiSlug || encodeURIComponent(choice.name.replace(/\s+/g, '_'));
-      try {
-        const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${slug}`, { headers: { 'Accept': 'application/json' } });
-        if (!res.ok) return { url: null, rating: null };
-        const data = await res.json();
-        const raw = data?.thumbnail?.source || data?.originalimage?.source || null;
-        return { url: raw ? raw.replace(/\/\d+px-/, '/640px-') : null, rating: null };
-      } catch (_) {
-        return { url: null, rating: null };
-      }
-    }
-
+        id: 'superpowers',
+// ... existing code ... -->
     function resolveMediaForChoice(choice) {
       if (!choice) return Promise.resolve({ url: null, rating: null });
       if (choice.img) return Promise.resolve({ url: choice.img, rating: null });
       if (mediaCache.has(choice.id)) return Promise.resolve(mediaCache.get(choice.id));
       if (mediaPending.has(choice.id)) return mediaPending.get(choice.id);
+
+      // Instant HD official artwork for Pokémon using National Pokédex number
+      if (choice.mediaType === 'pokemon' && choice.year) {
+        const dexNum = String(choice.year).replace(/[^0-9]/g, '');
+        if (dexNum) {
+          const result = {
+            url: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${dexNum}.png`,
+            rating: `#${dexNum.padStart(3, '0')}`
+          };
+          mediaCache.set(choice.id, result);
+          return Promise.resolve(result);
+        }
+      }
 
       const p = enqueueMediaFetch(async () => {
         let result = { url: null, rating: null };
@@ -1434,7 +1177,12 @@ Do NOT include any of these already-used items: ${excludeSample}.`;
         img.src = imgUrl;
         img.alt = '';
         img.loading = 'lazy';
-        img.className = 'absolute inset-0 w-full h-full object-cover object-top opacity-0 transition-opacity duration-500';
+        const fitMode = slot.dataset.artFit;
+        img.className = fitMode === 'pokemon-card'
+          ? 'absolute inset-0 w-full h-full object-contain p-5 pb-16 drop-shadow-[0_14px_24px_rgba(0,0,0,0.65)] opacity-0 transition-opacity duration-500'
+          : fitMode === 'pokemon-thumb'
+            ? 'absolute inset-0 w-full h-full object-contain p-0.5 opacity-0 transition-opacity duration-300'
+            : 'absolute inset-0 w-full h-full object-cover object-top opacity-0 transition-opacity duration-500';
         img.onload = () => img.classList.remove('opacity-0');
         img.onerror = () => img.remove();
         slot.appendChild(img);
@@ -1443,7 +1191,7 @@ Do NOT include any of these already-used items: ${excludeSample}.`;
 
     function injectRatingIntoChoiceSlots(choiceId, ratingStr) {
       document.querySelectorAll(`[data-tmdb-id="${CSS.escape(choiceId)}"]`).forEach((badge) => {
-        badge.textContent = `★ ${ratingStr}`;
+        badge.textContent = String(ratingStr).startsWith('#') ? ratingStr : `★ ${ratingStr}`;
         badge.classList.remove('hidden');
       });
     }
@@ -1772,7 +1520,7 @@ Do NOT include any of these already-used items: ${excludeSample}.`;
           const parsed = JSON.parse(decodeUnicodeBase64(customMatch[1]));
           if (parsed?.id && Array.isArray(parsed.ch) && parsed.ch.length === 10) {
             const catLabel = parsed.c || 'Custom';
-            const mediaType = catLabel === 'Movies' ? 'tmdb-movie' : (catLabel === 'TV Serials' || catLabel === 'Anime') ? 'tmdb-tv' : 'wiki';
+            const mediaType = catLabel === 'Movies' ? 'tmdb-movie' : (catLabel === 'TV Serials' || catLabel === 'Anime') ? 'tmdb-tv' : (catLabel === 'Pokemon' ? 'pokemon' : 'wiki');
             return {
               id: parsed.id, title: parsed.t || 'Shared 10-Choice Deck', categoryLabel: catLabel, subtitle: parsed.s || '',
               isCustom: true, createdAt: Date.now(), totalPlays: 0, totalDuels: 0, items: {},
@@ -2247,13 +1995,17 @@ Do NOT include any of these already-used items: ${excludeSample}.`;
 
     function buildThumbHtml(choice, sizeClass = 'w-9 h-9') {
       const [c1, c2] = choice.gradient || PALETTES[0];
+      const isPokemon = choice.mediaType === 'pokemon';
       const cached = mediaCache.get(choice.id);
       const knownUrl = choice.img || cached?.url || null;
+      const imgClass = isPokemon
+        ? 'absolute inset-0 w-full h-full object-contain p-0.5 opacity-0 transition-opacity duration-300'
+        : 'absolute inset-0 w-full h-full object-cover object-top opacity-0 transition-opacity duration-300';
       const imgHtml = knownUrl
-        ? `<img src="${escapeHtml(knownUrl)}" alt="" loading="lazy" class="absolute inset-0 w-full h-full object-cover object-top opacity-0 transition-opacity duration-300" onload="this.classList.remove('opacity-0')" onerror="this.remove()" />`
+        ? `<img src="${escapeHtml(knownUrl)}" alt="" loading="lazy" class="${imgClass}" onload="this.classList.remove('opacity-0')" onerror="this.remove()" />`
         : '';
       return `
-        <div data-art-id="${escapeHtml(choice.id)}" class="relative ${sizeClass} rounded-lg overflow-hidden shrink-0 flex items-center justify-center border border-white/10" style="background: linear-gradient(135deg, ${c1}, ${c2});">
+        <div data-art-id="${escapeHtml(choice.id)}" data-art-fit="${isPokemon ? 'pokemon-thumb' : 'cover'}" class="relative ${sizeClass} rounded-lg overflow-hidden shrink-0 flex items-center justify-center border border-white/10" style="background: linear-gradient(135deg, ${c1}, ${c2});">
           <span class="text-base leading-none select-none">${escapeHtml(choice.emoji || '✨')}</span>
           ${imgHtml}
         </div>`;
@@ -2261,28 +2013,34 @@ Do NOT include any of these already-used items: ${excludeSample}.`;
 
     function renderArenaCard(el, choice, streak, animateEnter) {
       const [c1, c2] = choice.gradient || PALETTES[0];
+      const isPokemon = choice.mediaType === 'pokemon';
       const initials = choice.name.split(/\s+/).slice(0, 2).map((w) => w[0] || '').join('').toUpperCase();
       const cached = mediaCache.get(choice.id);
       const knownUrl = choice.img || cached?.url || null;
       const knownRating = cached?.rating || null;
       const liveStats = getItemLiveStats(state.activeDeck, choice);
 
+      const cardImgClass = isPokemon
+        ? 'absolute inset-0 w-full h-full object-contain p-5 pb-16 drop-shadow-[0_14px_24px_rgba(0,0,0,0.65)] opacity-0 transition-opacity duration-500 group-hover:scale-[1.04]'
+        : 'absolute inset-0 w-full h-full object-cover object-top opacity-0 transition-opacity duration-500 group-hover:scale-[1.03]';
+
       const imgHtml = knownUrl
-        ? `<img src="${escapeHtml(knownUrl)}" alt="${escapeHtml(choice.name)}" class="absolute inset-0 w-full h-full object-cover object-top opacity-0 transition-opacity duration-500 group-hover:scale-[1.03]" onload="this.classList.remove('opacity-0')" onerror="this.remove()" />`
+        ? `<img src="${escapeHtml(knownUrl)}" alt="${escapeHtml(choice.name)}" class="${cardImgClass}" onload="this.classList.remove('opacity-0')" onerror="this.remove()" />`
         : '';
 
       const leftBadge = streak >= 2
         ? `<div class="absolute top-3 left-3 z-20 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-[#e0b34c]/40 text-[10px] font-bold uppercase tracking-wider text-[#e0b34c]">🔥 ${streak} streak</div>`
         : (choice.isAiGenerated ? `<div class="absolute top-3 left-3 z-20 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-sky-400/35 text-[9.5px] font-bold uppercase tracking-wider text-sky-300">✨ AI</div>` : '');
 
+      const ratingDisplay = knownRating ? (String(knownRating).startsWith('#') ? knownRating : `★ ${knownRating}`) : '';
       const topRightBadges = `
         <div class="absolute top-3 right-3 z-20 flex items-center gap-1.5 transition-opacity duration-200 ${state.hideNames ? 'opacity-0' : 'opacity-100'}">
-          <span data-tmdb-id="${escapeHtml(choice.id)}" class="${knownRating ? '' : 'hidden'} px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-[#e0b34c]/35 text-[10px] font-bold text-[#f3cf78] tabular-nums">${knownRating ? `★ ${escapeHtml(knownRating)}` : ''}</span>
+          <span data-tmdb-id="${escapeHtml(choice.id)}" class="${knownRating ? '' : 'hidden'} px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-[#e0b34c]/35 text-[10px] font-bold text-[#f3cf78] tabular-nums">${escapeHtml(ratingDisplay)}</span>
           <span class="px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-emerald-400/30 text-[10px] font-bold text-emerald-300 tabular-nums">⚡ ${liveStats.liveScore.toFixed(1)}</span>
         </div>`;
 
       el.innerHTML = `
-        <div data-art-id="${escapeHtml(choice.id)}" class="absolute inset-0 art-mesh flex flex-col items-center justify-center" style="background: radial-gradient(circle at 50% 34%, ${c1} 0%, ${c2} 85%);">
+        <div data-art-id="${escapeHtml(choice.id)}" data-art-fit="${isPokemon ? 'pokemon-card' : 'cover'}" class="absolute inset-0 art-mesh flex flex-col items-center justify-center" style="background: radial-gradient(circle at 50% 34%, ${c1} 0%, ${c2} 85%);">
           <div class="absolute inset-0 flex items-center justify-center opacity-[0.06] text-[132px] font-black tracking-tighter select-none pointer-events-none">${escapeHtml(initials)}</div>
           <div class="w-24 h-24 md:w-28 md:h-28 rounded-full bg-white/[0.06] border border-white/[0.11] flex items-center justify-center shadow-2xl mb-6 backdrop-blur-sm">
             <span class="text-5xl md:text-6xl leading-none drop-shadow-lg select-none">${escapeHtml(choice.emoji || '✨')}</span>
@@ -2747,7 +2505,7 @@ Do NOT include any of these already-used items: ${excludeSample}.`;
           id: `c${idx + 1}`, name: s.name.trim(), tag: (s.tag || '').trim(), emoji: s.emoji || '✨',
           paletteIdx: s.paletteIdx % PALETTES.length, gradient: PALETTES[s.paletteIdx % PALETTES.length],
           img: s.img ? s.img.trim() : null, wikiSlug: '',
-          mediaType: categoryLabel === 'Movies' ? 'tmdb-movie' : (categoryLabel === 'TV Serials' || categoryLabel === 'Anime' ? 'tmdb-tv' : 'wiki'),
+          mediaType: categoryLabel === 'Movies' ? 'tmdb-movie' : (categoryLabel === 'TV Serials' || categoryLabel === 'Anime' ? 'tmdb-tv' : (categoryLabel === 'Pokemon' ? 'pokemon' : 'wiki')),
           seedVotes: 0,
         }))
       };
@@ -2954,9 +2712,44 @@ Do NOT include any of these already-used items: ${excludeSample}.`;
       });
     }
 
+    // Automatically loads the extra 256 Pokémon from pokemona.json (root or /data folder)
+    async function loadExtraPokemonCatalog() {
+      const pokemonCat = BUILTIN_CATEGORIES.find((c) => c.id === 'pokemon');
+      if (!pokemonCat) return;
+
+      const candidateUrls = ['./pokemona.json', './data/pokemona.json'];
+      for (const url of candidateUrls) {
+        try {
+          const res = await fetch(url, { cache: 'no-cache' });
+          if (!res.ok) continue;
+          const list = await res.json();
+          if (!Array.isArray(list)) continue;
+
+          const existingNames = new Set(pokemonCat.choices.map((c) => c.name.toLowerCase()));
+          list.forEach((entry) => {
+            if (!Array.isArray(entry)) return;
+            const [name, tag = '', emoji = '⚡', group = 'popular', dexNum = '', wikiSlug = ''] = entry;
+            if (!name || existingNames.has(String(name).toLowerCase())) return;
+            existingNames.add(String(name).toLowerCase());
+
+            const id = slugifyId('pokemon', name, dexNum);
+            const seedVotes = 2200 + (stableHash(id) % 1800);
+            const palIdx = stableHash(id) % PALETTES.length;
+            pokemonCat.choices.push(
+              mk(id, name, emoji || '⚡', seedVotes, palIdx, tag, wikiSlug, group || 'popular', 'pokemon', dexNum)
+            );
+          });
+          break;
+        } catch (err) {
+          console.warn(`Optional expansion ${url} skipped:`, err?.message);
+        }
+      }
+    }
+
     async function boot() {
       loadLocalState();
       await loadExternalCatalog(); // Automatically loads ./<category>.json AND ./data/<category>.json on GitHub
+      await loadExtraPokemonCatalog(); // Links ./pokemona.json (or ./data/pokemona.json) for 512 total Pokémon
       setupEventListeners();
       initCreatorSlots();
       applyLayoutMode();
