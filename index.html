@@ -193,19 +193,33 @@
       <div id="subfilter-bar" class="hidden flex flex-wrap items-center justify-center gap-1.5 pt-1.5 pb-0.5"></div>
 
       <!-- Game Mode Selector -->
-      <div id="mode-bar-wrap" class="flex flex-wrap items-center justify-center gap-1.5 pt-2.5">
-        <div class="inline-flex flex-wrap items-center justify-center bg-[#12151c] border border-[#1f2432] rounded-xl p-1 gap-1">
-          <button id="btn-mode-knockout" type="button" class="px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all bg-[#232838] text-white">
-            ⚔️ 10-Choice Knockout
-          </button>
-          <button id="btn-mode-gbu" type="button" class="px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all text-zinc-400 hover:text-zinc-100">
-            🤠 Good · Bad · Ugly
-          </button>
-          <button id="btn-mode-personality" type="button" class="px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all text-zinc-400 hover:text-zinc-100 flex items-center gap-1.5">
-            <span>🧠 20-Round Personality</span>
-            <span id="personality-lock-badge" class="text-[9.5px] px-1.5 py-0.5 rounded bg-white/[0.06] text-zinc-400">42+</span>
-          </button>
+      <div id="mode-bar-wrap" class="flex flex-col items-center justify-center gap-2 pt-2.5">
+        <div class="flex flex-wrap items-center justify-center gap-2">
+          <div class="inline-flex flex-wrap items-center justify-center bg-[#12151c] border border-[#1f2432] rounded-xl p-1 gap-1">
+            <button id="btn-mode-knockout" type="button" class="px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all bg-[#232838] text-white">
+              ⚔️ 10-Choice Knockout
+            </button>
+            <button id="btn-mode-gbu" type="button" class="px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all text-zinc-400 hover:text-zinc-100">
+              🤠 Good · Bad · Ugly
+            </button>
+            <button id="btn-mode-personality" type="button" class="px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all text-zinc-400 hover:text-zinc-100 flex items-center gap-1.5">
+              <span>🧠 20-Round Personality</span>
+              <span id="personality-lock-badge" class="text-[9.5px] px-1.5 py-0.5 rounded bg-white/[0.06] text-zinc-400">42+</span>
+            </button>
+          </div>
+
+          <!-- 1-4 Player Count Selector (1P Default) -->
+          <div class="inline-flex items-center bg-[#12151c] border border-[#1f2432] rounded-xl p-1 gap-0.5" role="group" aria-label="Number of players">
+            <span class="px-2 text-[10px] font-bold uppercase tracking-wider text-zinc-500 select-none">👥</span>
+            <button type="button" data-player-count="1" class="btn-player-count px-2.5 py-1.5 rounded-lg text-[11px] font-bold bg-[#e0b34c] text-obsidian transition-all">1P</button>
+            <button type="button" data-player-count="2" class="btn-player-count px-2.5 py-1.5 rounded-lg text-[11px] font-semibold text-zinc-400 hover:text-zinc-100 transition-all">2P</button>
+            <button type="button" data-player-count="3" class="btn-player-count px-2.5 py-1.5 rounded-lg text-[11px] font-semibold text-zinc-400 hover:text-zinc-100 transition-all">3P</button>
+            <button type="button" data-player-count="4" class="btn-player-count px-2.5 py-1.5 rounded-lg text-[11px] font-semibold text-zinc-400 hover:text-zinc-100 transition-all">4P</button>
+          </div>
         </div>
+
+        <!-- Editable Player Name Chips (Shown only for 2-4 Players) -->
+        <div id="mp-names-bar" class="hidden flex flex-wrap items-center justify-center gap-1.5"></div>
       </div>
     </nav>
 
@@ -225,6 +239,9 @@
           <p id="arena-custom-title" class="text-base sm:text-lg font-bold text-white mt-1.5 truncate"></p>
           <p id="arena-custom-subtitle" class="text-xs text-zinc-400 truncate"></p>
         </div>
+
+        <!-- Active Player Turn Banner (Shown for 2-4 Players) -->
+        <div id="mp-arena-turn-bar" class="hidden w-full max-w-[440px] md:max-w-[860px] mb-3 bg-[#12151d] border border-[#242a3a] rounded-xl px-3.5 py-2.5 flex flex-wrap items-center justify-between gap-2"></div>
 
         <div id="arena-header-wrap" class="w-full max-w-[440px] md:max-w-[860px] mb-4">
           <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] sm:text-xs font-semibold tracking-[0.12em] uppercase mb-1.5">
@@ -268,9 +285,30 @@
       </section>
 
       <!-- ============================================================
+           VIEW 1.2: MULTIPLAYER HANDOFF (BETWEEN KNOCKOUT PLAYERS)
+           ============================================================ -->
+      <section id="view-mp-handoff" class="hidden flex-1 flex flex-col items-center justify-center py-6 w-full max-w-[520px] mx-auto animate-in">
+        <div class="w-full bg-[#12151d] border border-[#262c3e] rounded-2xl p-6 text-center space-y-4 shadow-2xl">
+          <div id="handoff-done-pill" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/35 text-xs font-bold text-emerald-300">
+            ✓ Player 1 Locked In
+          </div>
+          <div>
+            <div class="text-[11px] font-bold uppercase tracking-[0.14em] text-zinc-400">PASS THE SCREEN TO</div>
+            <h2 id="handoff-next-name" class="text-2xl sm:text-3xl font-extrabold text-white mt-1">Player 2</h2>
+            <p class="text-xs text-zinc-400 mt-1.5">Same 10 choices · Everyone's champion stays hidden until all players finish!</p>
+          </div>
+          <div id="handoff-progress-pills" class="flex flex-wrap items-center justify-center gap-1.5 pt-1"></div>
+          <button id="btn-mp-next-player" type="button" class="w-full py-3.5 px-5 rounded-xl bg-gradient-to-r from-[#e0b34c] to-[#f0cc70] text-obsidian font-extrabold text-sm shadow-xl hover:brightness-105 active:scale-[0.98] transition-all">
+            Start Player 2's Turn →
+          </button>
+        </div>
+      </section>
+
+      <!-- ============================================================
            VIEW 1.5: THE GOOD, THE BAD, AND THE UGLY (3-CHOICE MODE)
            ============================================================ -->
       <section id="view-gbu" class="hidden flex-1 flex flex-col items-center justify-center py-2 md:py-3 w-full max-w-[960px] mx-auto animate-in">
+        <div id="gbu-mp-turn-bar" class="hidden w-full mb-3 bg-[#12151d] border border-[#242a3a] rounded-xl px-3.5 py-2.5 flex flex-wrap items-center justify-between gap-2"></div>
         <div class="w-full text-center mb-4">
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#151923] border border-[#262d3f] text-[11px] font-bold uppercase tracking-wider text-zinc-200">
             <span>🤠 The Good, The Bad &amp; The Ugly</span>
@@ -308,6 +346,22 @@
            VIEW 2: KNOCKOUT RESULTS & TASTE RATING
            ============================================================ -->
       <section id="view-results" class="hidden animate-in space-y-3.5 pt-2 w-full max-w-[820px] mx-auto">
+
+        <!-- Multiplayer Knockout Squad Summary & Player Switcher -->
+        <div id="mp-knockout-summary" class="hidden bg-gradient-to-br from-[#161925] via-[#12151d] to-[#11131a] border border-[#2b3248] rounded-2xl p-4 space-y-3 shadow-xl">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <div class="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#e0b34c]">👥 SQUAD KNOCKOUT RESULTS</div>
+              <h2 class="text-base sm:text-lg font-extrabold text-white mt-0.5">Everyone's Champion &amp; Taste Profile</h2>
+            </div>
+            <span id="mp-ko-match-badge" class="px-2.5 py-1 rounded-full bg-white/[0.06] border border-white/10 text-[11px] font-bold text-zinc-200"></span>
+          </div>
+          <div id="mp-ko-cards" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
+          <div class="pt-1 border-t border-white/[0.07]">
+            <div class="text-[10px] font-bold uppercase tracking-[0.12em] text-zinc-400 mb-2">INSPECT PLAYER BREAKDOWN</div>
+            <div id="mp-results-tabs" class="flex flex-wrap gap-1.5"></div>
+          </div>
+        </div>
 
         <div id="taste-card" class="bg-[#12141a] border border-[#1d2028] rounded-2xl overflow-hidden shadow-xl">
           <button id="btn-toggle-taste" type="button" class="w-full px-4 py-3.5 flex items-center justify-between gap-3 hover:bg-white/[0.02] transition-colors text-left" aria-expanded="false">
@@ -465,6 +519,27 @@
            VIEW 2.2: 20-ROUND PERSONALITY PROFILE REPORT
            ============================================================ -->
       <section id="view-personality-report" class="hidden animate-in space-y-4 pt-2 w-full max-w-[820px] mx-auto">
+
+        <!-- Multiplayer 20-Round Squad Summary & Compatibility -->
+        <div id="mp-personality-summary" class="hidden bg-gradient-to-br from-[#171926] via-[#131620] to-[#11131a] border border-[#2d354c] rounded-2xl p-4 sm:p-5 space-y-3.5 shadow-xl">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <div class="text-[10px] font-extrabold uppercase tracking-[0.14em] text-sky-300">👥 MULTIPLAYER 20-ROUND RESULTS</div>
+              <h2 class="text-base sm:text-lg font-extrabold text-white mt-0.5">Squad Personalities &amp; Compatibility</h2>
+            </div>
+            <span id="mp-pers-players-pill" class="px-2.5 py-1 rounded-full bg-white/[0.06] border border-white/10 text-[11px] font-bold text-zinc-200">2 Players</span>
+          </div>
+          <div id="mp-pers-cards" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
+          <div id="mp-pers-compat-wrap" class="pt-2 border-t border-white/[0.07] space-y-1.5">
+            <div class="text-[10px] font-bold uppercase tracking-[0.12em] text-zinc-400">PAIRWISE AGREEMENT (OUT OF 20 ROUNDS)</div>
+            <div id="mp-pers-compat-list" class="flex flex-wrap gap-1.5"></div>
+          </div>
+          <div class="pt-2 border-t border-white/[0.07]">
+            <div class="text-[10px] font-bold uppercase tracking-[0.12em] text-zinc-400 mb-2">VIEW FULL PERSONALITY REPORT FOR</div>
+            <div id="mp-pers-tabs" class="flex flex-wrap gap-1.5"></div>
+          </div>
+        </div>
+
         <div class="bg-gradient-to-br from-[#191624] via-[#131620] to-[#11131a] border border-[#e0b34c]/40 rounded-2xl p-5 sm:p-6 shadow-2xl space-y-4">
           <div class="flex items-start justify-between gap-3">
             <div>
@@ -783,6 +858,13 @@
       '☕','🍰','🏀','🏎️','♟️','🎸','🎮','📚',
       '🎨','✈️','🏔️','🗼','🏝️','🌌','🧠','💼',
       '🎯','💡','🔮','🎭','📸','🛡️','🦁','🌊'
+    ];
+
+    const PLAYER_THEMES = [
+      { label: 'P1', hex: '#e0b34c', bg: 'bg-[#e0b34c]/15', border: 'border-[#e0b34c]/55', text: 'text-[#f3cf78]', dot: 'bg-[#e0b34c]', solid: 'bg-[#e0b34c] text-obsidian' },
+      { label: 'P2', hex: '#38bdf8', bg: 'bg-sky-500/15', border: 'border-sky-400/55', text: 'text-sky-300', dot: 'bg-sky-400', solid: 'bg-sky-400 text-obsidian' },
+      { label: 'P3', hex: '#34d399', bg: 'bg-emerald-500/15', border: 'border-emerald-400/55', text: 'text-emerald-300', dot: 'bg-emerald-400', solid: 'bg-emerald-400 text-obsidian' },
+      { label: 'P4', hex: '#fb7185', bg: 'bg-rose-500/15', border: 'border-rose-400/55', text: 'text-rose-300', dot: 'bg-rose-400', solid: 'bg-rose-400 text-obsidian' },
     ];
 
     function stableHash(str) {
@@ -1371,6 +1453,9 @@
           if (typeof parsed.settings.soundEnabled === 'boolean') soundEnabled = parsed.settings.soundEnabled;
           if (typeof parsed.settings.hideNames === 'boolean') state.hideNames = parsed.settings.hideNames;
           if (['auto', 'vertical', 'horizontal'].includes(parsed.settings.layoutMode)) state.layoutMode = parsed.settings.layoutMode;
+          if (Array.isArray(parsed.settings.playerNames) && parsed.settings.playerNames.length === 4) {
+            state.playerNames = parsed.settings.playerNames.map((n, i) => String(n || '').trim() || `Player ${i + 1}`);
+          }
         }
       } catch (_) {}
     }
@@ -1381,7 +1466,7 @@
           scores: categoryScoresCache,
           customDecks: customDecksCache,
           history: userRoundHistory.slice(0, 60),
-          settings: { soundEnabled, hideNames: state.hideNames, layoutMode: state.layoutMode }
+          settings: { soundEnabled, hideNames: state.hideNames, layoutMode: state.layoutMode, playerNames: state.playerNames }
         }));
       } catch (_) {}
     }
@@ -1460,9 +1545,7 @@
       setDoc(doc(db, 'artifacts', appId, 'public', 'data', colName, deck.id), {
         totalDuels: increment(1), updatedAt: now, items: itemsUpdate
       }, { merge: true }).catch(() => {});
-    }
-
-    async function persistChampionResults(deck, champion, tasteMetrics) {
+    async function persistChampionResults(deck, champion, tasteMetrics, recordToPersonalHistory = true) {
       const now = Date.now();
       const docObj = ensureLocalScoreDoc(deck);
       docObj.totalPlays = (docObj.totalPlays || 0) + 1;
@@ -1475,15 +1558,17 @@
       recentlyFlashedIds.set(champion.id, now);
       lastLiveSyncTimestamp = now;
 
-      const historyEntry = {
-        playedAt: now, deckId: deck.id, deckTitle: deck.title,
-        categoryLabel: deck.isCustom ? (deck.categoryLabel || 'Custom') : deck.title,
-        championId: champion.id, championName: champion.name, championEmoji: champion.emoji || '🏆',
-        crowdSync: tasteMetrics.crowdSync, rareTaste: tasteMetrics.rareTaste,
-        hotTakes: tasteMetrics.hotTakes, signature: tasteMetrics.signature,
-        archetypeTitle: tasteMetrics.archetype.title,
-      };
-      userRoundHistory = [historyEntry, ...userRoundHistory.filter((h) => h.playedAt !== now)];
+      if (recordToPersonalHistory) {
+        const historyEntry = {
+          playedAt: now, deckId: deck.id, deckTitle: deck.title,
+          categoryLabel: deck.isCustom ? (deck.categoryLabel || 'Custom') : deck.title,
+          championId: champion.id, championName: champion.name, championEmoji: champion.emoji || '🏆',
+          crowdSync: tasteMetrics.crowdSync, rareTaste: tasteMetrics.rareTaste,
+          hotTakes: tasteMetrics.hotTakes, signature: tasteMetrics.signature,
+          archetypeTitle: tasteMetrics.archetype.title,
+        };
+        userRoundHistory = [historyEntry, ...userRoundHistory.filter((h) => h.playedAt !== now)];
+      }
       saveLocalState();
 
       if (!firestoreReady || !currentUser || !db) return;
@@ -1511,310 +1596,16 @@
     }
 
     // =========================================================================
-    // 6. SHARE URL ENCODE/DECODE
-    // =========================================================================
-    function encodeUnicodeBase64(str) {
-      let binary = '';
-      new TextEncoder().encode(str).forEach((b) => { binary += String.fromCharCode(b); });
-      return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-    }
-
-    function decodeUnicodeBase64(b64) {
-      const norm = b64.replace(/-/g, '+').replace(/_/g, '/');
-      const pad = norm.length % 4 === 0 ? '' : '='.repeat(4 - (norm.length % 4));
-      return new TextDecoder().decode(Uint8Array.from(atob(norm + pad), (ch) => ch.charCodeAt(0)));
-    }
-
-    function buildShareUrl(deck) {
-      const base = window.location.href.split('?')[0].split('#')[0];
-      if (!deck) return base;
-      if (!deck.isCustom) {
-        const p = new URLSearchParams();
-        p.set('cat', deck.id);
-        if (state.activeSubFilter && state.activeSubFilter !== 'all') p.set('sub', state.activeSubFilter);
-        return `${base}?${p.toString()}`;
-      }
-      const compact = {
-        id: deck.id, t: deck.title || 'Custom 10', c: deck.categoryLabel || 'Custom', s: deck.subtitle || '',
-        ch: (deck.choices || []).slice(0, 10).map((i) => [i.name || '', i.emoji || '✨', Number.isFinite(i.paletteIdx) ? i.paletteIdx : 0, i.tag || '', i.img || ''])
-      };
-      return `${base}?deck=${encodeURIComponent(deck.id)}#custom=${encodeUnicodeBase64(JSON.stringify(compact))}`;
-    }
-
-    function parseDeckFromShareString(rawInput) {
-      try {
-        const trimmed = String(rawInput || '').trim();
-        if (!trimmed) return null;
-        if (/^d_[a-z0-9_]+$/i.test(trimmed)) return { deckIdOnly: trimmed };
-        const m = trimmed.match(/#custom=([A-Za-z0-9_-]+)/);
-        if (m && m[1]) {
-          const parsed = JSON.parse(decodeUnicodeBase64(m[1]));
-          if (parsed?.id && Array.isArray(parsed.ch) && parsed.ch.length === 10) {
-            const catLabel = parsed.c || 'Custom';
-            const mediaType = catLabel === 'Movies' ? 'tmdb-movie' : (catLabel === 'TV Serials' || catLabel === 'Anime') ? 'tmdb-tv' : (catLabel === 'Pokemon' ? 'pokemon' : 'wiki');
-            return {
-              id: parsed.id, title: parsed.t || 'Shared 10-Choice Deck', categoryLabel: catLabel, subtitle: parsed.s || '',
-              isCustom: true, createdAt: Date.now(), totalPlays: 0, totalDuels: 0, items: {},
-              choices: parsed.ch.map((entry, idx) => {
-                const pal = Math.abs(Number(entry[2]) || 0) % PALETTES.length;
-                return { id: `c${idx + 1}`, name: String(entry[0] || `Choice ${idx + 1}`), emoji: String(entry[1] || '✨'), paletteIdx: pal, gradient: PALETTES[pal], tag: String(entry[3] || ''), img: entry[4] ? String(entry[4]) : null, wikiSlug: '', mediaType, seedVotes: 0 };
-              })
-            };
-          }
-        }
-        const qIdx = trimmed.indexOf('?');
-        if (qIdx !== -1) {
-          const params = new URLSearchParams(trimmed.slice(qIdx + 1).split('#')[0]);
-          if (params.get('deck')) return { deckIdOnly: params.get('deck') };
-          if (params.get('cat')) return { catIdOnly: params.get('cat'), subFilter: params.get('sub') || 'all' };
-        }
-      } catch (_) {}
-      return null;
-    }
-
-    // =========================================================================
-    // 7. SCORING, LEADERBOARD & PERSONALITY ANALYTICS
-    // =========================================================================
-    function formatVoteCount(n) {
-      if (n >= 1000000) return `${(n / 1000000).toFixed(1).replace(/\.0$/, '')}m`;
-      if (n >= 1000) return `${(n / 1000).toFixed(1).replace(/\.0$/, '')}k`;
-      return String(n);
-    }
-
-    function getDeckTotalVotes(deck) {
-      if (deck.isCustom) {
-        const live = customDecksCache[deck.id];
-        return (live?.totalDuels || 0) + (live?.totalPlays || 0);
-      }
-      const live = categoryScoresCache[deck.id];
-      return (deck.seedTotalPlays || 0) + (live?.totalDuels || 0) + (live?.totalPlays || 0);
-    }
-
-    function getFilteredPool(deck, subFilter = 'all') {
-      if (!deck || deck.isCustom || !deck.subFilters || subFilter === 'all') return deck?.choices || [];
-      const filtered = deck.choices.filter((c) => c.group === subFilter);
-      return filtered.length >= 2 ? filtered : deck.choices;
-    }
-
-    function getItemLiveStats(deck, ch) {
-      const liveDoc = deck.isCustom ? (customDecksCache[deck.id] || deck) : (categoryScoresCache[deck.id] || {});
-      const liveItem = (liveDoc.items || {})[ch.id] || {};
-      const wins = (deck.isCustom ? 0 : (ch.seedWins || 12)) + (liveItem.w || 0);
-      const duels = (deck.isCustom ? 0 : (ch.seedDuels || 24)) + (liveItem.d || 0);
-      const crowns = (deck.isCustom ? 0 : (ch.seedCrowns || 2)) + (liveItem.c || 0);
-      const livePoints = (deck.isCustom ? 0 : (ch.seedPoints || 22)) + (liveItem.p || 0);
-      const winRate = duels > 0 ? Math.round((wins / duels) * 100) : 50;
-
-      let liveScore;
-      if (deck.isCustom) {
-        liveScore = (duels === 0 && crowns === 0) ? 50.0 : Math.min(99.9, Math.max(10, Number((((wins + 2.5) / (duels + 5)) * 80 + Math.min(18, crowns * 4.5)).toFixed(1))));
-      } else {
-        liveScore = Math.min(99.9, Math.max(20, Number((((wins + 4) / (duels + 8)) * 76 + Math.min(16, Math.log2(crowns + 1) * 4.2) + Math.min(8, (liveItem.p || 0) * 0.65)).toFixed(1))));
-      }
-
-      const recentlyUpdated = recentlyFlashedIds.has(ch.id) && (Date.now() - recentlyFlashedIds.get(ch.id) < 4500);
-      return { wins, duels, crowns, livePoints, winRate, liveScore, recentlyUpdated };
-    }
-
-    function computeLeaderboard(deck, subsetChoices = null, sortBy = 'liveScore') {
-      const choices = subsetChoices || deck.choices;
-      const scored = choices.map((ch) => ({ ...ch, ...getItemLiveStats(deck, ch) }));
-      scored.sort((a, b) => {
-        if (sortBy === 'winRate') return b.winRate - a.winRate || b.liveScore - a.liveScore;
-        if (sortBy === 'crowns') return b.crowns - a.crowns || b.liveScore - a.liveScore;
-        if (sortBy === 'livePoints') return b.livePoints - a.livePoints || b.liveScore - a.liveScore;
-        return b.liveScore - a.liveScore || b.livePoints - a.livePoints || a.name.localeCompare(b.name);
-      });
-      const totalPts = scored.reduce((s, i) => s + Math.max(1, i.livePoints), 0);
-      const maxVal = Math.max(1, ...scored.map((i) => sortBy === 'winRate' ? i.winRate : sortBy === 'crowns' ? i.crowns : sortBy === 'livePoints' ? i.livePoints : i.liveScore));
-
-      return scored.map((item, idx) => {
-        const pct = Math.max(0, Math.round((Math.max(1, item.livePoints) / totalPts) * 100));
-        const metricVal = sortBy === 'winRate' ? item.winRate : sortBy === 'crowns' ? item.crowns : sortBy === 'livePoints' ? item.livePoints : item.liveScore;
-        return { ...item, rank: idx + 1, pct, barWidthPct: Math.max(8, Math.round((metricVal / maxVal) * 100)) };
-      });
-    }
-
-    function classifyArchetype(crowdSync, rareTaste, hotTakes, signature) {
-      if (crowdSync >= 72 && hotTakes < 42) return { title: 'Crowd Whisperer', desc: 'You and the room share one brain. Effortless consensus.' };
-      if (crowdSync >= 62 && rareTaste < 38) return { title: 'Mainstream Icon', desc: 'You know exactly why the all-time classics sit on top.' };
-      if (crowdSync <= 32 && hotTakes >= 68) return { title: 'Hot-Take Rebel', desc: "If everyone agrees, you're already stirring the room." };
-      if (rareTaste >= 64 && signature >= 52) return { title: 'Cult Connoisseur', desc: 'Selective, refined, and proudly off the mainstream radar.' };
-      if (hotTakes >= 72 && signature < 52) return { title: 'Wildcard Maverick', desc: 'Zero loyalty to seeding. Pure instinct and drama.' };
-      if (signature >= 68 && crowdSync >= 38 && crowdSync <= 68) return { title: 'Sharp Tastemaker', desc: 'Confident conviction with an eye for what rises next.' };
-      return { title: 'Balanced Critic', desc: 'Some with the room, some against. You pick your spots.' };
-    }
-
-    function getMetricCaptions(crowdSync, rareTaste, hotTakes, signature) {
-      return {
-        crowdCap: crowdSync >= 80 ? 'Voice of the room.' : crowdSync >= 60 ? 'Right on the pulse.' : crowdSync >= 40 ? 'Half with the crowd.' : 'You go your own way.',
-        rareCap: rareTaste >= 80 ? 'Deep-cut connoisseur.' : rareTaste >= 60 ? 'Cult classic radar.' : rareTaste >= 40 ? 'Off-radar a bit.' : 'Familiar favorites.',
-        hotCap: hotTakes >= 85 ? 'All in. No fence.' : hotTakes >= 65 ? 'Spicy upsets.' : hotTakes >= 40 ? 'Selective rebellions.' : 'Measured instincts.',
-        sigCap: signature >= 80 ? 'Unmistakable identity.' : signature >= 60 ? 'Sharp instincts.' : signature >= 40 ? 'Loose pattern.' : 'Wildcard energy.',
-      };
-    }
-
-    function calculateTasteRating(deck, roundChoices, duelHistory, champion) {
-      const board = computeLeaderboard(deck, roundChoices);
-      const rankById = {};
-      board.forEach((i) => { rankById[i.id] = i.rank; });
-      const n = board.length || 10;
-
-      let agreed = 0, raritySum = 0, upsetSum = 0, maxUpset = 0, knockedTop = false, maxStreak = 0;
-      const winsPer = {};
-      duelHistory.forEach((duel) => {
-        const wRank = rankById[duel.winner.id] || 5, lRank = rankById[duel.loser.id] || 5;
-        winsPer[duel.winner.id] = (winsPer[duel.winner.id] || 0) + 1;
-        if (winsPer[duel.winner.id] > maxStreak) maxStreak = winsPer[duel.winner.id];
-        if (wRank < lRank) agreed += 1;
-        else if (wRank > lRank) {
-          const gap = (wRank - lRank) / Math.max(1, n - 1);
-          upsetSum += gap; if (gap > maxUpset) maxUpset = gap;
-          if (lRank <= 2) knockedTop = true;
-        } else agreed += 0.5;
-        raritySum += (wRank - 1) / Math.max(1, n - 1);
-      });
-
-      const champRank = rankById[champion.id] || 5;
-      const champWins = winsPer[champion.id] || 1;
-      const agreeRatio = agreed / Math.max(1, duelHistory.length);
-      const crowdSync = Math.min(100, Math.max(0, Math.round((agreeRatio * 0.62 + ((n - champRank) / Math.max(1, n - 1)) * 0.38) * 100)));
-      const rareTaste = Math.min(100, Math.max(0, Math.round((((champRank - 1) / Math.max(1, n - 1)) * 0.58 + (raritySum / Math.max(1, duelHistory.length)) * 0.42) * 100)));
-      const hotTakes = Math.min(100, Math.max(6, Math.round((upsetSum / Math.max(1, duelHistory.length)) * 145 + maxUpset * 38 + (knockedTop ? 24 : 0) + (champRank >= 6 ? 16 : 0))));
-      const signature = Math.min(99, Math.max(18, Math.round((Math.min(1, maxStreak / 7) * 0.45 + Math.abs(agreeRatio - 0.5) * 2 * 0.30 + Math.min(1, champWins / 6) * 0.25) * 100)));
-
-      return {
-        crowdSync, rareTaste, hotTakes, signature,
-        archetype: classifyArchetype(crowdSync, rareTaste, hotTakes, signature),
-        captions: getMetricCaptions(crowdSync, rareTaste, hotTakes, signature),
-        champWins
-      };
-    }
-
-    // 20-Round Deep Personality Analyzer
-    function analyzeTwentyRoundPersonality(deck, pool, duelHistory) {
-      const fullBoard = computeLeaderboard(deck, pool, 'liveScore');
-      const rankMap = new Map();
-      const scoreMap = new Map();
-      fullBoard.forEach((item) => { rankMap.set(item.id, item.rank); scoreMap.set(item.id, item.liveScore); });
-      const total = Math.max(2, fullBoard.length);
-
-      let agreed = 0, upsets = 0, rareSum = 0, classicCount = 0, modernCount = 0, datedCount = 0;
-      let biggestUpset = null, biggestUpsetGap = -1;
-      let topRatedWin = null, topRatedScore = -1;
-      const tokenFreq = {};
-
-      duelHistory.forEach(({ winner, loser }) => {
-        const wRank = rankMap.get(winner.id) || Math.ceil(total / 2);
-        const lRank = rankMap.get(loser.id) || Math.ceil(total / 2);
-        const wScore = scoreMap.get(winner.id) || 50;
-
-        if (wRank <= lRank) agreed += 1;
-        else {
-          upsets += 1;
-          const gap = wRank - lRank;
-          if (gap > biggestUpsetGap) { biggestUpsetGap = gap; biggestUpset = { winner, loser, gap }; }
-        }
-
-        if (wScore > topRatedScore) { topRatedScore = wScore; topRatedWin = winner; }
-        rareSum += (wRank - 1) / (total - 1);
-
-        // Extract vibe tokens from tag
-        const rawTag = String(winner.tag || '');
-        rawTag.split(/[·,/()]+/).map((s) => s.trim()).filter((s) => s.length >= 2 && !/^\d{4}$/.test(s)).forEach((tok) => {
-          tokenFreq[tok] = (tokenFreq[tok] || 0) + 1;
-        });
-
-        // Year / Gen era detection
-        const yr = parseInt(winner.year || (rawTag.match(/\b(19|20)\d{2}\b/) || [])[0], 10);
-        if (yr >= 1920 && yr <= 2030) {
-          datedCount += 1;
-          if (yr < 2010) classicCount += 1;
-          else modernCount += 1;
-        }
-      });
-
-      const rounds = Math.max(1, duelHistory.length);
-      const crowdSync = Math.round((agreed / rounds) * 100);
-      const boldness = Math.min(100, Math.round((upsets / rounds) * 120));
-      const rareTaste = Math.min(100, Math.round((rareSum / rounds) * 100));
-      const topThemes = Object.entries(tokenFreq).sort((a, b) => b[1] - a[1]).slice(0, 6);
-      const focusRatio = topThemes.length > 0 ? Math.min(100, Math.round(((topThemes[0][1] + (topThemes[1]?.[1] || 0)) / rounds) * 95)) : 55;
-
-      // Classify into 8 rich personalities
-      let profile;
-      if (crowdSync >= 75 && boldness < 35) {
-        profile = {
-          title: 'The Golden Consensus',
-          emoji: '👑',
-          subtitle: 'Instinctive Curator · Crowd Whisperer',
-          narrative: `Across 20 head-to-head calls in ${deck.title}, you agreed with the broader favorites ${crowdSync}% of the time. You have an uncanny radar for timeless quality—when something earns legendary status, you immediately see why.`
-        };
-      } else if (boldness >= 60 && rareTaste >= 55) {
-        profile = {
-          title: 'The Visionary Rebel',
-          emoji: '🔥',
-          subtitle: 'Contrarian Thinker · Underdog Champion',
-          narrative: `You flipped the script in ${upsets} out of 20 matchups, repeatedly elevating deep cuts over crowd favorites. You don't follow hype cycles—you trust your gut, prize originality, and love championing underrated gems.`
-        };
-      } else if (rareTaste >= 60 && focusRatio >= 50) {
-        profile = {
-          title: 'The Cult Connoisseur',
-          emoji: '🔮',
-          subtitle: 'Refined Taste · Deep-Cut Specialist',
-          narrative: `With a ${rareTaste}/100 Rare Taste score, your picks reveal a deliberate, niche aesthetic. You gravitate toward distinct flavors and craft rather than whatever sits at the top of mainstream charts.`
-        };
-      } else if (datedCount >= 8 && classicCount / datedCount >= 0.62) {
-        profile = {
-          title: 'The Timeless Purist',
-          emoji: '🏛️',
-          subtitle: 'Heritage Lover · Era Archivist',
-          narrative: `You consistently leaned toward iconic classics and proven legends across your 20 rounds. Nostalgia, enduring craft, and historical weight carry huge value in how you judge greatness.`
-        };
-      } else if (datedCount >= 8 && modernCount / datedCount >= 0.7) {
-        profile = {
-          title: 'The Modern Trendsetter',
-          emoji: '🚀',
-          subtitle: 'Forward-Looking · Pulse of Now',
-          narrative: `Your 20 picks skew strongly toward fresh, modern standouts. You appreciate bold contemporary energy, new waves, and evolving styles over living purely in the past.`
-        };
-      } else if (focusRatio >= 62) {
-        profile = {
-          title: 'The Focused Pursuer',
-          emoji: '🎯',
-          subtitle: 'High Conviction · Signature Identity',
-          narrative: `You know exactly what lights you up. Your 20 picks clustered tightly around specific vibes—especially ${topThemes[0]?.[0] || deck.title}—showing sharp clarity and decisive personal taste.`
-        };
-      } else if (boldness >= 50) {
-        profile = {
-          title: 'The Chaos Tactician',
-          emoji: '⚡',
-          subtitle: 'Unpredictable · Pure Instinct',
-          narrative: `Half diplomat, half disruptor—you kept the brackets guessing with ${upsets} bold upsets while still honoring select heavyweights. You judge every single matchup on pure moment-to-moment vibe.`
-        };
-      } else {
-        profile = {
-          title: 'The Balanced Philosopher',
-          emoji: '⚖️',
-          subtitle: 'Nuanced Critic · Best of Both Worlds',
-          narrative: `Your 20 choices struck a rare equilibrium: ${crowdSync}% crowd alignment paired with ${upsets} spicy personal upsets. You respect the icons without ever letting popularity dictate your favorites.`
-        };
-      }
-
-      return {
-        ...profile,
-        crowdSync, boldness, rareTaste, focusRatio,
-        topThemes, biggestUpset, topRatedWin,
-        winners: duelHistory.map((d) => d.winner)
-      };
-    }
-
-    // =========================================================================
-    // 8. APP STATE & ALL 3 GAME MODES
+    // 8. APP STATE & ALL 3 GAME MODES (1-4 PLAYERS)
     // =========================================================================
     const state = {
-      view: 'arena',          // 'arena' | 'gbu' | 'results' | 'personality-report' | 'standings' | 'creator'
+      view: 'arena',          // 'arena' | 'mp-handoff' | 'gbu' | 'results' | 'personality-report' | 'standings' | 'creator'
       gameMode: 'knockout',   // 'knockout' | 'gbu' | 'personality'
+      playerCount: 1,         // Default: 1 Player (supports 1 to 4)
+      playerNames: ['Player 1', 'Player 2', 'Player 3', 'Player 4'],
+      currentPlayerIdx: 0,
+      viewingPlayerIdx: 0,
+
       activeDeck: null,
       activeSubFilter: 'all',
       seenByPoolKey: {},
@@ -1844,6 +1635,12 @@
       lastTasteMetrics: null,
       lastPersonalityReport: null,
 
+      // Multiplayer per-player tracking
+      mpKnockoutResults: [],
+      mpPersonalityHistories: [],
+      mpPersonalityReports: [],
+      mpGbuPicks: [],
+
       // Good / Bad / Ugly state
       gbuTrio: [],
       gbuAssign: { good: null, bad: null, ugly: null }, // stores choice index 0|1|2
@@ -1855,6 +1652,74 @@
       lastCreatedDeck: null,
       activeEmojiSlotIdx: null,
     };
+
+    function getPlayerName(idx) {
+      const raw = (state.playerNames[idx] || '').trim();
+      return raw || `Player ${idx + 1}`;
+    }
+
+    function computePairwiseAgreement(histA, histB) {
+      const len = Math.min(histA?.length || 0, histB?.length || 0);
+      if (len === 0) return { same: 0, total: 0, pct: 0 };
+      let same = 0;
+      for (let i = 0; i < len; i++) {
+        if (histA[i]?.winner?.id === histB[i]?.winner?.id) same += 1;
+      }
+      return { same, total: len, pct: Math.round((same / len) * 100) };
+    }
+
+    function renderPlayerCountUI() {
+      document.querySelectorAll('.btn-player-count').forEach((btn) => {
+        const cnt = Number(btn.dataset.playerCount);
+        const active = cnt === state.playerCount;
+        btn.className = active
+          ? 'btn-player-count px-2.5 py-1.5 rounded-lg text-[11px] font-extrabold bg-[#e0b34c] text-obsidian shadow transition-all'
+          : 'btn-player-count px-2.5 py-1.5 rounded-lg text-[11px] font-semibold text-zinc-400 hover:text-zinc-100 transition-all';
+      });
+
+      const namesBar = document.getElementById('mp-names-bar');
+      if (state.playerCount <= 1) {
+        namesBar.classList.add('hidden');
+        namesBar.innerHTML = '';
+        return;
+      }
+
+      namesBar.classList.remove('hidden');
+      namesBar.innerHTML = Array.from({ length: state.playerCount }, (_, idx) => {
+        const th = PLAYER_THEMES[idx];
+        return `
+          <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#12151c] border ${th.border} text-xs">
+            <span class="w-2 h-2 rounded-full ${th.dot} shrink-0"></span>
+            <input type="text" maxlength="16" data-mp-name-idx="${idx}" value="${escapeHtml(getPlayerName(idx))}" aria-label="Player ${idx + 1} name"
+              class="mp-name-input w-[84px] sm:w-[96px] bg-transparent text-[11.5px] font-semibold text-zinc-100 placeholder-zinc-500 focus:outline-none" />
+          </label>`;
+      }).join('');
+
+      namesBar.querySelectorAll('.mp-name-input').forEach((inp) => {
+        inp.addEventListener('input', (e) => {
+          const i = Number(inp.dataset.mpNameIdx);
+          state.playerNames[i] = e.target.value;
+          saveLocalState();
+          if (state.view === 'arena') renderMpTurnBar();
+          if (state.view === 'gbu') renderGbuView();
+          if (state.view === 'mp-handoff') renderMpHandoff();
+          if (state.view === 'results') renderResults();
+          if (state.view === 'personality-report') renderPersonalityReport();
+        });
+      });
+    }
+
+    function setPlayerCount(count) {
+      const clamped = Math.max(1, Math.min(4, Number(count) || 1));
+      if (clamped === state.playerCount) return;
+      state.playerCount = clamped;
+      playClickTone(480 + clamped * 30);
+      renderPlayerCountUI();
+      showToast(clamped === 1 ? 'Switched to 1 Player mode' : `${clamped}-Player mode ready!`, 'info');
+      if (state.view !== 'standings' && state.view !== 'creator') {
+        startActiveMode(state.activeDeck || BUILTIN_CATEGORIES[0], { subFilter: state.activeSubFilter });
+      }
+    }
 
     function shuffleArray(arr) {
       const copy = [...arr];
@@ -1954,6 +1819,9 @@
       state.gameMode = 'knockout';
       state.activeDeck = deck;
       state.isAnimatingPick = false;
+      state.currentPlayerIdx = 0;
+      state.viewingPlayerIdx = 0;
+      state.mpKnockoutResults = [];
       state.duelHistory = [];
       state.champion = null;
       state.lastTasteMetrics = null;
@@ -1974,6 +1842,24 @@
       updateHeader();
       renderCategoryBar();
       updateModeBarUI();
+      renderPlayerCountUI();
+      showView('arena');
+      applyLayoutMode();
+      renderArena(true, true);
+      prefetchUpcomingRoundArtwork(state.roundChoices, 2);
+    }
+
+    function advanceToNextKnockoutPlayer() {
+      state.currentPlayerIdx += 1;
+      state.isAnimatingPick = false;
+      state.duelHistory = [];
+      state.topChoice = state.roundChoices[0];
+      state.bottomChoice = state.roundChoices[1];
+      state.topStreak = 0;
+      state.bottomStreak = 0;
+      state.nextIndex = 2;
+      state.duelNumber = 1;
+
       showView('arena');
       applyLayoutMode();
       renderArena(true, true);
@@ -1990,7 +1876,11 @@
       state.gameMode = 'personality';
       state.activeDeck = deck;
       state.isAnimatingPick = false;
+      state.currentPlayerIdx = 0;
+      state.viewingPlayerIdx = 0;
       state.duelHistory = [];
+      state.mpPersonalityHistories = Array.from({ length: state.playerCount }, () => []);
+      state.mpPersonalityReports = [];
       state.lastPersonalityReport = null;
 
       const drawn40 = drawFreshChoices(deck, state.activeSubFilter, 40);
@@ -2009,6 +1899,7 @@
       updateHeader();
       renderCategoryBar();
       updateModeBarUI();
+      renderPlayerCountUI();
       showView('arena');
       applyLayoutMode();
       renderArena(true, true);
@@ -2019,6 +1910,8 @@
     function startGbuRound(deck, options = {}) {
       state.gameMode = 'gbu';
       state.activeDeck = deck;
+      state.currentPlayerIdx = 0;
+      state.mpGbuPicks = [];
       if (options.resetCounter) { state.gbuRoundCount = 1; state.gbuHistory = []; }
       state.gbuTrio = drawFreshChoices(deck, state.activeSubFilter, 3);
       state.gbuAssign = { good: null, bad: null, ugly: null };
@@ -2026,6 +1919,7 @@
       updateHeader();
       renderCategoryBar();
       updateModeBarUI();
+      renderPlayerCountUI();
       showView('gbu');
       renderGbuView();
     }
@@ -2066,12 +1960,37 @@
       recordLiveDuelVote(state.activeDeck, goodItem, badItem, 2);
       recordLiveDuelVote(state.activeDeck, goodItem, uglyItem, 1);
 
-      state.gbuHistory.unshift({ round: state.gbuRoundCount, good: goodItem, bad: badItem, ugly: uglyItem });
+      state.mpGbuPicks.push({
+        playerIdx: state.currentPlayerIdx,
+        playerName: getPlayerName(state.currentPlayerIdx),
+        good: goodItem, bad: badItem, ugly: uglyItem
+      });
+
+      if (state.playerCount > 1 && state.currentPlayerIdx < state.playerCount - 1) {
+        const prevName = getPlayerName(state.currentPlayerIdx);
+        state.currentPlayerIdx += 1;
+        state.gbuAssign = { good: null, bad: null, ugly: null };
+        playClickTone(520);
+        showToast(`${prevName} locked in! Now ${getPlayerName(state.currentPlayerIdx)}'s turn.`, 'info');
+        renderGbuView();
+        return;
+      }
+
+      state.gbuHistory.unshift({
+        round: state.gbuRoundCount,
+        good: goodItem, bad: badItem, ugly: uglyItem,
+        multiPicks: state.playerCount > 1 ? [...state.mpGbuPicks] : null
+      });
       state.gbuHistory = state.gbuHistory.slice(0, 8);
       state.gbuRoundCount += 1;
 
       playChampionChime();
-      showToast(`😇 ${goodItem.name} · 😈 ${badItem.name} · 💀 ${uglyItem.name}`, 'success');
+      showToast(
+        state.playerCount > 1
+          ? `All ${state.playerCount} players locked in Trio #${state.gbuRoundCount - 1}!`
+          : `😇 ${goodItem.name} · 😈 ${badItem.name} · 💀 ${uglyItem.name}`,
+        'success'
+      );
       startGbuRound(state.activeDeck, { resetCounter: false });
     }
 
@@ -2083,21 +2002,32 @@
       const loser = side === 'top' ? state.bottomChoice : state.topChoice;
       const winEl = document.getElementById(side === 'top' ? 'card-top' : 'card-bottom');
       const loseEl = document.getElementById(side === 'top' ? 'card-bottom' : 'card-top');
+      const isMpPersonalityMidRound = state.gameMode === 'personality' && state.playerCount > 1 && state.currentPlayerIdx < state.playerCount - 1;
 
       playClickTone(side === 'top' ? 460 : 410);
       winEl.classList.add('picked-win');
-      loseEl.classList.add('picked-lose');
+      if (!isMpPersonalityMidRound) loseEl.classList.add('picked-lose');
 
       const isFinalKnockout = state.gameMode === 'knockout' && state.nextIndex >= state.roundChoices.length;
       const pop = document.createElement('div');
-      pop.className = 'delta-pop absolute top-3 right-3 z-30 px-2.5 py-1 rounded-full bg-emerald-500/90 text-obsidian text-[10px] font-extrabold tracking-wider shadow-lg pointer-events-none';
-      pop.textContent = isFinalKnockout ? '+6 LIVE PTS 👑' : '+1 LIVE PT ↑';
+      if (state.playerCount > 1 && state.gameMode === 'personality') {
+        const th = PLAYER_THEMES[state.currentPlayerIdx];
+        pop.className = `delta-pop absolute top-3 right-3 z-30 px-2.5 py-1 rounded-full ${th.solid} text-[10px] font-extrabold tracking-wider shadow-lg pointer-events-none`;
+        pop.textContent = `✓ ${getPlayerName(state.currentPlayerIdx)}`;
+      } else {
+        pop.className = 'delta-pop absolute top-3 right-3 z-30 px-2.5 py-1 rounded-full bg-emerald-500/90 text-obsidian text-[10px] font-extrabold tracking-wider shadow-lg pointer-events-none';
+        pop.textContent = isFinalKnockout ? '+6 LIVE PTS 👑' : '+1 LIVE PT ↑';
+      }
       winEl.appendChild(pop);
 
       recordLiveDuelVote(state.activeDeck, winner, loser, 1);
-      state.duelHistory.push({ winner, loser });
 
-      if (state.gameMode === 'knockout') {
+      if (state.gameMode === 'personality') {
+        if (!state.mpPersonalityHistories[state.currentPlayerIdx]) state.mpPersonalityHistories[state.currentPlayerIdx] = [];
+        state.mpPersonalityHistories[state.currentPlayerIdx].push({ winner, loser });
+        if (state.currentPlayerIdx === 0) state.duelHistory.push({ winner, loser });
+      } else {
+        state.duelHistory.push({ winner, loser });
         if (side === 'top') { state.topStreak += 1; state.bottomStreak = 0; }
         else { state.bottomStreak += 1; state.topStreak = 0; }
       }
@@ -2105,11 +2035,25 @@
       setTimeout(async () => {
         winEl.classList.remove('picked-win');
         loseEl.classList.remove('picked-lose');
+        pop.remove();
 
         if (state.gameMode === 'personality') {
+          // Stay on the exact same 2 choices until all selected players pick!
+          if (state.playerCount > 1 && state.currentPlayerIdx < state.playerCount - 1) {
+            state.currentPlayerIdx += 1;
+            renderMpTurnBar();
+            state.isAnimatingPick = false;
+            return;
+          }
+
+          state.currentPlayerIdx = 0;
           if (state.duelNumber >= state.personalityPairs.length) {
             const pool = getFilteredPool(state.activeDeck, state.activeSubFilter);
-            state.lastPersonalityReport = analyzeTwentyRoundPersonality(state.activeDeck, pool, state.duelHistory);
+            state.mpPersonalityReports = Array.from({ length: state.playerCount }, (_, idx) =>
+              analyzeTwentyRoundPersonality(state.activeDeck, pool, state.mpPersonalityHistories[idx] || [])
+            );
+            state.viewingPlayerIdx = 0;
+            state.lastPersonalityReport = state.mpPersonalityReports[0];
             playChampionChime();
             state.isAnimatingPick = false;
             showView('personality-report');
@@ -2128,10 +2072,29 @@
 
         // 10-Choice Knockout flow
         if (state.nextIndex >= state.roundChoices.length) {
-          state.champion = winner;
-          state.lastTasteMetrics = calculateTasteRating(state.activeDeck, state.roundChoices, state.duelHistory, winner);
+          const metrics = calculateTasteRating(state.activeDeck, state.roundChoices, state.duelHistory, winner);
+          await persistChampionResults(state.activeDeck, winner, metrics, state.currentPlayerIdx === 0);
+
+          state.mpKnockoutResults[state.currentPlayerIdx] = {
+            playerIdx: state.currentPlayerIdx,
+            champion: winner,
+            duelHistory: [...state.duelHistory],
+            tasteMetrics: metrics
+          };
+
+          if (state.playerCount > 1 && state.currentPlayerIdx < state.playerCount - 1) {
+            playClickTone(620);
+            state.isAnimatingPick = false;
+            updateHeader();
+            showView('mp-handoff');
+            renderMpHandoff();
+            return;
+          }
+
+          state.viewingPlayerIdx = 0;
+          state.champion = state.mpKnockoutResults[0].champion;
+          state.lastTasteMetrics = state.mpKnockoutResults[0].tasteMetrics;
           playChampionChime();
-          await persistChampionResults(state.activeDeck, winner, state.lastTasteMetrics);
           state.isAnimatingPick = false;
           updateHeader();
           showView('results');
@@ -2145,7 +2108,7 @@
           prefetchUpcomingRoundArtwork(state.roundChoices, state.nextIndex);
           state.isAnimatingPick = false;
         }
-      }, 230);
+      }, isMpPersonalityMidRound ? 190 : 230);
     }
 
     // =========================================================================
@@ -2158,6 +2121,7 @@
     function showView(viewName) {
       state.view = viewName;
       document.getElementById('view-arena').classList.toggle('hidden', viewName !== 'arena');
+      document.getElementById('view-mp-handoff').classList.toggle('hidden', viewName !== 'mp-handoff');
       document.getElementById('view-gbu').classList.toggle('hidden', viewName !== 'gbu');
       document.getElementById('view-results').classList.toggle('hidden', viewName !== 'results');
       document.getElementById('view-personality-report').classList.toggle('hidden', viewName !== 'personality-report');
@@ -2166,7 +2130,7 @@
       document.getElementById('category-nav-wrap').classList.toggle('hidden', viewName === 'creator');
       document.getElementById('mode-bar-wrap').classList.toggle('hidden', viewName === 'standings' || viewName === 'creator');
 
-      const playActive = ['arena', 'gbu', 'results', 'personality-report'].includes(viewName);
+      const playActive = ['arena', 'mp-handoff', 'gbu', 'results', 'personality-report'].includes(viewName);
       document.getElementById('btn-nav-play').className = playActive
         ? 'px-3 py-1.5 rounded-lg text-xs font-bold bg-[#1b1f2b] text-white border border-[#2d3345] transition-colors whitespace-nowrap shrink-0'
         : 'px-3 py-1.5 rounded-lg text-xs font-semibold text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.04] border border-transparent transition-colors whitespace-nowrap shrink-0';
@@ -2328,10 +2292,77 @@
       hydrateArtworkForChoice(choice);
     }
 
+    function renderMpTurnBar(targetId = 'mp-arena-turn-bar') {
+      const bar = document.getElementById(targetId);
+      if (!bar) return;
+      if (state.playerCount <= 1) {
+        bar.classList.add('hidden');
+        bar.innerHTML = '';
+        return;
+      }
+
+      const activeIdx = state.currentPlayerIdx;
+      const th = PLAYER_THEMES[activeIdx];
+      const subtitle = state.gameMode === 'personality'
+        ? 'Pick between these two'
+        : state.gameMode === 'gbu'
+          ? 'Assign Good · Bad · Ugly'
+          : 'Playing your 10-choice bracket';
+
+      const chips = Array.from({ length: state.playerCount }, (_, idx) => {
+        const t = PLAYER_THEMES[idx];
+        const done = idx < activeIdx;
+        const current = idx === activeIdx;
+        return `
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10.5px] font-bold border ${
+            current ? `${t.bg} ${t.border} ${t.text}` : done ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300' : 'bg-white/[0.03] border-white/10 text-zinc-500'
+          }">
+            ${done ? '✓' : `<span class="w-1.5 h-1.5 rounded-full ${t.dot}"></span>`}
+            <span>${escapeHtml(getPlayerName(idx))}</span>
+          </span>`;
+      }).join('');
+
+      bar.classList.remove('hidden');
+      bar.innerHTML = `
+        <div class="flex items-center gap-2 min-w-0">
+          <span class="w-2.5 h-2.5 rounded-full ${th.dot} live-dot shrink-0"></span>
+          <span class="text-xs sm:text-sm font-extrabold ${th.text} truncate">${escapeHtml(getPlayerName(activeIdx))}'s Turn</span>
+          <span class="hidden sm:inline text-[11px] text-zinc-400">· ${subtitle}</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-1">${chips}</div>`;
+    }
+
+    function renderMpHandoff() {
+      const doneIdx = state.currentPlayerIdx;
+      const nextIdx = state.currentPlayerIdx + 1;
+      const nextTheme = PLAYER_THEMES[nextIdx];
+
+      document.getElementById('handoff-done-pill').textContent = `✓ ${getPlayerName(doneIdx)} Locked In`;
+      const nameEl = document.getElementById('handoff-next-name');
+      nameEl.textContent = getPlayerName(nextIdx);
+      nameEl.className = `text-2xl sm:text-3xl font-extrabold mt-1 ${nextTheme.text}`;
+
+      document.getElementById('handoff-progress-pills').innerHTML = Array.from({ length: state.playerCount }, (_, idx) => {
+        const t = PLAYER_THEMES[idx];
+        const isDone = idx <= doneIdx;
+        const isNext = idx === nextIdx;
+        return `
+          <span class="px-2.5 py-1 rounded-full text-xs font-bold border ${
+            isDone ? 'bg-emerald-500/15 border-emerald-400/35 text-emerald-300' : isNext ? `${t.bg} ${t.border} ${t.text}` : 'bg-white/[0.04] border-white/10 text-zinc-500'
+          }">
+            ${isDone ? '✓ ' : isNext ? '▶ ' : ''}${escapeHtml(getPlayerName(idx))}
+          </span>`;
+      }).join('');
+
+      document.getElementById('btn-mp-next-player').textContent = `Start ${getPlayerName(nextIdx)}'s Turn →`;
+    }
+
     function renderArena(animateTop = false, animateBottom = false) {
       const isPers = state.gameMode === 'personality';
       const totalDuels = isPers ? 20 : Math.max(1, state.roundChoices.length - 1);
       const isFinal = state.duelNumber === totalDuels;
+
+      renderMpTurnBar('mp-arena-turn-bar');
 
       const roundLabelEl = document.getElementById('arena-round-label');
       roundLabelEl.textContent = isPers
@@ -2368,22 +2399,22 @@
 
     function renderGbuView() {
       const a = state.gbuAssign;
+      renderMpTurnBar('gbu-mp-turn-bar');
       document.getElementById('gbu-round-counter').textContent = `Trio #${state.gbuRoundCount}`;
 
       const instr = document.getElementById('gbu-instruction');
-      if (a.good === null) instr.innerHTML = 'Tap a card (or pill) to pick <span class="text-emerald-400 font-bold">The Good 😇</span>';
-      else if (a.bad === null) instr.innerHTML = 'Now pick <span class="text-orange-400 font-bold">The Bad 😈</span>';
-      else if (a.ugly === null) instr.innerHTML = 'Finally pick <span class="text-rose-400 font-bold">The Ugly 💀</span>';
-      else instr.innerHTML = '<span class="text-[#e0b34c] font-bold">All 3 assigned!</span> Tap Lock In or click any card to swap.';
+      const whoPrefix = state.playerCount > 1 ? `<span class="${PLAYER_THEMES[state.currentPlayerIdx].text} font-bold">${escapeHtml(getPlayerName(state.currentPlayerIdx))}:</span> ` : '';
+      if (a.good === null) instr.innerHTML = `${whoPrefix}Tap a card (or pill) to pick <span class="text-emerald-400 font-bold">The Good 😇</span>`;
+      else if (a.bad === null) instr.innerHTML = `${whoPrefix}Now pick <span class="text-orange-400 font-bold">The Bad 😈</span>`;
+      else if (a.ugly === null) instr.innerHTML = `${whoPrefix}Finally pick <span class="text-rose-400 font-bold">The Ugly 💀</span>`;
+      else instr.innerHTML = `${whoPrefix}<span class="text-[#e0b34c] font-bold">All 3 assigned!</span> Tap Lock In or click any card to swap.`;
 
       const allAssigned = a.good !== null && a.bad !== null && a.ugly !== null;
-      document.getElementById('btn-gbu-submit').disabled = !allAssigned;
-
-      const grid = document.getElementById('gbu-grid');
-      grid.innerHTML = state.gbuTrio.map((ch, idx) => {
-        const [c1, c2] = ch.gradient || PALETTES[0];
-        const isPokemon = ch.mediaType === 'pokemon';
-        const cached = mediaCache.get(ch.id);
+      const submitBtn = document.getElementById('btn-gbu-submit');
+      submitBtn.disabled = !allAssigned;
+      submitBtn.textContent = (state.playerCount > 1 && state.currentPlayerIdx < state.playerCount - 1)
+        ? `Lock In ${getPlayerName(state.currentPlayerIdx)} →`
+        : 'Lock In & Next Trio →';
         const knownUrl = ch.img || cached?.url || null;
         const role = a.good === idx ? 'good' : a.bad === idx ? 'bad' : a.ugly === idx ? 'ugly' : null;
 
@@ -2440,23 +2471,102 @@
       const histWrap = document.getElementById('gbu-history-wrap');
       if (state.gbuHistory.length > 0) {
         histWrap.classList.remove('hidden');
-        document.getElementById('gbu-history-list').innerHTML = state.gbuHistory.map((h) => `
+        document.getElementById('gbu-history-list').innerHTML = state.gbuHistory.map((h) => {
+          if (h.multiPicks && h.multiPicks.length > 1) {
+            return `
+              <div class="bg-[#12141a] border border-[#1d2028] rounded-xl p-3 space-y-1.5 text-xs">
+                <div class="text-[10.5px] font-bold text-zinc-400">TRIO #${h.round} SQUAD VERDICTS</div>
+                ${h.multiPicks.map((p) => {
+                  const th = PLAYER_THEMES[p.playerIdx % 4];
+                  return `
+                    <div class="flex flex-wrap items-center gap-1.5">
+                      <span class="font-bold ${th.text} min-w-[68px]">${escapeHtml(p.playerName)}:</span>
+                      <span class="px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-300 border border-emerald-500/25 font-semibold">😇 ${escapeHtml(p.good.name)}</span>
+                      <span class="px-2 py-0.5 rounded-md bg-orange-500/15 text-orange-300 border border-orange-500/25 font-semibold">😈 ${escapeHtml(p.bad.name)}</span>
+                      <span class="px-2 py-0.5 rounded-md bg-rose-500/15 text-rose-300 border border-rose-500/25 font-semibold">💀 ${escapeHtml(p.ugly.name)}</span>
+                    </div>`;
+                }).join('')}
+              </div>`;
+          }
+          return `
           <div class="bg-[#12141a] border border-[#1d2028] rounded-xl px-3.5 py-2.5 flex flex-wrap items-center gap-2 text-xs">
             <span class="text-zinc-500 font-bold">#${h.round}</span>
             <span class="px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-300 border border-emerald-500/25 font-semibold">😇 ${escapeHtml(h.good.name)}</span>
             <span class="px-2 py-0.5 rounded-md bg-orange-500/15 text-orange-300 border border-orange-500/25 font-semibold">😈 ${escapeHtml(h.bad.name)}</span>
             <span class="px-2 py-0.5 rounded-md bg-rose-500/15 text-rose-300 border border-rose-500/25 font-semibold">💀 ${escapeHtml(h.ugly.name)}</span>
-          </div>`).join('');
+          </div>`;
+        }).join('');
       } else {
         histWrap.classList.add('hidden');
       }
     }
 
     function renderPersonalityReport() {
-      const rep = state.lastPersonalityReport;
+      const isMulti = state.playerCount > 1 && state.mpPersonalityReports.length > 1;
+      const summaryEl = document.getElementById('mp-personality-summary');
+
+      if (isMulti) {
+        summaryEl.classList.remove('hidden');
+        document.getElementById('mp-pers-players-pill').textContent = `${state.playerCount} Players`;
+
+        document.getElementById('mp-pers-cards').innerHTML = state.mpPersonalityReports.map((r, idx) => {
+          const th = PLAYER_THEMES[idx];
+          const isSelected = idx === state.viewingPlayerIdx;
+          return `
+            <button type="button" data-mp-pers-card="${idx}" class="mp-pers-select-btn text-left p-3 rounded-xl border transition-all ${
+              isSelected ? `${th.bg} ${th.border} shadow-lg` : 'bg-[#0f1118] border-[#212636] hover:border-white/20'
+            }">
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="w-2.5 h-2.5 rounded-full ${th.dot} shrink-0"></span>
+                  <span class="text-xs font-extrabold ${th.text} truncate">${escapeHtml(getPlayerName(idx))}</span>
+                </div>
+                <span class="text-lg leading-none">${r.emoji}</span>
+              </div>
+              <div class="text-sm font-bold text-white mt-1.5 truncate">${escapeHtml(r.title)}</div>
+              <div class="text-[10.5px] text-zinc-400 mt-0.5">Sync ${r.crowdSync}% · Bold ${r.boldness}% · Rare ${r.rareTaste}%</div>
+            </button>`;
+        }).join('');
+
+        // Pairwise Compatibility Badges
+        const pairsHtml = [];
+        for (let i = 0; i < state.playerCount; i++) {
+          for (let j = i + 1; j < state.playerCount; j++) {
+            const ag = computePairwiseAgreement(state.mpPersonalityHistories[i], state.mpPersonalityHistories[j]);
+            const tone = ag.pct >= 70 ? 'bg-emerald-500/15 border-emerald-400/35 text-emerald-300' : ag.pct >= 45 ? 'bg-[#e0b34c]/15 border-[#e0b34c]/35 text-[#f3cf78]' : 'bg-rose-500/15 border-rose-400/35 text-rose-300';
+            pairsHtml.push(`<span class="px-2.5 py-1 rounded-full border text-[11px] font-bold ${tone}">${escapeHtml(getPlayerName(i))} &amp; ${escapeHtml(getPlayerName(j))}: ${ag.pct}% (${ag.same}/${ag.total})</span>`);
+          }
+        }
+        document.getElementById('mp-pers-compat-list').innerHTML = pairsHtml.join('');
+
+        document.getElementById('mp-pers-tabs').innerHTML = state.mpPersonalityReports.map((_, idx) => {
+          const th = PLAYER_THEMES[idx];
+          const active = idx === state.viewingPlayerIdx;
+          return `
+            <button type="button" data-mp-pers-tab="${idx}" class="mp-pers-select-btn px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
+              active ? `${th.solid} border-transparent shadow` : 'bg-[#12151d] border-[#252b3b] text-zinc-300 hover:text-white'
+            }">
+              ${escapeHtml(getPlayerName(idx))}
+            </button>`;
+        }).join('');
+
+        summaryEl.querySelectorAll('.mp-pers-select-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const idx = Number(btn.dataset.mpPersCard ?? btn.dataset.mpPersTab);
+            state.viewingPlayerIdx = idx;
+            state.lastPersonalityReport = state.mpPersonalityReports[idx];
+            playClickTone(500);
+            renderPersonalityReport();
+          });
+        });
+      } else {
+        summaryEl.classList.add('hidden');
+      }
+
+      const rep = isMulti ? state.mpPersonalityReports[state.viewingPlayerIdx] : state.lastPersonalityReport;
       if (!rep) return;
 
-      document.getElementById('pers-title').textContent = rep.title;
+      document.getElementById('pers-title').textContent = isMulti ? `${getPlayerName(state.viewingPlayerIdx)}: ${rep.title}` : rep.title;
       document.getElementById('pers-subtitle').textContent = rep.subtitle;
       document.getElementById('pers-emoji').textContent = rep.emoji;
       document.getElementById('pers-narrative').textContent = rep.narrative;
@@ -2522,13 +2632,78 @@
           </div>
         </div>`).join('');
       rep.winners.slice(0, 12).forEach((w) => hydrateArtworkForChoice(w));
+
+      document.getElementById('btn-pers-copy').textContent = isMulti ? 'Copy Squad Summary' : 'Copy Personality Summary';
     }
 
     function renderResults() {
-      const deck = state.activeDeck, champ = state.champion, metrics = state.lastTasteMetrics;
+      const deck = state.activeDeck;
+      const isMulti = state.playerCount > 1 && state.mpKnockoutResults.length > 1;
+      const summaryEl = document.getElementById('mp-knockout-summary');
+
+      if (isMulti) {
+        summaryEl.classList.remove('hidden');
+        const uniqueChamps = new Set(state.mpKnockoutResults.map((r) => r.champion.id));
+        const matchText = uniqueChamps.size === 1
+          ? '🎯 Unanimous Champion!'
+          : uniqueChamps.size === state.mpKnockoutResults.length
+            ? '🔥 All Different Champions'
+            : `🤝 ${state.mpKnockoutResults.length - uniqueChamps.size + 1} Players Agreed`;
+        document.getElementById('mp-ko-match-badge').textContent = matchText;
+
+        document.getElementById('mp-ko-cards').innerHTML = state.mpKnockoutResults.map((res, idx) => {
+          const th = PLAYER_THEMES[idx];
+          const active = idx === state.viewingPlayerIdx;
+          return `
+            <button type="button" data-mp-ko-idx="${idx}" class="mp-ko-select-btn text-left p-3 rounded-xl border transition-all flex items-center gap-3 ${
+              active ? `${th.bg} ${th.border} shadow-lg` : 'bg-[#0f1118] border-[#212636] hover:border-white/20'
+            }">
+              ${buildThumbHtml(res.champion, 'w-11 h-11')}
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full ${th.dot} shrink-0"></span>
+                  <span class="text-[11px] font-extrabold ${th.text} truncate">${escapeHtml(getPlayerName(idx))}</span>
+                </div>
+                <div class="text-sm font-bold text-white truncate mt-0.5">👑 ${escapeHtml(res.champion.name)}</div>
+                <div class="text-[10.5px] text-zinc-400 truncate">${escapeHtml(res.tasteMetrics.archetype.title)}</div>
+              </div>
+            </button>`;
+        }).join('');
+        state.mpKnockoutResults.forEach((r) => hydrateArtworkForChoice(r.champion));
+
+        document.getElementById('mp-results-tabs').innerHTML = state.mpKnockoutResults.map((_, idx) => {
+          const th = PLAYER_THEMES[idx];
+          const active = idx === state.viewingPlayerIdx;
+          return `
+            <button type="button" data-mp-ko-idx="${idx}" class="mp-ko-select-btn px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
+              active ? `${th.solid} border-transparent shadow` : 'bg-[#12151d] border-[#252b3b] text-zinc-300 hover:text-white'
+            }">
+              ${escapeHtml(getPlayerName(idx))}
+            </button>`;
+        }).join('');
+
+        summaryEl.querySelectorAll('.mp-ko-select-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const idx = Number(btn.dataset.mpKoIdx);
+            state.viewingPlayerIdx = idx;
+            state.champion = state.mpKnockoutResults[idx].champion;
+            state.lastTasteMetrics = state.mpKnockoutResults[idx].tasteMetrics;
+            playClickTone(500);
+            renderResults();
+          });
+        });
+      } else {
+        summaryEl.classList.add('hidden');
+      }
+
+      const activeRes = isMulti ? state.mpKnockoutResults[state.viewingPlayerIdx] : null;
+      const champ = activeRes ? activeRes.champion : state.champion;
+      const metrics = activeRes ? activeRes.tasteMetrics : state.lastTasteMetrics;
       if (!deck || !champ || !metrics) return;
 
-      document.getElementById('taste-header-archetype').textContent = metrics.archetype.title;
+      document.getElementById('taste-header-archetype').textContent = isMulti
+        ? `${getPlayerName(state.viewingPlayerIdx)} · ${metrics.archetype.title}`
+        : metrics.archetype.title;
       document.getElementById('post-archetype-title').textContent = metrics.archetype.title;
       document.getElementById('post-archetype-desc').textContent = metrics.archetype.desc;
       document.getElementById('metric-crowd-val').textContent = metrics.crowdSync;
@@ -2625,6 +2800,12 @@
       document.getElementById('leaderboard-list').innerHTML = rows.slice(0, 30).map((item) => {
         const isChamp = item.id === champId;
         const rankColor = item.rank === 1 ? 'text-[#e0b34c]' : item.rank === 2 ? 'text-zinc-200' : item.rank === 3 ? 'text-[#d8894a]' : 'text-zinc-500';
+        const crownedByHtml = (state.playerCount > 1 && state.mpKnockoutResults.length > 1)
+          ? state.mpKnockoutResults
+              .filter((r) => r.champion.id === item.id)
+              .map((r) => `<span class="px-1.5 py-0.5 rounded text-[9.5px] font-extrabold ${PLAYER_THEMES[r.playerIdx].solid}">👑 ${escapeHtml(getPlayerName(r.playerIdx))}</span>`)
+              .join('')
+          : '';
         return `
           <div class="relative rounded-xl border ${isChamp ? 'border-[#7c3526] bg-[#161112]' : 'border-[#1d2028] bg-[#12141a]'} ${item.recentlyUpdated ? 'live-flash' : ''} overflow-hidden transition-all">
             <div class="lb-fill absolute inset-y-0 left-0 ${isChamp ? 'bg-[#2a1716]' : 'bg-[#1c202b]'} rounded-r-lg pointer-events-none" style="width: ${item.barWidthPct}%;"></div>
@@ -2633,7 +2814,10 @@
                 <span class="w-5 text-center text-sm font-bold tabular-nums shrink-0 ${rankColor}">${item.rank}</span>
                 ${buildThumbHtml(item, 'w-9 h-9')}
                 <div class="min-w-0">
-                  <div class="text-[14px] font-semibold text-zinc-100 truncate">${escapeHtml(item.name)}</div>
+                  <div class="flex flex-wrap items-center gap-1.5">
+                    <span class="text-[14px] font-semibold text-zinc-100 truncate">${escapeHtml(item.name)}</span>
+                    ${crownedByHtml}
+                  </div>
                   <div class="text-[10.5px] text-zinc-400 truncate">${item.winRate}% win · 👑 ${item.crowns}${item.tag ? ` · ${escapeHtml(item.tag)}` : ''}</div>
                 </div>
               </div>
@@ -2952,6 +3136,15 @@
         startPersonalityMode(state.activeDeck || BUILTIN_CATEGORIES[0]);
       });
 
+      // 1-4 Player Count Switcher & Handoff Button
+      document.querySelectorAll('.btn-player-count').forEach((btn) => {
+        btn.addEventListener('click', () => setPlayerCount(Number(btn.dataset.playerCount)));
+      });
+      document.getElementById('btn-mp-next-player').addEventListener('click', () => {
+        playClickTone(520);
+        advanceToNextKnockoutPlayer();
+      });
+
       // GBU Controls
       document.getElementById('btn-gbu-clear').addEventListener('click', () => {
         state.gbuAssign = { good: null, bad: null, ugly: null };
@@ -2970,6 +3163,14 @@
         startPersonalityMode(state.activeDeck);
       });
       document.getElementById('btn-pers-copy').addEventListener('click', () => {
+        if (state.playerCount > 1 && state.mpPersonalityReports.length > 1) {
+          const lines = state.mpPersonalityReports.map((r, idx) =>
+            `${getPlayerName(idx)}: ${r.emoji} ${r.title} (Sync ${r.crowdSync}%, Bold ${r.boldness}%, Rare ${r.rareTaste}%)`
+          );
+          const summary = `PickOff ${state.playerCount}-Player 20-Round Personality (${state.activeDeck.title}):\n${lines.join('\n')}`;
+          copyTextToClipboard(summary, 'Squad personality summary copied!');
+          return;
+        }
         const rep = state.lastPersonalityReport;
         if (!rep) return;
         const summary = `My PickOff 20-Round Personality (${state.activeDeck.title}): ${rep.emoji} ${rep.title} — ${rep.subtitle}. Crowd Sync: ${rep.crowdSync}/100 | Boldness: ${rep.boldness}/100 | Rare Taste: ${rep.rareTaste}/100.`;
